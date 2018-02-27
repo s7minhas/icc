@@ -12,7 +12,7 @@ vars = c(
 	'icclevel_state',
 	'icclevel_opp',
 	'pts',
-	'pts_lag',
+	# 'pts_lag',
 	'poi_pts',
 	'osv_state',
 	'runsum_osvstate',
@@ -25,8 +25,8 @@ vars = c(
 	'poi_osv_total',
 	'civilwar',
 	'intensitylevel',
-	'civilwar_lag',
-	'intensitylevel_lag',
+	# 'civilwar_lag',
+	# 'intensitylevel_lag',
 	'runmax_civilwar',
 	'runmax_intensitylevel'
 	)
@@ -59,6 +59,26 @@ apData = apData[
 	which(
 		apData$date > as.Date('2002-06-01', format='%Y-%m-%d'))
 	,]
+
+# consequences of aggregating to year level
+sub = apData[apData$icclevel_state>=1,c('cname','date','icclevel')]
+
+for(t in unique(apData$year)){
+	slice=apData[apData$year==t,]
+	for(c in unique(apData$cname)){
+		sslice = slice[slice$cname==c,]
+		icclevel_checks = unique(sslice$icclevel_opp)
+		icclevel_checks = setdiff(icclevel_checks, 0)
+		if(length(icclevel_checks)>1){
+			print(
+				paste0(
+					c, ' ', 
+					t, ' ', 
+					paste(icclevel_checks, collapse=' ')))
+		}
+	}
+}
+# fuck
 
 # save and move onto merging
 save(apData, file=paste0(pathData, 'apDataRaw.rda'))
