@@ -12,7 +12,6 @@ vars = c(
 	'icclevel_state',
 	'icclevel_opp',
 	'pts',
-	# 'pts_lag',
 	'poi_pts',
 	'osv_state',
 	'runsum_osvstate',
@@ -25,8 +24,6 @@ vars = c(
 	'poi_osv_total',
 	'civilwar',
 	'intensitylevel',
-	# 'civilwar_lag',
-	# 'intensitylevel_lag',
 	'runmax_civilwar',
 	'runmax_intensitylevel'
 	)
@@ -54,31 +51,45 @@ apData$date = ymd(
 apData$cdate = paste(apData$cname, apData$date, sep='_')
 apData = apData[,c('cname','cdate','date',ids,vars)]
 
-# subset to when dv available
+# subset to temporal frame
+# if based on dv we'd go through 2016
+# however because of if restrictions we go 
+# to 12/2015
 apData = apData[
 	which(
-		apData$date > as.Date('2002-06-01', format='%Y-%m-%d'))
+		apData$date > as.Date('2002-06-01', format='%Y-%m-%d') &
+		apData$date < as.Date('2016-01-01', format='%Y-%m-%d')
+		)
 	,]
 
-# consequences of aggregating to year level
-sub = apData[apData$icclevel_state>=1,c('cname','date','icclevel')]
+# aggregate to year level
+apDataYr = apData %>% 
+	group_by(cname, ccode, year) %>%
+	summarize(
+		prelim_icc = ifelse(any(icclevel==1), 1, 0),
+		formal_icc = ifelse(any(icclevel>1), 1, 0),
+		prelim_icc_state = ifelse(any(icclevel_state==1), 1, 0),
+		formal_icc_state = ifelse(any(icclevel_state>1), 1, 0),
+		prelim_icc_opp = ifelse(any(icclevel_opp==1), 1, 0),
+		formal_icc_opp = ifelse(any(icclevel_opp>1), 1, 0),
+		pts = max(pts, na.rm=TRUE), 
+		poi_pts = max(poi_pts, na.rm=TRUE),
+		osv_state = sum(osv_state, na.rm=TRUE),
+		runsum_osvstate = sum(runsum_osvstate, na.rm=TRUE),
+		osv_rebel = sum(osv_rebel, na.rm=TRUE),
+		runsum_osvrebel = sum(runsum_osvrebel, na.rm=TRUE),		
+		osv_total = sum(osv_total, na.rm=TRUE),
+		runsum_osvtotal = sum(runsum_osvtotal, na.rm=TRUE),				
+		poi_osv_state = max(poi_osv_state, na.rm=TRUE),
+		poi_osv_rebel = max(poi_osv_rebel, na.rm=TRUE),
+		poi_osv_total = max(poi_osv_total, na.rm=TRUE),
+		civilwar = max(civilwar, na.rm=TRUE),
+		intensitylevel = max(intensitylevel, na.rm=TRUE),
+		runmax_civilwar = max(runmax_civilwar, na.rm=TRUE),
+		runmax_intensitylevel = max(runmax_intensitylevel, na.rm=TRUE)
+		) %>% data.frame()
 
-for(t in unique(apData$year)){
-	slice=apData[apData$year==t,]
-	for(c in unique(apData$cname)){
-		sslice = slice[slice$cname==c,]
-		icclevel_checks = unique(sslice$icclevel_opp)
-		icclevel_checks = setdiff(icclevel_checks, 0)
-		if(length(icclevel_checks)>1){
-			print(
-				paste0(
-					c, ' ', 
-					t, ' ', 
-					paste(icclevel_checks, collapse=' ')))
-		}
-	}
-}
-# fuck
+nrow(unique(apData[,c('cname','year','civilwar')])) ; nrow(unique(apData[,c('cname','year')])) ; nrow(apData) ; 
 
 # save and move onto merging
 save(apData, file=paste0(pathData, 'apDataRaw.rda'))
