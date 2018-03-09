@@ -1,10 +1,10 @@
-if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"){
-	source('~/Research/antitrustdiffusion/R/setup.R') }
+if(Sys.info()['user'] %in% c('s7m','janus829')){
+  source('~/Research/irNeuralNets/code/R/setup.R') }
 
 ############################
 # Download file from INSCR site
-polURL = 'http://www.systemicpeace.org/inscr/p4v2014.sav'
-polName = paste0(pathDataRaw, 'polity14.sav')
+polURL = 'http://www.systemicpeace.org/inscr/p4v2016.sav'
+polName = paste0(pathDataRaw, 'polity16')
 if(!file.exists(polName)) { download.file(polURL, polName) }
 
 polData = read.spss(polName, to.data.frame=TRUE)

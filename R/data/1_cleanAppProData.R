@@ -34,8 +34,6 @@ apData = data.frame(orig[,c(ids, vars)], stringsAsFactors=FALSE)
 apData$statenme[apData$statenme=='Yugoslavia'] = 'SERBIA'
 apData$cname = cname(apData$statenme)
 apData$ccode = panel$ccode[match(apData$cname, panel$cname)]
-apData$cnameYear = with(apData, paste(cname, year, sep='_'))
-apData$ccodeYear = with(apData, paste(ccode, year, sep='_'))
 
 # reorg
 apData$d = '01'
@@ -59,9 +57,9 @@ apData = apData[
 	,]
 
 # aggregate to year level
-apDataYr = apData %>% 
-	group_by(cname, ccode, year) %>%
-	summarize(
+data = apData %>% 
+	dplyr::group_by(cname, ccode, year) %>%
+	dplyr::summarize(
 		prelim_icc = ifelse(any(icclevel==1), 1, 0),
 		formal_icc = ifelse(any(icclevel>1), 1, 0),
 		prelim_icc_state = ifelse(any(icclevel_state==1), 1, 0),
@@ -77,5 +75,21 @@ apDataYr = apData %>%
 		runsum_osvtotal = sum(runsum_osvtotal, na.rm=TRUE),				
 		) %>% data.frame()
 
+# add year level ids
+data$cnameYear = with(data, paste(cname, year, sep='_'))
+data$ccodeYear = with(data, paste(ccode, year, sep='_'))
+
 # save and move onto merging
-save(apDataYr, file=paste0(pathData, 'apDataRaw.rda'))
+save(data, file=paste0(pathData, 'baseData.rda'))
+
+# ###CINC Stuff
+# ## extends to 2012
+# cinc = read.csv("NMC_5_0.csv")
+# cinc = cinc[cinc$year>=1960,]
+# cinc$cyear = paste(cinc$ccode, cinc$year, sep='_')
+
+# for(var in c('milex','milper','cinc')){
+# 	dyadData$tmp = cinc[match(dyadData$cyear1, cinc$cyear),var]
+# 	names(dyadData)[ncol(dyadData)] = paste(var, 'i', sep='_')
+# 	dyadData$tmp = cinc[match(dyadData$cyear2, cinc$cyear),var]
+# 	names(dyadData)[ncol(dyadData)] = paste(var, 'j', sep='_')}

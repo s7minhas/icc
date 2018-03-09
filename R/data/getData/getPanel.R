@@ -14,7 +14,7 @@ panel <- NULL
 
 for(ii in 1:length(date)){
 	if(years[ii]==2016){
-		codesYear <- attributes(cshp(date=as.Date('2012-6-30'), useGW=TRUE))[['data']][,vars]
+		codesYear <- attributes(cshp(date=as.Date('2016-6-30'), useGW=TRUE))[['data']][,vars]
 		panel <- rbind(panel, cbind(codesYear, years[ii])); colnames(panel) <- c(vars, 'year')
 	} else {
 		codesYear <- attributes(cshp(date=as.Date(date[ii]), useGW=TRUE))[['data']][,vars]
@@ -60,5 +60,5 @@ panel$ccodeYear <- paste(panel$ccode, panel$year, sep='')
 panel$cnameYear <- paste(panel$cname, panel$year, sep='')
 
 # saving dataframe to datafolder
-save(panel, file='panel.rda')
+save(panel, file=paste0(pathData, 'panel.rda'))
 ############################################################
