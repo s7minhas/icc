@@ -12,20 +12,12 @@ vars = c(
 	'icclevel_state',
 	'icclevel_opp',
 	'pts',
-	'poi_pts',
 	'osv_state',
 	'runsum_osvstate',
 	'osv_rebel',
 	'runsum_osvrebel',
 	'osv_total',
-	'runsum_osvtotal',
-	'poi_osv_state',
-	'poi_osv_rebel',
-	'poi_osv_total',
-	'civilwar',
-	'intensitylevel',
-	'runmax_civilwar',
-	'runmax_intensitylevel'
+	'runsum_osvtotal'
 	)
 
 ids = c(
@@ -39,7 +31,11 @@ ids = c(
 apData = data.frame(orig[,c(ids, vars)], stringsAsFactors=FALSE)
 
 # add in stdz cnames
+apData$statenme[apData$statenme=='Yugoslavia'] = 'SERBIA'
 apData$cname = cname(apData$statenme)
+apData$ccode = panel$ccode[match(apData$cname, panel$cname)]
+apData$cnameYear = with(apData, paste(cname, year, sep='_'))
+apData$ccodeYear = with(apData, paste(ccode, year, sep='_'))
 
 # reorg
 apData$d = '01'
@@ -58,7 +54,7 @@ apData = apData[,c('cname','cdate','date',ids,vars)]
 apData = apData[
 	which(
 		apData$date > as.Date('2002-06-01', format='%Y-%m-%d') &
-		apData$date < as.Date('2016-01-01', format='%Y-%m-%d')
+		apData$date < as.Date('2016-12-01', format='%Y-%m-%d')
 		)
 	,]
 
@@ -73,23 +69,13 @@ apDataYr = apData %>%
 		prelim_icc_opp = ifelse(any(icclevel_opp==1), 1, 0),
 		formal_icc_opp = ifelse(any(icclevel_opp>1), 1, 0),
 		pts = max(pts, na.rm=TRUE), 
-		poi_pts = max(poi_pts, na.rm=TRUE),
 		osv_state = sum(osv_state, na.rm=TRUE),
 		runsum_osvstate = sum(runsum_osvstate, na.rm=TRUE),
 		osv_rebel = sum(osv_rebel, na.rm=TRUE),
 		runsum_osvrebel = sum(runsum_osvrebel, na.rm=TRUE),		
 		osv_total = sum(osv_total, na.rm=TRUE),
 		runsum_osvtotal = sum(runsum_osvtotal, na.rm=TRUE),				
-		poi_osv_state = max(poi_osv_state, na.rm=TRUE),
-		poi_osv_rebel = max(poi_osv_rebel, na.rm=TRUE),
-		poi_osv_total = max(poi_osv_total, na.rm=TRUE),
-		civilwar = max(civilwar, na.rm=TRUE),
-		intensitylevel = max(intensitylevel, na.rm=TRUE),
-		runmax_civilwar = max(runmax_civilwar, na.rm=TRUE),
-		runmax_intensitylevel = max(runmax_intensitylevel, na.rm=TRUE)
 		) %>% data.frame()
 
-nrow(unique(apData[,c('cname','year','civilwar')])) ; nrow(unique(apData[,c('cname','year')])) ; nrow(apData) ; 
-
 # save and move onto merging
-save(apData, file=paste0(pathData, 'apDataRaw.rda'))
+save(apDataYr, file=paste0(pathData, 'apDataRaw.rda'))

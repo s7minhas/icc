@@ -24,6 +24,7 @@ loadPkg=function(toLoad){
 loadPkg(c(
 	'dplyr', 'reshape2', 'magrittr', 'haven', 'lubridate',
 	'ggplot2', 'latex2exp', 'Cairo',	# plotting
+	'foreach', 'doParallel', # parallelization
 	'xtable', # tables
 	'devtools', # loading git packages
 	'countrycode' # v 0.16

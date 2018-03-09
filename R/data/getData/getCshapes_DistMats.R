@@ -6,24 +6,24 @@ if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"){
 # Parameters for parallelization
 cl = makeCluster(8)
 registerDoParallel(cl)
-yrs = 2001:2016
+yrs = 2001:2015
 
 # Get capdist mats
 print('Collecting capital distance matrices...')
 capMats = foreach(yr = yrs, .packages=c("cshapes")) %dopar% {
-	distmatrix(as.Date(paste0(yr, "-1-1")), type="capdist", useGW=TRUE)
+	distmatrix(as.Date(paste0(yr, "-12-30")), type="capdist", useGW=TRUE)
 }
 
 # Get centdist mats
 print('Collecting centroid distance matrices...')
 centMats = foreach(yr = yrs, .packages=c("cshapes")) %dopar% {
-	distmatrix(as.Date(paste0(yr, "-1-1")), type="centdist", useGW=TRUE)
+	distmatrix(as.Date(paste0(yr, "-12-30")), type="centdist", useGW=TRUE)
 }
 
 # Get mindist mats
 print('Collecting minimum distance matrices...')
 minMats = foreach(yr = yrs, .packages=c("cshapes")) %dopar% {
-	distmatrix(as.Date(paste0(yr, "-1-1")), type="mindist", useGW=TRUE)
+	distmatrix(as.Date(paste0(yr, "-12-30")), type="mindist", useGW=TRUE)
 }
 ###############################################################
 
@@ -41,6 +41,29 @@ minMats = lapply(minMats, matchPanelCode)
 
 # Label years
 names(capMats) = yrs; names(centMats) = yrs; names(minMats) = yrs
+###############################################################
+
+###############################################################
+# melt into dd frames
+distance = melt(capMats)
+names(distance) = c('ccode_1','ccode_2','capitalDistance','year')
+distance$id = with(distance, paste(ccode_1, ccode_2, year, sep='_'))
+
+tmp=melt(centMats) %>% mutate(id=paste(Var1, Var2, L1, sep='_'))
+distance$centDistance = tmp$value[match(distance$id, tmp$id)]
+
+tmp=melt(minMats) %>% mutate(id=paste(Var1, Var2, L1, sep='_'))
+distance$minDistance = tmp$value[match(distance$id, tmp$id)]
+
+# cleanup
+distance = distance[distance$ccode_1!=distance$ccode_2,]
+###############################################################
+
+###############################################################
+# var transformations
+for(var in names(distance)[c(3,6:7)]){
+	distance$tmp = log(distance[,var] + 1)
+	names(distance)[ncol(distance)] = paste0(var, 'Log') }
 ###############################################################
 
 ###############################################################
