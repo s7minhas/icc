@@ -22,7 +22,8 @@ loadPkg=function(toLoad){
 
 # some necessary libs
 loadPkg(c(
-	'dplyr', 'reshape2', 'magrittr', 'haven', 'lubridate',
+	'foreign', 'haven',
+	'dplyr', 'reshape2', 'magrittr', 'lubridate',
 	'ggplot2', 'latex2exp', 'Cairo',	# plotting
 	'foreach', 'doParallel', # parallelization
 	'xtable', # tables

@@ -1,17 +1,15 @@
-if(Sys.info()['user'] %in% c('s7m','janus829')){
-  source('~/Research/irNeuralNets/code/R/setup.R') }
+if(Sys.info()['user'] %in% c('s7m', 'janus829')){
+    source('~/Research/icc/R/setup.R') }
 
 ############################
 # Download file from ICOW site
 igoURL = 'http://www.correlatesofwar.org/data-sets/IGOs/IGO_dyadunit_stata_v2.3.zip/at_download/file'
-igoName = paste0(pathDataRaw, 'igo.zip')
+igoName = paste0(pathData, 'cow_igo/igo.zip')
 if(!file.exists(igoName)) { download.file(igoURL, igoName) }
 
 igo = unzip(igoName, 
 	'IGO_dyadunit_stata_v2.3.dta') %>% read.dta()
 file.remove(paste0(getwd(), '/IGO_dyadunit_stata_v2.3.dta'))
-unlink(paste0(getwd(), '/version4.1_dta'), 
-    recursive=TRUE, force=TRUE)
 ############################
 
 ############################
@@ -112,5 +110,5 @@ igo <- data.frame(apply(igoDataFINAL,2,num))
 ############################
 # Save
 save(igo, 
-    file=paste0(pathDataBin,'igo.rda'))
+    file=paste0(pathData, 'cow_igo/igo.rda'))
 ############################

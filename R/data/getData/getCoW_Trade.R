@@ -1,16 +1,16 @@
-if(Sys.info()['user'] %in% c('s7m','janus829')){
-  source('~/Research/irNeuralNets/code/R/setup.R') }
+if(Sys.info()['user'] %in% c('s7m', 'janus829')){
+    source('~/Research/icc/R/setup.R') }
 
 ############################
 # Download file from ICOW site  
 tradeURL = 'http://www.correlatesofwar.org/data-sets/bilateral-trade/cow_trade_4.0/at_download/file'
-tradeName = paste0(pathDataRaw, 'trade.zip')
+tradeName = paste0(pathData, 'cow_trade/trade.zip')
 if(!file.exists(tradeName)) { download.file(tradeURL, tradeName) }
 
 currDir = getwd()
 trade = unzip(tradeName, 
 	'COW_Trade_4.0/Dyadic_COW_4.0.csv') %>% read.csv()
-unlink(paste0(currDir, 'R/Data/getCleanData/COW_Trade_4.0'), 
+unlink(paste0(getwd(), '/COW_Trade_4.0'), 
     recursive=TRUE, force=TRUE)	
 ############################
 
@@ -100,5 +100,5 @@ trade <- trade3[,c(
 # Save
 trade$id = with(trade, paste(ccode_1, ccode_2, year, sep='_'))
 save(trade, 
-	file=paste0(pathDataBin, 'trade.rda'))
+	file=paste0(pathData, 'cow_trade/trade.rda'))
 ############################

@@ -4,17 +4,8 @@ if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"){
 ####
 
 ###############################################################
-# Add 2013 and 2014 to panel (assumes '13-14 cntries = '12 cntries)
-p13 = panel[panel$year==2012,]; p13$year = 2013
-p13$ccodeYear = paste0(p13$ccode, p13$year); p13$cnameYear = paste0(p13$cname, p13$year)
-panel = rbind(panel, p13); rm(list='p13')
-p14 = panel[panel$year==2012,]; p14$year = 2014
-p14$ccodeYear = paste0(p14$ccode, p14$year); p14$cnameYear = paste0(p14$cname, p14$year)
-panel = rbind(panel, p14); rm(list='p14')
-###############################################################
-
-###############################################################
 # Function to clean data data
+loadPkg('xlsx')
 icrgCleaner = function(data,sheetNum){
 	# Match to country names in panel
 	data$Country=char(data$Country)
@@ -70,13 +61,14 @@ icrgCleaner = function(data,sheetNum){
 ###############################################################
 # ICRG data from PRS group
 # Manually downloaded through Duke website
-icrgName = paste0(pathRaw, "3BResearchersDataset2015.xlsx")
+icrgName = paste0(pathData, "icrg/3BResearchersDataset2015.xlsx")
 icrgL = lapply(2:13, function(ii){
-	var = read.xlsx(icrgName, sheet=ii)[3,1]
-	dat = read.xlsx(icrgName, sheet=ii, startRow=8)
+	var = read.xlsx(file=icrgName, sheetIndex=ii)[3,1]
+	dat = read.xlsx(icrgName, sheetIndex=ii, startRow=8)
 	mdat = melt(dat, id='Country')
-	for(v in c('variable','value')){ mdat[,v] = num(mdat[,v]) }
-	names(mdat)[2:3] = c('year', var)
+	mdat$variable = gsub('X','',mdat$variable) %>% num()
+	mdat$value = num(mdat$value)
+	names(mdat)[2:3] = c('year', char(var))
 	mdat = icrgCleaner(data=mdat, sheetNum=ii)
 	return(mdat)
 })
@@ -98,14 +90,9 @@ shortNames = c(
 cbind(names(icrg)[c(3,8:ncol(icrg))], shortNames)
 # Replace
 names(icrg)[c(3,8:ncol(icrg))] = shortNames
-
-# Create ICRG property rights measure
-# Investment Profile +  Bureaucracy Quality +  Corruption + Law and Order
-# First rescale each to be between 0 and 10
-icrg$propRights = apply(icrg[,c('invProf','burQual','corr','lawOrd')],2,function(x){rescale(x,10,0)}) %>% apply(., 1, sum)
 ###############################################################
 
 ###############################################################
 # Save
-save(icrg, file=paste0(pathBin, 'icrg.rda'))
+save(icrg, file=paste0(pathData, "icrg/icrg.rda"))
 ###############################################################

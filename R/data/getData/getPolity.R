@@ -1,10 +1,12 @@
-if(Sys.info()['user'] %in% c('s7m','janus829')){
-  source('~/Research/irNeuralNets/code/R/setup.R') }
+####
+if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"){
+	source('~/Research/icc/R/setup.R') }
+####
 
 ############################
 # Download file from INSCR site
 polURL = 'http://www.systemicpeace.org/inscr/p4v2016.sav'
-polName = paste0(pathDataRaw, 'polity16')
+polName = paste0(pathData, 'polity/polity16.sav')
 if(!file.exists(polName)) { download.file(polURL, polName) }
 
 polData = read.spss(polName, to.data.frame=TRUE)
@@ -64,5 +66,5 @@ polData$polity2 = polData$polity2 + 11
 ############################
 # Save cleaned polity data
 polity=polData
-save(polity, file=paste0(pathDataBin, 'polity.rda'))
+save(polity, file=paste0(pathData, 'polity/polity.rda'))
 ############################

@@ -4,26 +4,39 @@ if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"){
 ###############################################################
 # Get distance matrices in parallel
 # Parameters for parallelization
+loadPkg('cshapes')
 cl = makeCluster(8)
 registerDoParallel(cl)
-yrs = 2001:2015
+yrs = 2000:2016
 
 # Get capdist mats
 print('Collecting capital distance matrices...')
 capMats = foreach(yr = yrs, .packages=c("cshapes")) %dopar% {
-	distmatrix(as.Date(paste0(yr, "-12-30")), type="capdist", useGW=TRUE)
+	if(yr==2016){
+		distmatrix(as.Date(paste0(yr, "-6-30")), type="capdist", useGW=TRUE)
+	} else {
+		distmatrix(as.Date(paste0(yr, "-12-30")), type="capdist", useGW=TRUE)
+	}
 }
 
 # Get centdist mats
 print('Collecting centroid distance matrices...')
 centMats = foreach(yr = yrs, .packages=c("cshapes")) %dopar% {
-	distmatrix(as.Date(paste0(yr, "-12-30")), type="centdist", useGW=TRUE)
+	if(yr == 2016){
+		distmatrix(as.Date(paste0(yr, "-6-30")), type="centdist", useGW=TRUE)
+	} else {
+		distmatrix(as.Date(paste0(yr, "-12-30")), type="centdist", useGW=TRUE)
+	}
 }
 
 # Get mindist mats
 print('Collecting minimum distance matrices...')
 minMats = foreach(yr = yrs, .packages=c("cshapes")) %dopar% {
-	distmatrix(as.Date(paste0(yr, "-12-30")), type="mindist", useGW=TRUE)
+	if(yr == 2016){
+		distmatrix(as.Date(paste0(yr, "-6-30")), type="mindist", useGW=TRUE)
+	} else {
+		distmatrix(as.Date(paste0(yr, "-12-30")), type="mindist", useGW=TRUE)
+	}
 }
 ###############################################################
 
@@ -68,7 +81,7 @@ for(var in names(distance)[c(3,6:7)]){
 
 ###############################################################
 # Save to binaries
-save(capMats, centMats, minMats, file=paste0(
-	pathData,'cshapes_distance/distMats.rda')
+save(distance, file=paste0(
+	pathData,'cshapes_distance/distance.rda')
 )
 ###############################################################
