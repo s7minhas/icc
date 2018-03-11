@@ -68,5 +68,5 @@ wbData$popLog = log(wbData$pop)
 ############################
 # Save
 worldBank = wbData
-save(worldBank, file=paste0(pathDataBin, 'worldBank.rda'))
+save(worldBank, file=paste0(pathData, 'worldBank/worldBank.rda'))
 ############################

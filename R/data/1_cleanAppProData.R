@@ -81,15 +81,3 @@ data$ccodeYear = with(data, paste(ccode, year, sep='_'))
 
 # save and move onto merging
 save(data, file=paste0(pathData, 'baseData.rda'))
-
-# ###CINC Stuff
-# ## extends to 2012
-# cinc = read.csv("NMC_5_0.csv")
-# cinc = cinc[cinc$year>=1960,]
-# cinc$cyear = paste(cinc$ccode, cinc$year, sep='_')
-
-# for(var in c('milex','milper','cinc')){
-# 	dyadData$tmp = cinc[match(dyadData$cyear1, cinc$cyear),var]
-# 	names(dyadData)[ncol(dyadData)] = paste(var, 'i', sep='_')
-# 	dyadData$tmp = cinc[match(dyadData$cyear2, cinc$cyear),var]
-# 	names(dyadData)[ncol(dyadData)] = paste(var, 'j', sep='_')}
