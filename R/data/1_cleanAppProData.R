@@ -1,6 +1,9 @@
+###############################################################
 if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	source('~/Research/icc/R/setup.R') }
+###############################################################
 
+###############################################################
 # load in AP data and keep only their key vars
 # will rebuild rest in subseq files
 orig  = read_dta(
@@ -29,12 +32,16 @@ ids = c(
 
 # create new df and get rid of tibble formatting
 apData = data.frame(orig[,c(ids, vars)], stringsAsFactors=FALSE)
+###############################################################
 
+###############################################################
 # add in stdz cnames
 apData$statenme[apData$statenme=='Yugoslavia'] = 'SERBIA'
 apData$cname = cname(apData$statenme)
 apData$ccode = panel$ccode[match(apData$cname, panel$cname)]
+###############################################################
 
+###############################################################
 # reorg
 apData$d = '01'
 apData$m = ifelse(
@@ -55,7 +62,9 @@ apData = apData[
 		apData$date < as.Date('2016-12-01', format='%Y-%m-%d')
 		)
 	,]
+###############################################################
 
+###############################################################
 # aggregate to year level
 data = apData %>% 
 	dplyr::group_by(cname, ccode, year) %>%
@@ -78,6 +87,9 @@ data = apData %>%
 # add year level ids
 data$cnameYear = with(data, paste(cname, year, sep='_'))
 data$ccodeYear = with(data, paste(ccode, year, sep='_'))
+###############################################################
 
+###############################################################
 # save and move onto merging
 save(data, file=paste0(pathData, 'baseData.rda'))
+###############################################################
