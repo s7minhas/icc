@@ -12,8 +12,26 @@ load(paste0(pathData, 'baseData.rda'))
 # helper fn to merge data from component files
 addComponentData = function(rdaPath, missPath, objName, vars){
 	load(rdaPath) ; toAdd = get(objName)
-	setdiff(data$cname, toAdd$cname) %>% unique() %>% write.csv(.,file=missPath)
-	
+	data[data$cname %in% unique(setdiff(data$cname, toAdd$cname)),] %>%
+		dplyr::group_by(cname) %>%
+		dplyr::summarize(
+			any_prelim_icc=mean(prelim_icc),
+			any_formal_icc=mean(formal_icc),
+			any_prelim_icc_state=mean(prelim_icc_state),
+			any_formal_icc_state=mean(formal_icc_state),			
+			any_prelim_icc_opp=mean(prelim_icc_opp),
+			any_formal_icc_opp=mean(formal_icc_opp)
+			) %>%
+		dplyr::mutate(
+			any_prelim_icc = ifelse(any_prelim_icc, 1, 0),
+			any_formal_icc = ifelse(any_formal_icc, 1, 0),
+			any_prelim_icc_state = ifelse(any_prelim_icc_state, 1, 0),
+			any_formal_icc_state = ifelse(any_formal_icc_state, 1, 0),			
+			any_prelim_icc_opp = ifelse(any_prelim_icc_opp, 1, 0),
+			any_formal_icc_opp = ifelse(any_formal_icc_opp, 1, 0)
+			) %>%
+		write.csv(., file=missPath)
+
 	# merge in vars at same pd
 	toAdd$ccodeYear = with(toAdd, paste(ccode, year, sep='_'))
 	for(v in vars){
