@@ -17,3 +17,7 @@ civWar = ucdp.brd[
 
 civWar$cname = panel$cname[match(civWar$gwno_loc,panel$ccode)]
 ############################
+
+### regen osv variables from one sided violence data
+
+### 

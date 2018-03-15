@@ -10,7 +10,7 @@ loadPkg('WDI')
 fName = paste0(pathData, 'worldBank/worldBankVars.csv')
 wbVars = c(
 	'NY.GDP.MKTP.KD', # GDP, constant US
-	'NY.GDP.PCAP.KD', # GDP per capita, current US
+	'NY.GDP.PCAP.KD', # GDP per capita, constant US
 	'NY.GDP.MKTP.KD.ZG', # GDP growth
 	'SP.POP.TOTL', # Population
 	'BX.KLT.DINV.WD.GD.ZS', # Foreign direct investment, net inflows (% of GDP)
