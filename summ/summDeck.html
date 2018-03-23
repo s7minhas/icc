@@ -42,16 +42,12 @@ count: false
 ## DVs
 
 - State
-  + Prelim ICC Involvement
-    * 18 countries experienced event between 2002 to 2016
-  + Formal ICC Involvement
-    * 5 countries experienced event between 2002 to 2016
+  + Prelim ICC Involvement: 18 countries experienced event between 2002 to 2016
+  + Formal ICC Involvement: 5 countries experienced event between 2002 to 2016
 
 - Opposition
-  + Prelim ICC Involvement
-    * 16 countries experienced event between 2002 to 2016
-  + Formal ICC Involvement
-    * 8 countries experienced event between 2002 to 2016
+  + Prelim ICC Involvement: 16 countries experienced event between 2002 to 2016
+  + Formal ICC Involvement: 8 countries experienced event between 2002 to 2016
 
 ---
 
@@ -91,20 +87,201 @@ Other affinity measures with P5+1 countries that we discussed include alliances,
 
 ---
 
+## Major issues to keep in mind
+
+- Very few countries experience prelim and even fewer experience formal
+- There might be a sample selection issue in that countries may only experience formal after a prelim. 
+
+---
+
 ## Strategies
 
 - We've discussed a number of modeling strategies:
   + Logit models estimated separately for prelim and formal stage
   + Logit model with temporal dependence taken into account using cubic splines (Carter &amp; Signorino, 2010)
   + Selection model to account for the conditional dependence between the formal and prelim stages
-    * For now I've worked on using a Sartori's version of a selection model since we haven't discussed whether we have enough covariates to specify separate theories for the prelim and formal equations
+  + Matching strategies given the covariates we assembled
   + Random forest models to aid in accounting for paucity of events
+
+---
+
+## Aside on selection models
+
+I tried setting up a Heckman selection model with varying covariates in the prelim and formal stages but the correlation across the equations tended to be above 0.8 no matter the specification. I switched to a Sartori model, which doesn't require different DGPs for the selection and outcome stages. 
+
+However, this approach comes with a key assumption of its own: the error term for an observation must be the same in the two equations. 
+
+---
+
+## Aside on matching
+
+Some in the literature have talked about using matching as an alternative to dealing with selection bias. I doubt that we have the sample to actually employ this procedure. Also we would have to make an argument here that we can account for the selection bias by matching on the observables that we have collected. 
 
 ---
 
 ## Model specification
 
-In general, the model specification I used for each of the above is:
+In general, the model specification I used for the Sartori and logistic models is: 
+
+ICC (prelim/formal, state/opp): 
+
+Africa + ICC + GDP + Ratification + OSV + Intervention + Civil War + Democracy + Higher Judicial + Avg P5 Voting Sim + Higher Judicial x Avg P5 Voting Sim
+
+- I use the higher judicial measure from VDEM instead of the lower because across the logit and sartori models they provided me consistent results. 
+- Haven't included the PTS variables yet.
+- Referral information has not been incorporated into the model yet either. 
+
+---
+
+## Notes before results
+
+- As you can see there are a lot of covariates here and we also have an interactive relationship to test as well
+- This is important to note as the number of actual events is so small
+- Also because our DVs are binary as well I'm concerned about separation issues
+- There is a way of dealing with separation issues by building on prior information about the parameters in the model ... but how we set priors here is unclear to me, especially, when we get to the Sartori model. 
+
+---
+
+## Logistic model: ICC Prelim
+
+Sorry for the crude depiction, but blue/red indicates significance at 95% CI. Haven't had a chance to do a substantive effects analysis yet, and also as I've been trying to note above I'm not the most confident in these results just yet. 
+
+.pull-left[
+Government - Prelim
+- Africa
+- ICC Ratif. 
+- GDP
+- &lt;span style="color:blue"&gt;OSV&lt;/span&gt;
+- Intervention
+- &lt;span style="color:blue"&gt;Civil War&lt;/span&gt;
+- Democracy
+- &lt;span style="color:red"&gt;Judicial&lt;/span&gt;
+- P5 Voting
+- Judicial x P5 Voting
+]
+
+.pull-right[
+Opposition - Prelim
+- Africa
+- ICC Ratif.
+- GDP
+- Ratification
+- &lt;span style="color:blue"&gt;OSV&lt;/span&gt;
+- Intervention
+- Civil War
+- Democracy
+- &lt;span style="color:red"&gt;Judicial&lt;/span&gt;
+- P5 Voting
+- Judicial x P5 Voting
+]
+
+---
+
+## Logistic model: ICC Formal
+
+.pull-left[
+Government
+- &lt;span style="color:blue"&gt;Africa&lt;/span&gt;
+- &lt;span style="color:blue"&gt;ICC&lt;/span&gt;
+- GDP
+- Ratification
+- &lt;span style="color:blue"&gt;OSV&lt;/span&gt;
+- Intervention
+- Civil War
+- Democracy
+- &lt;span style="color:red"&gt;Judicial&lt;/span&gt;
+- &lt;span style="color:red"&gt;P5 Voting&lt;/span&gt;
+- Judicial x P5 Voting
+]
+
+.pull-right[
+Opposition
+- &lt;span style="color:blue"&gt;Africa&lt;/span&gt;
+- &lt;span style="color:blue"&gt;ICC&lt;/span&gt;
+- GDP
+- Ratification
+- &lt;span style="color:blue"&gt;OSV&lt;/span&gt;
+- Intervention
+- Civil War
+- Democracy
+- Judicial
+- P5 Voting
+- Judicial x P5 Voting
+]
+
+---
+
+## Sartori model: Government
+
+.pull-left[
+Prelim
+- &lt;span style="color:blue"&gt;Africa&lt;/span&gt;
+- &lt;span style="color:blue"&gt;ICC&lt;/span&gt;
+- GDP
+- Ratification
+- &lt;span style="color:blue"&gt;OSV&lt;/span&gt;
+- Intervention
+- Civil War
+- Democracy
+- &lt;span style="color:red"&gt;Judicial&lt;/span&gt;
+- &lt;span style="color:red"&gt;P5 Voting&lt;/span&gt;
+- Judicial x P5 Voting
+]
+
+.pull-right[
+Formal
+- &lt;span style="color:blue"&gt;Africa&lt;/span&gt;
+- &lt;span style="color:blue"&gt;ICC&lt;/span&gt;
+- GDP
+- Ratification
+- &lt;span style="color:blue"&gt;OSV&lt;/span&gt;
+- Intervention
+- Civil War
+- Democracy
+- Judicial
+- P5 Voting
+- Judicial x P5 Voting
+]
+
+---
+
+## Sartori model: Rebel
+
+.pull-left[
+Prelim
+- &lt;span style="color:blue"&gt;Africa&lt;/span&gt;
+- ICC
+- GDP
+- Ratification
+- &lt;span style="color:blue"&gt;OSV&lt;/span&gt;
+- Intervention
+- Civil War
+- Democracy
+- &lt;span style="color:red"&gt;Judicial&lt;/span&gt;
+- P5 Voting
+- Judicial x P5 Voting
+]
+
+.pull-right[
+Formal
+- &lt;span style="color:blue"&gt;Africa&lt;/span&gt;
+- &lt;span style="color:blue"&gt;ICC&lt;/span&gt;
+- GDP
+- Ratification
+- &lt;span style="color:blue"&gt;OSV&lt;/span&gt;
+- Intervention
+- Civil War
+- Democracy
+- Judicial
+- P5 Voting
+- Judicial x P5 Voting
+]
+
+---
+
+## Weighing the models
+
+I also generated predictions from each of these models in a leave one out cross validation context. This is a common way of assessing how well the models perform in being able to generate the data in an out of sample context. The logistic and Sartori models each perform quite poorly. The metrics that we would use to study prediction in the binary case are ROC and PR curves, and for each of the models above the AUC under these curves was less than 0.6. A value of 0.5 would indicate that you're better simply tossing a coin.
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
