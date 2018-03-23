@@ -1,0 +1,123 @@
+---
+title: ICC Initial Modeling Deck
+author: "Shahryar Minhas"
+date: "3/22/2018"
+output:
+  xaringan::moon_reader:
+    css: "slides.css"
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+exclude: true
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  width = 80,
+  tibble.width = 80
+)
+
+knitr::opts_chunk$set(
+  fig.align = "center"
+)
+
+library(emo)
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+```
+
+```{r setup, message=FALSE}
+library(ggplot2)
+theme_set(theme_bw())
+library(dplyr)
+library(stringr)
+library(magrittr)
+library(rvest)
+```
+
+---
+class: middle
+count: false
+
+# Data
+
+---
+
+## DVs
+
+- State
+  + Prelim ICC Involvement: 18 countries experienced event between 2002 to 2016
+  + Formal ICC Involvement: 5 countries experienced event between 2002 to 2016
+
+- Opposition
+  + Prelim ICC Involvement: 16 countries experienced event between 2002 to 2016
+  + Formal ICC Involvement: 8 countries experienced event between 2002 to 2016
+
+---
+
+## IVs
+
+- ICC ratification
+- Africa region binary (static)
+- GDP in constant dollars from World Bank (to 2017)
+- Civil War & OSV from UCDP (to 2016)
+- Political Terror Scale (to 2016)
+- Polity (to 2016)
+- Lower and higher court independence measures from VDEM (to 2017)
+- Referral data (static)
+
+---
+
+## P5+1 Measures
+
+For each P5+1 measure, I calculate the average relationship between every country in the sample and also include individual variables designating the relation between a country and each of the P5+1 countries.
+
+- Ideal points from Voeten (to 2015)
+- Military intervention from UCDP (to 2016)
+
+Other affinity measures with P5+1 countries that we discussed include alliances, joint IGO membership, and trade. Each of these variables has too short a time series. I have the SIPRI measure set up as well but am hesitant about using it for now because the level of missingness in the dataset exceeds 30%.
+
+---
+
+## Effective sample
+
+- Lagging each of the IVs and P5+1 measures by one year provides us with an effective sample from 2002 to 2016. 
+- Each of the control and key variables of interest come with degrees of missingness, but in no case do we have missingness for more than 10% of cases. 
+- However, given that some of those missing cases will lead us to lose the already number of rare events that we have I imputed five missing datasets using a Bayesian copula scheme. 
+
+---
+
+# Modeling
+
+---
+
+## Strategies
+
+- We've discussed a number of modeling strategies:
+  + Logit models estimated separately for prelim and formal stage
+  + Logit model with temporal dependence taken into account using cubic splines (Carter & Signorino, 2010)
+  + Selection model to account for the conditional dependence between the formal and prelim stages
+  + Matching strategies given the covariates we assembled
+  + Random forest models to aid in accounting for paucity of events
+
+## Aside on selection models
+
+I tried setting up a Heckman selection model with varying covariates in the prelim and formal stages but the correlation across the equations tended to be above 0.8 no matter the specification. I switched to a Sartori model, which relaxes the constraint that the 
+
+For now I've worked on using a Sartori's version of a selection model since we haven't discussed whether we have enough covariates to specify separate theories for the prelim and formal equations
+
+---
+
+## Aside on matching
+
+
+
+---
+
+## Model specification
+
+In general, the model specification I used for each of the above is: 
+
+---

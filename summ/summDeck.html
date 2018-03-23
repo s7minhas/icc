@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ICC Initial Modeling Deck</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Shahryar Minhas" />
+    <link href="libs/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# ICC Initial Modeling Deck
+### Shahryar Minhas
+### 3/22/2018
+
+---
+
+exclude: true
+
+
+
+
+```r
+library(ggplot2)
+theme_set(theme_bw())
+library(dplyr)
+library(stringr)
+library(magrittr)
+library(rvest)
+```
+
+---
+class: middle
+count: false
+
+# Data
+
+---
+
+## DVs
+
+- State
+  + Prelim ICC Involvement
+    * 18 countries experienced event between 2002 to 2016
+  + Formal ICC Involvement
+    * 5 countries experienced event between 2002 to 2016
+
+- Opposition
+  + Prelim ICC Involvement
+    * 16 countries experienced event between 2002 to 2016
+  + Formal ICC Involvement
+    * 8 countries experienced event between 2002 to 2016
+
+---
+
+## IVs
+
+- ICC ratification
+- Africa region binary (static)
+- GDP in constant dollars from World Bank (to 2017)
+- Civil War &amp; OSV from UCDP (to 2016)
+- Political Terror Scale (to 2016)
+- Polity (to 2016)
+- Lower and higher court independence measures from VDEM (to 2017)
+- Referral data (static)
+
+---
+
+## P5+1 Measures
+
+For each P5+1 measure, I calculate the average relationship between every country in the sample and also include individual variables designating the relation between a country and each of the P5+1 countries.
+
+- Ideal points from Voeten (to 2015)
+- Military intervention from UCDP (to 2016)
+
+Other affinity measures with P5+1 countries that we discussed include alliances, joint IGO membership, and trade. Each of these variables has too short a time series. I have the SIPRI measure set up as well but am hesitant about using it for now because the level of missingness in the dataset exceeds 30%.
+
+---
+
+## Effective sample
+
+- Lagging each of the IVs and P5+1 measures by one year provides us with an effective sample from 2002 to 2016. 
+- Each of the control and key variables of interest come with degrees of missingness, but in no case do we have missingness for more than 10% of cases. 
+- However, given that some of those missing cases will lead us to lose the already number of rare events that we have I imputed five missing datasets using a Bayesian copula scheme. 
+
+---
+
+# Modeling
+
+---
+
+## Strategies
+
+- We've discussed a number of modeling strategies:
+  + Logit models estimated separately for prelim and formal stage
+  + Logit model with temporal dependence taken into account using cubic splines (Carter &amp; Signorino, 2010)
+  + Selection model to account for the conditional dependence between the formal and prelim stages
+    * For now I've worked on using a Sartori's version of a selection model since we haven't discussed whether we have enough covariates to specify separate theories for the prelim and formal equations
+  + Random forest models to aid in accounting for paucity of events
+
+---
+
+## Model specification
+
+In general, the model specification I used for each of the above is:
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
