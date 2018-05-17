@@ -10,7 +10,9 @@ load(paste0(pathData, 'baseData.rda'))
 
 ###############################################################
 # helper fn to merge data from component files
-addComponentData = function(rdaPath, missPath, objName, vars){
+addComponentData = function(
+	data=data, rdaPath, 
+	missPath, objName, vars, writeMiss=FALSE){
 	load(rdaPath) ; toAdd = get(objName)
 	data[data$cname %in% unique(setdiff(data$cname, toAdd$cname)),] %>%
 		dplyr::group_by(cname) %>%
@@ -30,7 +32,7 @@ addComponentData = function(rdaPath, missPath, objName, vars){
 			any_prelim_icc_opp = ifelse(any_prelim_icc_opp, 1, 0),
 			any_formal_icc_opp = ifelse(any_formal_icc_opp, 1, 0)
 			) %>%
-		write.csv(., file=missPath)
+		if(writeMiss){ write.csv(., file=missPath) }
 
 	# merge in vars at same pd
 	toAdd$ccodeYear = with(toAdd, paste(ccode, year, sep='_'))
@@ -46,7 +48,7 @@ addComponentData = function(rdaPath, missPath, objName, vars){
 		names(data)[ncol(data)] = paste0('lag1_', v) }
 
 	return(data) }
-###############################################################	
+###############################################################
 
 # nodal variables ##############################################################
 

@@ -15,11 +15,15 @@ vars = c(
 	'icclevel_state',
 	'icclevel_opp',
 	'pts',
+	'poi_pts',
 	'osv_state',
+	'poi_osv_state',
 	'runsum_osvstate',
 	'osv_rebel',
+	'poi_osv_rebel',
 	'runsum_osvrebel',
 	'osv_total',
+	'poi_osv_total',
 	'runsum_osvtotal'
 	)
 
