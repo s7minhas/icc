@@ -1,36 +1,108 @@
-# ####
-# if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"){
-# 	source('~/Research/icc/R/setup.R') }
-# ####
+####
+if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"){
+	source('~/Research/icc/R/setup.R') }
+####
 
 ############################
 # battle deaths conflict level data
-load(paste0(pathData, 'ucdp/ucdp-onesided-172.rda'))
-############################
-
-############################
-# define civil wars at country year level
-head(slice)
-tocompare = unique(slice[,c('statenme','year','month','osv_state','osv_rebel','osv_total')])
-
-fckme = ucdp.osv[grepl('Sudan', ucdp.osv$location),]
-fckme2 = fckme[fckme$is_government_actor==0,]
-aggstats = fckme2 %>%
-	group_by(year) %>% 
-	summarize(
-		best_deaths = sum(best_fatality_estimate),
-		low_deaths = sum(low_fatality_estimate),
-		high_deaths = sum(high_fatality_estimate)
-		)
-
-
 load(paste0(pathData, 'ucdp/ged171.Rdata'))
-
-fckme = ged171[ged171$country=='Sudan',]
-fckme = fckme[fckme$year>=2005,]
-fckme = fckme[,c('')]
+ged = ged171@data
 ############################
 
-### regen osv variables from one sided violence data
+############################
+# 
+ged = ged[ged$year>=2001,]
 
-### 
+# type of violence==3
+ged = ged[ged$type_of_vi==3,]
+
+# cleanup
+ged = ged[,c('year','side_a','gwnoa','country','deaths_civ')]
+for(v in c(1,3,5)){ ged[,v] = num(ged[,v])}
+for(v in c(2,4)){ ged[,v] = char(ged[,v])}
+
+# separate by state and non-state
+gedState = ged[!is.na(ged$gwnoa),]
+gedRebel = ged[is.na(ged$gwnoa),]
+############################
+
+############################
+# match country names for state
+gedState$cname = cname(gedState$side_a)
+gedState$cname[gedState$side_a=='Government of Mali'] = cname('Mali')
+
+# aggregate counts by unit year
+gedState = gedState %>%
+	group_by(cname,year) %>%
+	summarize(civDeaths=sum(deaths_civ)) %>% data.frame(.,stringsAsFactors = FALSE)
+
+# add ccodes
+gedState$ccode = panel$ccode[match(gedState$cname, panel$cname)]
+
+# make correction for syria based on ap's do file
+gedState = rbind(
+	gedState,
+	data.frame(
+		cname='SYRIAN ARAB REPUBLIC',year=2001:2010, civDeaths=0, ccode=652
+		) )
+gedState = rbind(
+	gedState,
+	data.frame(
+		cname='SYRIAN ARAB REPUBLIC',year=2011, civDeaths=244, ccode=652
+		) )
+gedState = rbind(
+	gedState,
+	data.frame(
+		cname='SYRIAN ARAB REPUBLIC',year=2012, civDeaths=28, ccode=652
+		) )
+gedState = rbind(
+	gedState,
+	data.frame(
+		cname='SYRIAN ARAB REPUBLIC',year=2013, civDeaths=51, ccode=652
+		) )
+gedState = rbind(
+	gedState,
+	data.frame(
+		cname='SYRIAN ARAB REPUBLIC',year=2013:2016, civDeaths=3, ccode=652
+		) )
+############################
+
+############################
+# match country names for rebel
+gedRebel$cname = cname(gedRebel$country)
+
+# aggregate counts by unit year
+gedRebel = gedRebel %>%
+	group_by(cname,year) %>%
+	summarize(civDeaths=sum(deaths_civ)) %>% data.frame(.,stringsAsFactors = FALSE)
+
+# add ccodes
+gedRebel$ccode = panel$ccode[match(gedRebel$cname, panel$cname)]
+
+# make correction for syria based on ap's do file
+gedRebel = rbind(
+	gedRebel,
+	data.frame(
+		cname='SYRIAN ARAB REPUBLIC',year=2001:2012, civDeaths=0, ccode=652
+		) )
+gedRebel = rbind(
+	gedRebel,
+	data.frame(
+		cname='SYRIAN ARAB REPUBLIC',year=2013, civDeaths=73, ccode=652
+		) )
+gedRebel = rbind(
+	gedRebel,
+	data.frame(
+		cname='SYRIAN ARAB REPUBLIC',year=2014, civDeaths=47, ccode=652
+		) )
+gedRebel = rbind(
+	gedRebel,
+	data.frame(
+		cname='SYRIAN ARAB REPUBLIC',year=2015:2016, civDeaths=213, ccode=652
+		) )
+############################
+
+############################
+# save
+save(gedRebel, gedState, file=paste0(pathData, 'ucdp/ged_osv.rda'))
+############################
