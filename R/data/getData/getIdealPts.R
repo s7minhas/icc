@@ -26,6 +26,39 @@ stopifnot( length( table(idPt$dyadidyr)[table(idPt$dyadidyr)>1] ) == 0 )
 ###############################################################
 
 ###############################################################
+# match time frame
+idPt = idPt[idPt$year>=2000,]
+
+# relabel vars
+idPt = idPt[,c(2,23:24,3,6,8,10)]
+
+# focus on p5 countries
+toKeep = c(
+	"UNITED STATES", "UNITED KINGDOM", 
+	"CHINA", "RUSSIAN FEDERATION", "FRANCE")
+idPt = idPt[which(idPt$cname2 %in% toKeep),]
+
+# spread data
+idPt = idPt %>% 
+	gather(variable, value, -(ccode1:year)) %>%
+	unite(temp, cname2, variable) %>%
+	spread(temp, value)
+idPt[is.na(idPt)] = 0
+
+# get p5 vars
+idPt$p5_absidealdiffSum = apply(idPt[,paste0(toKeep,'_absidealdiff')], 1, sum)
+idPt$p5_s3unSum = apply(idPt[,paste0(toKeep,'_s3un')], 1, sum)
+idPt$p5_agree3unSum = apply(idPt[,paste0(toKeep,'_agree3un')], 1, sum)
+
+# calc proportions
+denom = rep(5,nrow(idPt))
+denom = ifelse(idPt$cname1 %in% toKeep, 4, 5)
+idPt$p5_absidealdiffProp = idPt$p5_absidealdiffSum/denom
+idPt$p5_s3unProp = idPt$p5_s3unSum/denom
+idPt$p5_agree3unProp = idPt$p5_agree3unSum/denom
+###############################################################
+
+###############################################################
 # Save
 save(idPt, file=paste0(pathData, 'Voeten/idPt.rda'))
 ###############################################################

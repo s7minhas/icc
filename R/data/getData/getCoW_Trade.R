@@ -96,9 +96,49 @@ trade <- trade3[,c(
 	'trade')]
 ############################
 
+###############################################################
+# sample cutoff
+trade = trade[trade$year>=2000,]
+
+# relabel vars
+names(trade)[1:4] = c(paste0('ccode',1:2),paste0('cname',1:2))
+trade = trade[,-match(c(paste0('cyear_',1:2)),names(trade))]
+
+# calc proportion of trade by country
+tmp = trade %>% group_by(cname1,year) %>%
+	summarize(totTrade = sum(trade))
+
+# focus on p5 countries
+toKeep = c(
+	"UNITED STATES", "UNITED KINGDOM", 
+	"CHINA", "RUSSIAN FEDERATION", "FRANCE")
+trade = trade[which(trade$cname2 %in% toKeep),-match('ccode2',names(trade))]
+
+# spread data
+trade = trade %>% 
+	gather(variable, value, -(ccode1:year)) %>%
+	unite(temp, cname2, variable) %>%
+	spread(temp, value)
+trade[is.na(trade)] = 0
+
+# bring in totTrade
+trade$totTrade_1 = tmp$totTrade[
+	match(
+		paste0(trade$cname1, trade$year),
+		paste0(tmp$cname1, tmp$year) ) ]
+
+# get p5 vars
+trade$p5_trade = apply(trade[,paste0(toKeep,'_trade')], 1, sum)
+for(v in names(trade)[c(4:8,10)]){
+	trade$tmp = trade[,v]/trade$totTrade_1
+	names(trade)[ncol(trade)] = paste0(v, 'Prop') }
+
+# remove some small countries
+trade = trade[!is.na(trade$CHINA_tradeProp),]
+###############################################################
+
 ############################
 # Save
-trade$id = with(trade, paste(ccode_1, ccode_2, year, sep='_'))
 save(trade, 
 	file=paste0(pathData, 'cow_trade/trade.rda'))
 ############################

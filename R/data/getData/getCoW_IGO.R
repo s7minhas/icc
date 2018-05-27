@@ -107,6 +107,47 @@ igoDataFINAL <- cbind(ccodes, igoDataFINAL[,c('year','igo')])
 igo <- data.frame(apply(igoDataFINAL,2,num))
 ############################
 
+###############################################################
+# add labels back in
+igo$cname1 = panel$cname[match(igo$ccode_1, panel$ccode)]
+igo$cname2 = panel$cname[match(igo$ccode_2, panel$ccode)]
+names(igo)[1:2] = paste0('ccode',1:2)
+igo = igo[,c(paste0('ccode',1:2),paste0('cname',1:2), 'year','igo')]
+
+# add in igoAny
+names(igo)[ncol(igo)] = 'igoCount'
+igo$igoAny = ifelse(igo$igo>0, 1, 0)
+
+# flip around
+tmp = igo
+tmp$cname1 = igo$cname2 ; tmp$cname2 = igo$cname1
+tmp$ccode1 = igo$ccode2 ; tmp$ccode2 = igo$ccode1
+igo = rbind(igo, tmp)
+
+# focus on p5 countries
+toKeep = c(
+    "UNITED STATES", "UNITED KINGDOM", 
+    "CHINA", "RUSSIAN FEDERATION", "FRANCE")
+igo = igo[which(igo$cname2 %in% toKeep),-match('ccode2',names(igo))]
+
+# spread data
+igo = igo %>% 
+    gather(variable, value, -(ccode1:year)) %>%
+    unite(temp, cname2, variable) %>%
+    spread(temp, value)
+igo[is.na(igo)] = 0
+
+# get p5 vars
+igo$p5_igoAnySum = apply(igo[,paste0(toKeep,'_igoAny')], 1, sum)
+igo$p5_igoCountSum = apply(igo[,paste0(toKeep,'_igoCount')], 1, sum)
+
+# calc proportions
+denom = rep(5,nrow(igo))
+denom = ifelse(igo$cname1 %in% toKeep, 4, 5)
+igo$p5_igoAnyProp = igo$p5_igoAnySum/denom
+igo$p5_igoCountAvg = igo$p5_igoCountSum/denom
+###############################################################
+
 ############################
 # Save
 save(igo, 

@@ -80,6 +80,39 @@ for(var in names(distance)[c(3,6:7)]){
 ###############################################################
 
 ###############################################################
+# relabel vars
+names(distance)[1:2] = paste0('ccode',1:2)
+distance$cname1 = panel$cname[match(distance$ccode1, panel$ccode)]
+distance$cname2 = panel$cname[match(distance$ccode2, panel$ccode)]
+distance = distance[,c(1,11:12,4,8:10)]
+
+# focus on p5 countries
+toKeep = c(
+	"UNITED STATES", "UNITED KINGDOM", 
+	"CHINA", "RUSSIAN FEDERATION", "FRANCE")
+distance = distance[which(distance$cname2 %in% toKeep),]
+
+# spread data
+distance = distance %>% 
+	gather(variable, value, -(ccode1:year)) %>%
+	unite(temp, cname2, variable) %>%
+	spread(temp, value)
+distance[is.na(distance)] = 0
+
+# get p5 vars
+distance$p5_capDistLogSum = apply(distance[,paste0(toKeep,'_capitalDistanceLog')], 1, sum)
+distance$p5_centDistLogSum = apply(distance[,paste0(toKeep,'_centDistanceLog')], 1, sum)
+distance$p5_minDistLogSum = apply(distance[,paste0(toKeep,'_minDistanceLog')], 1, sum)
+
+# calc proportions
+denom = rep(5,nrow(distance))
+denom = ifelse(distance$cname1 %in% toKeep, 4, 5)
+distance$p5_capDistLogAvg = distance$p5_capDistLogSum/denom
+distance$p5_centDistLogAvg = distance$p5_centDistLogSum/denom
+distance$p5_minDistLogAvg = distance$p5_minDistLogSum/denom
+###############################################################
+
+###############################################################
 # Save to binaries
 save(distance, file=paste0(
 	pathData,'cshapes_distance/distance.rda')

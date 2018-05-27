@@ -46,11 +46,41 @@ ally$ccode1 = cntries$ccode[match(ally$state_name1, cntries$cntry)]
 ally$ccode2 = cntries$ccode[match(ally$state_name2, cntries$cntry)]
 
 # Create separate dfs for defense and any
-ally$totCnt = apply(ally[,c('defense', 'neutrality', 'nonaggression', 'entente')], 1, sum)
 ally$any = apply(ally[,c('defense', 'neutrality', 'nonaggression', 'entente')], 1, sum) %>% ifelse(., 1, 0)
-ally$defEnt = apply(ally[,c('defense', 'entente')], 1, sum) %>% ifelse(., 1, 0)
-ally$defEntSum = apply(ally[,c('defense', 'entente')], 1, sum)
+ally$def = apply(ally[,c('defense'),drop=FALSE], 1, sum) %>% ifelse(., 1, 0)
 ally$did = paste(ally$ccode1,ally$ccode2,ally$year, sep='_')
+
+# keep max identified rel between dyad pairs
+ally = ally %>% group_by(did, ccode1, cname1, cname2, year) %>%
+	summarize(
+		defAlly = max(def),
+		anyAlly = max(any)
+		) %>% data.frame(.,stringsAsFactors=FALSE)
+###############################################################
+
+###############################################################
+# focus on p5 countries
+toKeep = c(
+	"UNITED STATES", "UNITED KINGDOM", 
+	"CHINA", "RUSSIAN FEDERATION", "FRANCE")
+ally = ally[which(ally$cname2 %in% toKeep),-1]
+
+# spread data
+ally = ally %>% 
+	gather(variable, value, -(ccode1:year)) %>%
+	unite(temp, cname2, variable) %>%
+	spread(temp, value)
+ally[is.na(ally)] = 0
+
+# get p5 vars
+ally$p5_anyAlly = apply(ally[,paste0(toKeep,'_anyAlly')], 1, sum)
+ally$p5_defAlly = apply(ally[,paste0(toKeep,'_defAlly')], 1, sum)
+
+# calc proportions
+denom = rep(5,nrow(ally))
+denom = ifelse(ally$cname1 %in% toKeep, 4, 5)
+ally$p5_anyAllyProp = ally$p5_anyAlly/denom
+ally$p5_defAllyProp = ally$p5_defAlly/denom
 ###############################################################
 
 ###############################################################
