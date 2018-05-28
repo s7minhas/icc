@@ -86,13 +86,12 @@ shortNames = c(
 	'govtStab', 'socEconCon', 'invProf', 'intConf', 
 	'extConf', 'corr', 'milPol', 'relPol', 'lawOrd', 
 	'ethTens', 'demAcct', 'burQual')
-# check to make sure everything matches
-cbind(names(icrg)[c(3,8:ncol(icrg))], shortNames)
 # Replace
 names(icrg)[c(3,8:ncol(icrg))] = shortNames
 ###############################################################
 
 ###############################################################
 # Save
+icrg = icrg[icrg$year>=1999,]
 save(icrg, file=paste0(pathData, "icrg/icrg.rda"))
 ###############################################################

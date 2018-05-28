@@ -12,8 +12,8 @@ cinc = unzip(cincName,
 ############################
 
 ############################
-# greater than 1960
-cinc = cinc[cinc$year>=1960,]
+# greater than 1999
+cinc = cinc[cinc$year>=1999,]
 
 # stdz country names
 cinc$cname = countrycode(cinc$stateabb, 'cowc', 'country.name')

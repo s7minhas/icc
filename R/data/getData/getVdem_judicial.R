@@ -19,7 +19,7 @@ if(!file.exists(paste0(pathData, 'vdem/vdem_judicial.rda'))){
 
 ###############################################################
 # restrict time
-vdem = vdem[vdem$year>=2001,]
+vdem = vdem[vdem$year>=1999,]
 
 # match names
 vdem$cname = cname(vdem$country_name)

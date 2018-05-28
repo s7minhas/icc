@@ -7,7 +7,7 @@ if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"){
 loadPkg('cshapes')
 cl = makeCluster(8)
 registerDoParallel(cl)
-yrs = 2000:2016
+yrs = 1999:2016
 
 # Get capdist mats
 print('Collecting capital distance matrices...')
@@ -114,6 +114,7 @@ distance$p5_minDistLogAvg = distance$p5_minDistLogSum/denom
 
 ###############################################################
 # Save to binaries
+names(distance)[1] = 'ccode'
 save(distance, file=paste0(
 	pathData,'cshapes_distance/distance.rda')
 )

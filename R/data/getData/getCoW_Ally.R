@@ -15,8 +15,8 @@ ally = unzip(allyName,
 	foreign::read.dta()
 unlink(paste0(getwd(), 'version4.1_dta'), recursive=TRUE, force=TRUE)
 
-# Include only post 1946 data
-ally = ally[ally$year>=2001,]
+# Include only post 1999 data
+ally = ally[ally$year>=1999,]
 
 # Subset to relevant vars
 ally = ally[,c(
@@ -85,6 +85,7 @@ ally$p5_defAllyProp = ally$p5_defAlly/denom
 
 ###############################################################
 # Save
+names(ally)[1] = 'ccode'
 save( ally,
 	file=paste0(pathData, 'cow_ally/ally.rda'))
 ###############################################################

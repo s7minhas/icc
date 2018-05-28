@@ -150,6 +150,8 @@ igo$p5_igoCountAvg = igo$p5_igoCountSum/denom
 
 ############################
 # Save
+names(igo)[1] = 'ccode'
+igo = igo[igo$year>=1999,]
 save(igo, 
     file=paste0(pathData, 'cow_igo/igo.rda'))
 ############################

@@ -13,18 +13,7 @@ orig  = read_dta(
 vars = c(
 	'icclevel',
 	'icclevel_state',
-	'icclevel_opp',
-	'pts',
-	'poi_pts',
-	'osv_state',
-	'poi_osv_state',
-	'runsum_osvstate',
-	'osv_rebel',
-	'poi_osv_rebel',
-	'runsum_osvrebel',
-	'osv_total',
-	'poi_osv_total',
-	'runsum_osvtotal'
+	'icclevel_opp'
 	)
 
 ids = c(
@@ -78,14 +67,7 @@ data = apData %>%
 		prelim_icc_state = ifelse(any(icclevel_state==1), 1, 0),
 		formal_icc_state = ifelse(any(icclevel_state>1), 1, 0),
 		prelim_icc_opp = ifelse(any(icclevel_opp==1), 1, 0),
-		formal_icc_opp = ifelse(any(icclevel_opp>1), 1, 0),
-		pts = max(pts, na.rm=TRUE), 
-		osv_state = sum(osv_state, na.rm=TRUE),
-		runsum_osvstate = sum(runsum_osvstate, na.rm=TRUE),
-		osv_rebel = sum(osv_rebel, na.rm=TRUE),
-		runsum_osvrebel = sum(runsum_osvrebel, na.rm=TRUE),		
-		osv_total = sum(osv_total, na.rm=TRUE),
-		runsum_osvtotal = sum(runsum_osvtotal, na.rm=TRUE),				
+		formal_icc_opp = ifelse(any(icclevel_opp>1), 1, 0)
 		) %>% data.frame()
 
 # add year level ids

@@ -19,7 +19,7 @@ unlink(paste0(getwd(), '/COW_Trade_4.0'),
 # Clean Trade [extends from 1870 to 2014]
 trade2 <- trade[,c('importer1', 'importer2', 'year', 'flow1', 'flow2')]
 colnames(trade2) <- c('state_name1', 'state_name2', 'year', 'imports', 'exports')
-trade2 <- trade2[trade2$year>=1960,]
+trade2 <- trade2[trade2$year>=1999,]
 
 trade2$state_name1 <- char(trade2$state_name1)
 trade2$state_name2 <- char(trade2$state_name2)
@@ -97,9 +97,6 @@ trade <- trade3[,c(
 ############################
 
 ###############################################################
-# sample cutoff
-trade = trade[trade$year>=2000,]
-
 # relabel vars
 names(trade)[1:4] = c(paste0('ccode',1:2),paste0('cname',1:2))
 trade = trade[,-match(c(paste0('cyear_',1:2)),names(trade))]
@@ -139,6 +136,7 @@ trade = trade[!is.na(trade$CHINA_tradeProp),]
 
 ############################
 # Save
+names(trade)[1] = 'ccode'
 save(trade, 
 	file=paste0(pathData, 'cow_trade/trade.rda'))
 ############################

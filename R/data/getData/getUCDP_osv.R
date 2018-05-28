@@ -11,7 +11,7 @@ ged = ged171@data
 
 ############################
 # 
-ged = ged[ged$year>=2001,]
+ged = ged[ged$year>=1999,]
 
 # type of violence==3
 ged = ged[ged$type_of_vi==3,]
@@ -104,5 +104,7 @@ gedRebel = rbind(
 
 ############################
 # save
+names(gedRebel)[3] = 'osv_rebel'
+names(gedState)[3] = 'osv_state'
 save(gedRebel, gedState, file=paste0(pathData, 'ucdp/ged_osv.rda'))
 ############################

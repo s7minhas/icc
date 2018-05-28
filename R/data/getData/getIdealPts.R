@@ -5,32 +5,39 @@ if(Sys.info()["user"]=="janus829" | Sys.info()["user"]=="s7m"){
 
 ###############################################################
 # https://dataverse.harvard.edu/dataset.xhtml?persistentId=hdl:1902.1/12379
-load(paste0(pathData,'Voeten/Dyadicdata.rdata')); idPt=x ; rm(list='x')
-###############################################################
+# load(paste0(pathData,'Voeten/Dyadicdata.rdata')); idPt=x ; rm(list='x')	
+load(paste0(pathData, 'Voeten/IdealpointsPublished.rdata')); idPtM =x ; rm(x)
+idPtM = idPtM[which(idPtM$year>=1999),c('ccode','CountryName','year','Idealpoint')]
+idPtM$cname = cname(idPtM$CountryName)
+idPtM$cname[idPtM$cname=='Yugoslavia'] = 'SERBIA'
+idPtM$ccode = panel$ccode[match(idPtM$cname,panel$cname)]
+idPtM$cyear = paste(idPtM$cname, idPtM$year, sep='_')
 
-###############################################################
-# Match idPt names to panel
-cntries = unique(c(idPt$ccode2, idPt$ccode)) %>% data.frame(cowcode=.,stringsAsFactors = FALSE)
-cntries$cname = panel$cname[match(cntries$cowcode,panel$COWCODE)]
-cntries$ccode = panel$ccode[match(cntries$cname,panel$cname)]
-
-# Merge updated cname and ccode to idPt
-idPt$cname1 = cntries$cname[match(idPt$ccode1, cntries$cowcode)]
-idPt$cname2 = cntries$cname[match(idPt$ccode2, cntries$cowcode)]
-idPt$ccode1 = cntries$ccode[match(idPt$ccode1, cntries$cowcode)]
-idPt$ccode2 = cntries$ccode[match(idPt$ccode2, cntries$cowcode)]
+idPt = lapply(unique(idPtM$year), function(yr){
+	slice = idPtM[idPtM$year==yr,]
+	cntries = unique(slice$cname)
+	dFrame = expand.grid(cntries, cntries)
+	dFrame = dFrame[dFrame$Var1!=dFrame$Var2,]
+	dFrame$year = yr
+	dFrame$cyear1 = paste(dFrame$Var1, dFrame$year, sep='_')
+	dFrame$cyear2 = paste(dFrame$Var2, dFrame$year, sep='_')
+	dFrame$idPt1 = idPtM$Idealpoint[match(dFrame$cyear1,idPtM$cyear)]
+	dFrame$idPt2 = idPtM$Idealpoint[match(dFrame$cyear2,idPtM$cyear)]
+	dFrame$absidealdiff = with(dFrame, abs(idPt1-idPt2))
+	names(dFrame)[1:2]=c('cname1','cname2')
+	dFrame$ccode1 = panel$ccode[match(dFrame$cname1,panel$cname)]
+	dFrame$ccode2 = panel$ccode[match(dFrame$cname2,panel$cname)]
+	out = dFrame[,c('ccode1','cname1','cname2','year','absidealdiff')]
+	return(out) }) %>% do.call('rbind', .)
 
 # Check for duplicates
-idPt$dyadidyr = paste(idPt$ccode1, idPt$ccode2, idPt$year, sep='_')
-stopifnot( length( table(idPt$dyadidyr)[table(idPt$dyadidyr)>1] ) == 0 )
+dyadidyr = paste(idPt$ccode1, idPt$ccode2, idPt$year, sep='_')
+stopifnot( length( table(dyadidyr)[table(dyadidyr)>1] ) == 0 )
 ###############################################################
 
 ###############################################################
 # match time frame
-idPt = idPt[idPt$year>=2000,]
-
-# relabel vars
-idPt = idPt[,c(2,23:24,3,6,8,10)]
+idPt = idPt[idPt$year>=1999,]
 
 # focus on p5 countries
 toKeep = c(
@@ -47,18 +54,15 @@ idPt[is.na(idPt)] = 0
 
 # get p5 vars
 idPt$p5_absidealdiffSum = apply(idPt[,paste0(toKeep,'_absidealdiff')], 1, sum)
-idPt$p5_s3unSum = apply(idPt[,paste0(toKeep,'_s3un')], 1, sum)
-idPt$p5_agree3unSum = apply(idPt[,paste0(toKeep,'_agree3un')], 1, sum)
 
 # calc proportions
 denom = rep(5,nrow(idPt))
 denom = ifelse(idPt$cname1 %in% toKeep, 4, 5)
-idPt$p5_absidealdiffProp = idPt$p5_absidealdiffSum/denom
-idPt$p5_s3unProp = idPt$p5_s3unSum/denom
-idPt$p5_agree3unProp = idPt$p5_agree3unSum/denom
+idPt$p5_absidealdiffAvg = idPt$p5_absidealdiffSum/denom
 ###############################################################
 
 ###############################################################
 # Save
+names(idPt)[1] = 'ccode'
 save(idPt, file=paste0(pathData, 'Voeten/idPt.rda'))
 ###############################################################

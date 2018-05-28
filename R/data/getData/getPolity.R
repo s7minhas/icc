@@ -16,7 +16,7 @@ polData = read.spss(polName, to.data.frame=TRUE)
 # Process polity data
 
 # Remove pre 1960 observations
-polData = polData[polData$year >= 1960, ]
+polData = polData[polData$year >= 1999, ]
 
 # Match country names with panel dataset
 polData$country = char(polData$country) %>% trim()

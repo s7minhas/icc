@@ -32,8 +32,6 @@ lji$cnameYear = paste0(lji$cname, lji$year)
 
 ###############################################################
 # save
+lji = lji[lji$year>=1999,]
 save(lji, file=paste0(pathData, 'lji/lji.rda'))
 ###############################################################
-
-
-### check constituent variables

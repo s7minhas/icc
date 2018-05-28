@@ -11,89 +11,105 @@ load(paste0(pathData, 'baseData.rda'))
 ###############################################################
 # helper fn to merge data from component files
 addComponentData = function(
-	data=data, rdaPath, 
-	missPath, objName, vars, writeMiss=FALSE){
+	baseData=data, rdaPath, 
+	objName, vars, lag=TRUE){
 	load(rdaPath) ; toAdd = get(objName)
-	data[data$cname %in% unique(setdiff(data$cname, toAdd$cname)),] %>%
-		dplyr::group_by(cname) %>%
-		dplyr::summarize(
-			any_prelim_icc=mean(prelim_icc),
-			any_formal_icc=mean(formal_icc),
-			any_prelim_icc_state=mean(prelim_icc_state),
-			any_formal_icc_state=mean(formal_icc_state),			
-			any_prelim_icc_opp=mean(prelim_icc_opp),
-			any_formal_icc_opp=mean(formal_icc_opp)
-			) %>%
-		dplyr::mutate(
-			any_prelim_icc = ifelse(any_prelim_icc, 1, 0),
-			any_formal_icc = ifelse(any_formal_icc, 1, 0),
-			any_prelim_icc_state = ifelse(any_prelim_icc_state, 1, 0),
-			any_formal_icc_state = ifelse(any_formal_icc_state, 1, 0),			
-			any_prelim_icc_opp = ifelse(any_prelim_icc_opp, 1, 0),
-			any_formal_icc_opp = ifelse(any_formal_icc_opp, 1, 0)
-			) %>%
-		if(writeMiss){ write.csv(., file=missPath) }
 
 	# merge in vars at same pd
-	toAdd$ccodeYear = with(toAdd, paste(ccode, year, sep='_'))
-	for(v in vars){
-		data$tmp = toAdd[match(data$ccodeYear, toAdd$ccodeYear),v]
-		names(data)[ncol(data)] = v }
+	if(!lag){
+		toAdd$ccodeYear = with(toAdd, paste(ccode, year, sep='_'))
+		for(v in vars){
+			baseData$tmp = toAdd[match(baseData$ccodeYear, toAdd$ccodeYear),v]
+			names(baseData)[ncol(baseData)] = v }
+	}
 
 	# merge lagged version
-	toAdd$year = toAdd$year + 1
-	toAdd$ccodeYear = with(toAdd, paste(ccode, year, sep='_'))
-	for(v in vars){
-		data$tmp = toAdd[match(data$ccodeYear, toAdd$ccodeYear),v]
-		names(data)[ncol(data)] = paste0('lag1_', v) }
+	if(lag){
+		toAdd$year = toAdd$year + 1
+		toAdd$ccodeYear = with(toAdd, paste(ccode, year, sep='_'))
+		for(v in vars){
+			baseData$tmp = toAdd[match(baseData$ccodeYear, toAdd$ccodeYear),v]
+			names(baseData)[ncol(baseData)] = paste0('lag1_', v) }
+	}
 
-	return(data) }
+	return(baseData) }
+
+# p5 countries
+p5 = c(
+	"UNITED STATES", "UNITED KINGDOM", 
+	"CHINA", "RUSSIAN FEDERATION", "FRANCE")
 ###############################################################
 
-# nodal variables ##############################################################
-
-## icrg (1984-2014)
-data = addComponentData(
-	rdaPath=paste0(pathData, "icrg/icrg.rda"),
-	missPath=paste0(pathData, 'icrg/missing_in_icrg.csv'),
-	objName='icrg',
-	vars=c(
-		"govtStab","socEconCon", "invProf", "intConf", 
-		"extConf","corr", "milPol", "relPol","lawOrd",  
-		"ethTens","demAcct", "burQual")
-	)
-
-# lji (1948-2012)
-data = addComponentData(
-	rdaPath=paste0(pathData, 'lji/lji.rda'),
-	missPath=paste0(pathData, 'lji/missing_in_lji.csv'),
-	objName='lji',
-	vars=c('LJI','postsd')
-	)
-
-# polity (1960-2016)
+# merge variables ##############################################################
+# polity (-2016)
 data=addComponentData(
 	rdaPath=paste0(pathData, 'polity/polity.rda'),
-	missPath=paste0(pathData, 'polity/missing_in_polity.csv'),
 	objName='polity',
-	vars=c(
-		"polity2", "xrreg", "xrcomp", "xropen", "xconst", 
-		"parreg", "parcomp", "exrec", "exconst", "polcomp"
-		)
-	)
+	vars=c( "polity2" ) )
 
-# wbdata (1960-2017)
+# wbdata (-2017)
 data=addComponentData(
 	rdaPath=paste0(pathData, 'worldBank/worldBank.rda'),
-	missPath=paste0(pathData, 'worldBank/missing_in_worldBank.csv'),
 	objName='worldBank',
 	vars=c(
 		"gdp", "gdpCap", "gdpGr", "pop", "fdiInGDP", 
-		"fdiOutGDP", "aidGNI", "region", "income", 
-		"gdpLog", 'gdpCapLog', 'popLog'
-		)
-	)
-data = data[,-match(c('lag1_region','lag1_income'), names(data))]
+		"fdiOutGDP", "aidGNI", 
+		"gdpLog", 'gdpCapLog', 'popLog' ) )
+data=addComponentData(
+	rdaPath=paste0(pathData, 'worldBank/worldBank.rda'),
+	objName='worldBank',
+	vars=c( 'region' ), lag=FALSE )
+data$region = char(data$region)
+data$africa = 0
+data$africa[data$region=="Sub-Saharan Africa "] = 1
+other = sort(unique(data$cname[which(data$region=='Middle East & North Africa')]))
+moreafrica = c(other[c(1,3,4,11,13,18)], 'NAMIBIA')
+data$africa[which(data$cname %in% moreafrica)] = 1
+data = data[,-match('region',names(data))]
 
-# ucdp
+# vdem (-2017)
+data=addComponentData(
+	rdaPath=paste0(pathData, 'vdem/vdem.rda'),
+	objName='vdem',
+	vars=c( "v2juhcind", "v2juncind" ) )	
+
+# pts (-2016)
+data=addComponentData(
+	rdaPath=paste0(pathData, 'pts/pts.rda'),
+	objName='pts',
+	vars=c( "pts" ) )	
+
+# ideal points (-2015)
+data=addComponentData(
+	rdaPath=paste0(pathData, 'Voeten/idPt.rda'),
+	objName='idPt',
+	vars=c( 
+		paste0(p5, '_absidealdiff'),
+		'p5_absidealdiffAvg' ) )
+
+# ged osv rebel (-2016)
+data=addComponentData(
+	rdaPath=paste0(pathData, 'ucdp/ged_osv.rda'),
+	objName='gedRebel',
+	vars=c( 'osv_rebel' ) )
+data$lag1_osv_rebel[is.na(data$lag1_osv_rebel)] = 0
+
+# ged osv state (-2016)
+data=addComponentData(
+	rdaPath=paste0(pathData, 'ucdp/ged_osv.rda'),
+	objName='gedState',
+	vars=c( 'osv_state' ) )
+data$lag1_osv_state[is.na(data$lag1_osv_state)] = 0
+
+# ged intervention (-2016)
+data=addComponentData(
+	rdaPath=paste0(pathData, 'ucdp/ged_intv.rda'),
+	objName='gedIntv',
+	vars=c(
+		paste0(p5, '_intvAny'), 
+		'p5_intvAnyProp' ) )
+varsToFix = c(
+	paste0('lag1_',p5, '_intvAny'),
+	'lag1_p5_intvAnyProp' )
+for(v in varsToFix){ data[is.na(data[,v]),v] = 0 }
 ###############################################################
