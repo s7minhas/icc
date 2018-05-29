@@ -113,3 +113,9 @@ varsToFix = c(
 	'lag1_p5_intvAnyProp' )
 for(v in varsToFix){ data[is.na(data[,v]),v] = 0 }
 ###############################################################
+
+###############################################################
+# save
+save(data, file=paste0(pathData, 'mergedData.rda'))
+write.csv(data, file=paste0(pathData, 'mergedData.csv'))
+###############################################################
