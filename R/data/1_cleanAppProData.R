@@ -14,7 +14,8 @@ vars = c(
 	'icclevel',
 	'icclevel_state',
 	'icclevel_opp',
-	names(orig)[grepl('poi_', names(orig))] # poi vars
+	'poi_osv_state', 'poi_osv_rebel',
+	'poi_osv_total', 'poi_pts'
 	)
 
 ids = c(
@@ -68,7 +69,11 @@ data = apData %>%
 		prelim_icc_state = ifelse(any(icclevel_state==1), 1, 0),
 		formal_icc_state = ifelse(any(icclevel_state>1), 1, 0),
 		prelim_icc_opp = ifelse(any(icclevel_opp==1), 1, 0),
-		formal_icc_opp = ifelse(any(icclevel_opp>1), 1, 0)
+		formal_icc_opp = ifelse(any(icclevel_opp>1), 1, 0),
+		poi_osv_state = sum(poi_osv_state, na.rm=TRUE),
+		poi_osv_rebel = sum(poi_osv_rebel, na.rm=TRUE),
+		poi_osv_total = sum(poi_osv_total, na.rm=TRUE),
+		poi_pts = mean(poi_pts, na.rm=TRUE)
 		) %>% data.frame()
 
 # add year level ids

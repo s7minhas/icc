@@ -102,15 +102,20 @@ data=addComponentData(
 data$lag1_osv_state[is.na(data$lag1_osv_state)] = 0
 
 # ged intervention (-2016)
+intvVars = c(
+	paste0(p5, '_intv_rebel'), 
+	paste0(p5, '_intv_state'), 
+	paste0(p5, '_intv_rebel_any'), 
+	paste0(p5, '_intv_state_any'), 
+	paste0('p5_', c(
+		'intv_rebel', 'intv_rebel_any', 'intv_rebel_mean', 'intv_rebel_prop',
+		'intv_state', 'intv_state_any', 'intv_state_mean', 'intv_state_prop'
+		)) )
 data=addComponentData(
 	rdaPath=paste0(pathData, 'ucdp/ged_intv.rda'),
 	objName='gedIntv',
-	vars=c(
-		paste0(p5, '_intvAny'), 
-		'p5_intvAnyProp' ) )
-varsToFix = c(
-	paste0('lag1_',p5, '_intvAny'),
-	'lag1_p5_intvAnyProp' )
+	vars=intvVars )
+varsToFix = paste0('lag1_', intvVars)
 for(v in varsToFix){ data[is.na(data[,v]),v] = 0 }
 ###############################################################
 
