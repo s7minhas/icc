@@ -13,7 +13,8 @@ orig  = read_dta(
 vars = c(
 	'icclevel',
 	'icclevel_state',
-	'icclevel_opp'
+	'icclevel_opp',
+	names(orig)[grepl('poi_', names(orig))] # poi vars
 	)
 
 ids = c(
