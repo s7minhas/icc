@@ -15,7 +15,9 @@ vars = c(
 	'icclevel_state',
 	'icclevel_opp',
 	'poi_osv_state', 'poi_osv_rebel',
-	'poi_osv_total', 'poi_pts'
+	'poi_osv_total', 'poi_pts',
+	'civilwar',
+	'icc_rat'
 	)
 
 ids = c(
@@ -73,12 +75,37 @@ data = apData %>%
 		poi_osv_state = sum(poi_osv_state, na.rm=TRUE),
 		poi_osv_rebel = sum(poi_osv_rebel, na.rm=TRUE),
 		poi_osv_total = sum(poi_osv_total, na.rm=TRUE),
-		poi_pts = mean(poi_pts, na.rm=TRUE)
+		poi_pts = mean(poi_pts, na.rm=TRUE),
+		civilwar = ifelse(any(civilwar>0), 1, 0),
+		icc_rat = ifelse(any(icc_rat>0), 1, 0),		
 		) %>% data.frame()
 
 # add year level ids
 data$cnameYear = with(data, paste(cname, year, sep='_'))
 data$ccodeYear = with(data, paste(ccode, year, sep='_'))
+###############################################################
+
+###############################################################
+# add lagged versions of poi and civilwar var
+tmp = data; tmp$year = tmp$year + 1
+tmp$ccodeYear = with(tmp, paste(ccode, year, sep='_'))
+vars = names(data)[10:14]
+
+for(v in vars){
+	data$tmp = tmp[match(data$ccodeYear, tmp$ccodeYear),v]
+	names(data)[ncol(data)] = paste0('lag1_', v) }
+
+# remove original non-lagged versions
+data = data[,-match(vars, names(data))]
+###############################################################
+
+###############################################################
+# small fixes
+data$lag1_civilwar[is.na(data$lag1_civilwar)] = 0
+data$lag1_poi_pts[is.nan(data$lag1_poi_pts)] = NA
+
+vars = paste0('lag1_poi_osv_',c('state','total','rebel'))
+for(v in vars){data[is.na(data$poi_pts),v] = NA}
 ###############################################################
 
 ###############################################################

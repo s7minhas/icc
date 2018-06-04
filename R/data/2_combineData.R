@@ -123,4 +123,8 @@ for(v in varsToFix){ data[is.na(data[,v]),v] = 0 }
 # save
 save(data, file=paste0(pathData, 'mergedData.rda'))
 write.csv(data, file=paste0(pathData, 'mergedData.csv'))
+
+# cor mat
+corVars = names(data)[c(4:10,13:68)]
+write.csv(cor(data[,corVars], use='pairwise.complete.obs'), file='~/Desktop/corrMat.csv')
 ###############################################################
