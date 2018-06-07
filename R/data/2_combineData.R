@@ -117,6 +117,30 @@ data=addComponentData(
 	vars=intvVars )
 varsToFix = paste0('lag1_', intvVars)
 for(v in varsToFix){ data[is.na(data[,v]),v] = 0 }
+
+# ally (-2012)
+data=addComponentData(
+	rdaPath=paste0(pathData, 'cow_ally/ally.rda'),
+	objName='ally',
+	vars=c( 
+		paste0(p5, '_anyAlly'),
+		paste0(p5, '_any_NoNonAggAlly'),
+		paste0(p5, '_defAlly'),
+		'p5_anyAllyProp',
+		'p5_any_NoNonAggAllyProp',
+		'p5_defAllyProp'
+		 ) )
+
+# trade (-2014)
+data=addComponentData(
+	rdaPath=paste0(pathData, 'cow_trade/trade.rda'),
+	objName='trade',
+	vars=c( 
+		paste0(p5, '_tradeProp'),
+		paste0(p5, '_trade'),		
+		'p5_trade',
+		'p5_tradeProp'
+		 ) )
 ###############################################################
 
 ###############################################################
@@ -125,6 +149,8 @@ save(data, file=paste0(pathData, 'mergedData.rda'))
 write.csv(data, file=paste0(pathData, 'mergedData.csv'))
 
 # cor mat
-corVars = names(data)[c(4:10,13:68)]
-write.csv(cor(data[,corVars], use='pairwise.complete.obs'), file='~/Desktop/corrMat.csv')
+corVars = names(data)[c(4:10,13:ncol(data))]
+write.csv(cor(data[,corVars], use='pairwise.complete.obs'), 
+	file=paste0(pathData, 'corrMat.csv')
+	)
 ###############################################################
