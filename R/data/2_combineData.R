@@ -163,6 +163,15 @@ write.csv(cor(rebPrelim[,corVars], use='pairwise.complete.obs'),
 	file=paste0(pathData, 'corrMat_rebelPrelim.csv')
 	)
 
+# check for observation loss
+allRebFormalOnsets <- apply(
+	data[data$formal_icc_opp==1,c('cname','year')], 1, 
+	function(x){paste(x[1],x[2],sep='_')})
+allRebFormalOnsets_withprelim <- apply(
+	rebPrelim[rebPrelim$formal_icc_opp==1,c('cname','year')], 1, 
+	function(x){paste(x[1],x[2],sep='_')})
+setdiff(allRebFormalOnsets,allRebFormalOnsets_withprelim)
+
 statePrelim <- data[data$prelim_icc_state==1,]
 write.csv(cor(statePrelim[,corVars], use='pairwise.complete.obs'), 
 	file=paste0(pathData, 'corrMat_statePrelim.csv')
