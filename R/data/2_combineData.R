@@ -154,3 +154,17 @@ write.csv(cor(data[,corVars], use='pairwise.complete.obs'),
 	file=paste0(pathData, 'corrMat.csv')
 	)
 ###############################################################
+
+###############################################################
+# save data for states experiencing a prelim 
+## investigation separately
+rebPrelim <- data[data$prelim_icc_opp==1,]
+write.csv(cor(rebPrelim[,corVars], use='pairwise.complete.obs'), 
+	file=paste0(pathData, 'corrMat_rebelPrelim.csv')
+	)
+
+statePrelim <- data[data$prelim_icc_state==1,]
+write.csv(cor(statePrelim[,corVars], use='pairwise.complete.obs'), 
+	file=paste0(pathData, 'corrMat_statePrelim.csv')
+	)
+###############################################################
