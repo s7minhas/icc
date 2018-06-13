@@ -149,14 +149,15 @@ save(data, file=paste0(pathData, 'mergedData.rda'))
 write.csv(data, file=paste0(pathData, 'mergedData.csv'))
 
 # cor mat
-corVars = names(data)[c(4:10,13:ncol(data))]
-write.csv(cor(data[,corVars], use='pairwise.complete.obs'), 
-	file=paste0(pathData, 'corrMat.csv')
-	)
+# corVars = names(data)[c(4:10,13:ncol(data))]
+# write.csv(cor(data[,corVars], use='pairwise.complete.obs'), 
+# 	file=paste0(pathData, 'corrMat.csv')
+# 	)
 ###############################################################
 
 ###############################################################
 # save data for states experiencing a prelim 
+
 ## investigation separately
 rebPrelim <- data[data$prelim_icc_opp==1,]
 write.csv(cor(rebPrelim[,corVars], use='pairwise.complete.obs'), 

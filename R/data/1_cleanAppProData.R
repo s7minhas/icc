@@ -121,3 +121,25 @@ data = data[,c(1:3,14:15,4:13,16:20)]
 # save and move onto merging
 save(data, file=paste0(pathData, 'baseData.rda'))
 ###############################################################
+
+###############################################################
+# create prelim model sample for rebels
+data$icc_stage1_opp = 0 
+data$icc_stage1_opp[data$icc_stage1_opp] = 1
+
+### sample rule for inclusion in prelim model: 
+# 1. once a state experiences a prelim investigation it drops from the dataset in the next year
+# 2. it only reenters the dataset once there is no icc involvement
+### can create this from just the icc level models
+
+### sample rule for inclusion in formal model: 
+# 1. State only enters formal model if it has experienced a prelim in the past
+# 2. once a state experiences a formal investigation it drops from the dataset in the next year
+# 3. it only reenters the dataset once there is a new prelim
+### can create this from just the icc level models
+
+### dealing with formal pool ... 
+# 1. go back down to the monthly level ... only include cases that have experienced prelims
+# 2. include same prelim pool int the formal pool 
+	# note: include a dummy prelim variable, account for lagged structure
+	# note: for sudan libya turn icclevel into zero, because they were referred from unsc
