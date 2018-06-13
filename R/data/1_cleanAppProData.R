@@ -17,6 +17,9 @@ vars = c(
 	'poi_osv_state', 'poi_osv_rebel',
 	'poi_osv_total', 'poi_pts',
 	'civilwar',
+	'icc_stage1',
+	'icc_stage2',
+	'icc_onset',
 	'icc_rat'
 	)
 
@@ -72,6 +75,9 @@ data = apData %>%
 		formal_icc_state = ifelse(any(icclevel_state>1), 1, 0),
 		prelim_icc_opp = ifelse(any(icclevel_opp==1), 1, 0),
 		formal_icc_opp = ifelse(any(icclevel_opp>1), 1, 0),
+		icc_stage1 = ifelse(any(icc_stage1>=1), 1, 0),
+		icc_stage2 = ifelse(any(icc_stage2>=1), 1, 0),
+		icc_onset = ifelse(any(icc_onset>=1), 1, 0),
 		poi_osv_state = sum(poi_osv_state, na.rm=TRUE),
 		poi_osv_rebel = sum(poi_osv_rebel, na.rm=TRUE),
 		poi_osv_total = sum(poi_osv_total, na.rm=TRUE),
@@ -89,7 +95,7 @@ data$ccodeYear = with(data, paste(ccode, year, sep='_'))
 # add lagged versions of poi and civilwar var
 tmp = data; tmp$year = tmp$year + 1
 tmp$ccodeYear = with(tmp, paste(ccode, year, sep='_'))
-vars = names(data)[10:14]
+vars = names(data)[13:17]
 
 for(v in vars){
 	data$tmp = tmp[match(data$ccodeYear, tmp$ccodeYear),v]
@@ -109,6 +115,9 @@ for(v in vars){data[is.na(data$poi_pts),v] = NA}
 ###############################################################
 
 ###############################################################
+# reorder columns
+data = data[,c(1:3,14:15,4:13,16:20)]
+
 # save and move onto merging
 save(data, file=paste0(pathData, 'baseData.rda'))
 ###############################################################
