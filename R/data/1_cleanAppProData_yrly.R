@@ -205,7 +205,7 @@ prelimGov[prelimGov$cname==iccStates[9],vars]
 toRemove = paste0('501_',2010:2016)
 prelimGov = prelimGov[which(!prelimGov$ccodeYear %in% toRemove),]
 
-toAdd = paste0('731_',2010)
+toAdd = paste0('501_',2010)
 formalGov = rbind(formalGov, data[which(data$ccodeYear %in% toAdd),])
 
 ###  north korea
@@ -239,9 +239,6 @@ formalGov = rbind(formalGov, data[which(data$ccodeYear %in% toAdd),])
 prelimGov[prelimGov$cname==iccStates[14],vars]
 toRemove = paste0('625_',2006:2016)
 prelimGov = prelimGov[which(!prelimGov$ccodeYear %in% toRemove),]
-
-toAdd = paste0('625_',2006)
-formalGov = rbind(formalGov, data[which(data$ccodeYear %in% toAdd),])
 
 ###  ukraine
 prelimGov[prelimGov$cname==iccStates[15],vars]
@@ -304,7 +301,7 @@ prelimOpp[prelimOpp$cname==iccStates[2],vars]
 toRemove = paste0('482_',2006:2016)
 prelimOpp = prelimOpp[which(!prelimOpp$ccodeYear %in% toRemove),]
 
-toAdd = paste0('402_',2006:2007)
+toAdd = paste0('482_',2006:2007)
 formalOpp = rbind(formalOpp, data[which(data$ccodeYear %in% toAdd),])
 
 ### colombia
