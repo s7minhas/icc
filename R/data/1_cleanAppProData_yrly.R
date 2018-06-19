@@ -143,6 +143,10 @@ vars = c('cname', 'ccodeYear','prelim_icc_state','formal_icc_state')
 ## remove after a state faces a prelim investigation and stays under icc
 iccStates = sort(unique(data$cname[data$prelim_icc_state==1]))
 
+#### DRC CONGO focus on formal state opposition ... 
+#### ALSO LIBYA
+### you missed this because only focused on prelim states
+
 ## manually remove irrelevant years for icc states
 prelimState = data
 
@@ -199,6 +203,8 @@ prelimState = prelimState[which(!prelimState$ccodeYear %in% toRemove),]
 
 toAdd = paste0('666_',2010:2016)
 formalState = rbind(formalState, data[which(data$ccodeYear %in% toAdd),])
+
+#### put israel back in 2013, take out again in 2014, put back in 2015, and remove again afterwards
 
 ###  kenya
 prelimState[prelimState$cname==iccStates[9],vars]
