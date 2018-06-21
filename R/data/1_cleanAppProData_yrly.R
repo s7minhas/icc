@@ -151,7 +151,7 @@ iccStates = sort(unique(data$cname[data$prelim_icc_state==1]))
 prelimState = data
 
 ### afghanistan
-prelimState[prelimState$cname==iccStates[1],vars]
+prelimState[prelimState$cname=="AFGHANISTAN",vars]
 toRemove = paste0('700_',2008:2016)
 prelimState = prelimState[which(!prelimState$ccodeYear %in% toRemove),]
 
@@ -159,10 +159,10 @@ toAdd = paste0('700_',2008:2016)
 formalState = data[which(data$ccodeYear %in% toAdd),]
 
 ### burundi
-prelimState[prelimState$cname==iccStates[2],vars]
+prelimState[prelimState$cname=="BURUNDI",vars]
 
 ### colombia
-prelimState[prelimState$cname==iccStates[3],vars]
+prelimState[prelimState$cname=="COLOMBIA",vars]
 toRemove = paste0('100_',2005:2016)
 prelimState = prelimState[which(!prelimState$ccodeYear %in% toRemove),]
 
@@ -170,10 +170,10 @@ toAdd = paste0('100_',2005:2016)
 formalState = rbind(formalState, data[which(data$ccodeYear %in% toAdd),])
 
 ### gabon
-prelimState[prelimState$cname==iccStates[4],vars]
+prelimState[prelimState$cname=="GABON",vars]
 
 ###  georgia
-prelimState[prelimState$cname==iccStates[5],vars]
+prelimState[prelimState$cname=="GEORGIA",vars]
 toRemove = paste0('372_',2009:2016)
 prelimState = prelimState[which(!prelimState$ccodeYear %in% toRemove),]
 
@@ -181,7 +181,7 @@ toAdd = paste0('372_',2009:2016)
 formalState = rbind(formalState, data[which(data$ccodeYear %in% toAdd),])
 
 ###  guinea
-prelimState[prelimState$cname==iccStates[6],vars]
+prelimState[prelimState$cname=="GUINEA",vars]
 toRemove = paste0('438_',2010)
 prelimState = prelimState[which(!prelimState$ccodeYear %in% toRemove),]
 
@@ -189,7 +189,7 @@ toAdd = paste0('438_',2010)
 formalState = rbind(formalState, data[which(data$ccodeYear %in% toAdd),])
 
 ###  honduras
-prelimState[prelimState$cname==iccStates[7],vars]
+prelimState[prelimState$cname=="HONDURAS",vars]
 toRemove = paste0('91_',2011:2015)
 prelimState = prelimState[which(!prelimState$ccodeYear %in% toRemove),]
 
@@ -197,7 +197,7 @@ toAdd = paste0('91_',2011:2015)
 formalState = rbind(formalState, data[which(data$ccodeYear %in% toAdd),])
 
 ###  israel
-prelimState[prelimState$cname==iccStates[8],vars]
+prelimState[prelimState$cname=="ISRAEL",vars]
 toRemove = paste0('666_',2010:2016)
 prelimState = prelimState[which(!prelimState$ccodeYear %in% toRemove),]
 
@@ -207,7 +207,7 @@ formalState = rbind(formalState, data[which(data$ccodeYear %in% toAdd),])
 #### put israel back in 2013, take out again in 2014, put back in 2015, and remove again afterwards
 
 ###  kenya
-prelimState[prelimState$cname==iccStates[9],vars]
+prelimState[prelimState$cname=="KENYA",vars]
 toRemove = paste0('501_',2010:2016)
 prelimState = prelimState[which(!prelimState$ccodeYear %in% toRemove),]
 
@@ -215,7 +215,7 @@ toAdd = paste0('501_',2010)
 formalState = rbind(formalState, data[which(data$ccodeYear %in% toAdd),])
 
 ###  north korea
-prelimState[prelimState$cname==iccStates[10],vars]
+prelimState[prelimState$cname=="KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF",vars]
 toRemove = paste0('731_',2011:2014)
 prelimState = prelimState[which(!prelimState$ccodeYear %in% toRemove),]
 
@@ -223,10 +223,10 @@ toAdd = paste0('731_',2011:2014)
 formalState = rbind(formalState, data[which(data$ccodeYear %in% toAdd),])
 
 ###  libya
-prelimState[prelimState$cname==iccStates[11],vars]
+prelimState[prelimState$cname=="LIBYAN ARAB JAMAHIRIYA",vars]
 
 ###  nigeria
-prelimState[prelimState$cname==iccStates[12],vars]
+prelimState[prelimState$cname=="NIGERIA",vars]
 toRemove = paste0('475_',2011:2016)
 prelimState = prelimState[which(!prelimState$ccodeYear %in% toRemove),]
 
@@ -234,7 +234,7 @@ toAdd = paste0('475_',2011:2016)
 formalState = rbind(formalState, data[which(data$ccodeYear %in% toAdd),])
 
 ###  russia
-prelimState[prelimState$cname==iccStates[13],vars]
+prelimState[prelimState$cname=="RUSSIAN FEDERATION",vars]
 toRemove = paste0('365_',2009:2016)
 prelimState = prelimState[which(!prelimState$ccodeYear %in% toRemove),]
 
@@ -242,12 +242,12 @@ toAdd = paste0('365_',2009:2016)
 formalState = rbind(formalState, data[which(data$ccodeYear %in% toAdd),])
 
 ###  sudan
-prelimState[prelimState$cname==iccStates[14],vars]
+prelimState[prelimState$cname=="SUDAN",vars]
 toRemove = paste0('625_',2006:2016)
 prelimState = prelimState[which(!prelimState$ccodeYear %in% toRemove),]
 
 ###  ukraine
-prelimState[prelimState$cname==iccStates[15],vars]
+prelimState[prelimState$cname=="UKRAINE",vars]
 toRemove = paste0('369_',2016)
 prelimState = prelimState[which(!prelimState$ccodeYear %in% toRemove),]
 
@@ -255,7 +255,7 @@ toAdd = paste0('369_',2016)
 formalState = rbind(formalState, data[which(data$ccodeYear %in% toAdd),])
 
 ###  uk
-prelimState[prelimState$cname==iccStates[16],vars]
+prelimState[prelimState$cname=="UNITED KINGDOM",vars]
 toRemove = c(paste0('200_',2005:2006), paste0('200_',2015:2016))
 prelimState = prelimState[which(!prelimState$ccodeYear %in% toRemove),]
 
@@ -263,7 +263,7 @@ toAdd = c(paste0('200_',2005:2006), paste0('200_',2015:2016))
 formalState = rbind(formalState, data[which(data$ccodeYear %in% toAdd),])
 
 ###  usa
-prelimState[prelimState$cname==iccStates[17],vars]
+prelimState[prelimState$cname=="UNITED STATES",vars]
 toRemove = paste0('2_',2008:2016)
 prelimState = prelimState[which(!prelimState$ccodeYear %in% toRemove),]
 
@@ -271,7 +271,7 @@ toAdd = paste0('2_',2008:2016)
 formalState = rbind(formalState, data[which(data$ccodeYear %in% toAdd),])
 
 ###  venezuela
-prelimState[prelimState$cname==iccStates[18],vars]
+prelimState[prelimState$cname=="VENEZUELA, BOLIVARIAN REPUBLIC OF",vars]
 
 # 2. include same prelim pool int the formal pool 
 	# note: include a dummy prelim variable, account for lagged structure
@@ -305,7 +305,7 @@ iccStates = sort(unique(data$cname[data$prelim_icc_opp==1]))
 prelimOpp = data
 
 ### afghanistan
-prelimOpp[prelimOpp$cname==iccStates[1],vars]
+prelimOpp[prelimOpp$cname=="AFGHANISTAN",vars]
 toRemove = paste0('700_',2008:2016)
 prelimOpp = prelimOpp[which(!prelimOpp$ccodeYear %in% toRemove),]
 
@@ -313,7 +313,7 @@ toAdd = paste0('700_',2008:2016)
 formalOpp = data[which(data$ccodeYear %in% toAdd),]
 
 ### central african republic
-prelimOpp[prelimOpp$cname==iccStates[2],vars]
+prelimOpp[prelimOpp$cname=="CENTRAL AFRICAN REPUBLIC",vars]
 toRemove = paste0('482_',2006:2016)
 prelimOpp = prelimOpp[which(!prelimOpp$ccodeYear %in% toRemove),]
 
@@ -321,7 +321,7 @@ toAdd = paste0('482_',2006:2007)
 formalOpp = rbind(formalOpp, data[which(data$ccodeYear %in% toAdd),])
 
 ### colombia
-prelimOpp[prelimOpp$cname==iccStates[3],vars]
+prelimOpp[prelimOpp$cname=="COLOMBIA",vars]
 toRemove = paste0('100_',2005:2016)
 prelimOpp = prelimOpp[which(!prelimOpp$ccodeYear %in% toRemove),]
 
@@ -329,20 +329,20 @@ toAdd = paste0('100_',2005:2016)
 formalOpp = rbind(formalOpp, data[which(data$ccodeYear %in% toAdd),])
 
 ### drc congo
-prelimOpp[prelimOpp$cname==iccStates[4],vars]
+prelimOpp[prelimOpp$cname=="CONGO, THE DEMOCRATIC REPUBLIC OF",vars]
 toRemove = paste0('490_',2005:2016)
 prelimOpp = prelimOpp[which(!prelimOpp$ccodeYear %in% toRemove),]
 
 ###  ivory coast
-prelimOpp[prelimOpp$cname==iccStates[5],vars]
+prelimOpp[prelimOpp$cname=="COTE D'IVOIRE",vars]
 toRemove = paste0('437_',2012:2016)
 prelimOpp = prelimOpp[which(!prelimOpp$ccodeYear %in% toRemove),]
 
 ###  gabon
-prelimOpp[prelimOpp$cname==iccStates[6],vars]
+prelimOpp[prelimOpp$cname=="GABON",vars]
 
 ###  georgia
-prelimOpp[prelimOpp$cname==iccStates[7],vars]
+prelimOpp[prelimOpp$cname=="GEORGIA",vars]
 toRemove = paste0('372_',2009:2016)
 prelimOpp = prelimOpp[which(!prelimOpp$ccodeYear %in% toRemove),]
 
@@ -350,7 +350,7 @@ toAdd = paste0('372_',2009:2016)
 formalOpp = rbind(formalOpp, data[which(data$ccodeYear %in% toAdd),])
 
 ###  guinea
-prelimOpp[prelimOpp$cname==iccStates[8],vars]
+prelimOpp[prelimOpp$cname=="GUINEA",vars]
 toRemove = paste0('438_',2011:2016)
 prelimOpp = prelimOpp[which(!prelimOpp$ccodeYear %in% toRemove),]
 
@@ -358,7 +358,7 @@ toAdd = paste0('438_',2011:2016)
 formalOpp = rbind(formalOpp, data[which(data$ccodeYear %in% toAdd),])
 
 ###  honduras
-prelimOpp[prelimOpp$cname==iccStates[9],vars]
+prelimOpp[prelimOpp$cname=="HONDURAS",vars]
 toRemove = paste0('91_',2011:2015)
 prelimOpp = prelimOpp[which(!prelimOpp$ccodeYear %in% toRemove),]
 
@@ -366,7 +366,7 @@ toAdd = paste0('91_',2011:2015)
 formalOpp = rbind(formalOpp, data[which(data$ccodeYear %in% toAdd),])
 
 ###  israsel
-prelimOpp[prelimOpp$cname==iccStates[10],vars]
+prelimOpp[prelimOpp$cname=="ISRAEL",vars]
 toRemove = c(paste0('666_',2010:2012), paste0('666_',2016))
 prelimOpp = prelimOpp[which(!prelimOpp$ccodeYear %in% toRemove),]
 
@@ -374,7 +374,7 @@ toAdd = c(paste0('666_',2010:2012), paste0('666_',2016))
 formalOpp = rbind(formalOpp, data[which(data$ccodeYear %in% toAdd),])
 
 ###  mali
-prelimOpp[prelimOpp$cname==iccStates[11],vars]
+prelimOpp[prelimOpp$cname=="MALI",vars]
 toRemove = paste0('432_',2013:2016)
 prelimOpp = prelimOpp[which(!prelimOpp$ccodeYear %in% toRemove),]
 
@@ -382,7 +382,7 @@ toAdd = paste0('432_',2013)
 formalOpp = rbind(formalOpp, data[which(data$ccodeYear %in% toAdd),])
 
 ###  nigeria
-prelimOpp[prelimOpp$cname==iccStates[12],vars]
+prelimOpp[prelimOpp$cname=="NIGERIA",vars]
 toRemove = paste0('475_',2011:2016)
 prelimOpp = prelimOpp[which(!prelimOpp$ccodeYear %in% toRemove),]
 
@@ -390,12 +390,12 @@ toAdd = paste0('475_',2011:2016)
 formalOpp = rbind(formalOpp, data[which(data$ccodeYear %in% toAdd),])
 
 ###  sudan
-prelimOpp[prelimOpp$cname==iccStates[13],vars]
+prelimOpp[prelimOpp$cname=="SUDAN",vars]
 toRemove = paste0('625_',2006:2016)
 prelimOpp = prelimOpp[which(!prelimOpp$ccodeYear %in% toRemove),]
 
 ###  uganda
-prelimOpp[prelimOpp$cname==iccStates[14],vars]
+prelimOpp[prelimOpp$cname=="UGANDA",vars]
 toRemove = paste0('500_',2004:2016)
 prelimOpp = prelimOpp[which(!prelimOpp$ccodeYear %in% toRemove),]
 
@@ -403,7 +403,7 @@ toAdd = paste0('500_',2004)
 formalOpp = rbind(formalOpp, data[which(data$ccodeYear %in% toAdd),])
 
 ###  ukraine
-prelimOpp[prelimOpp$cname==iccStates[15],vars]
+prelimOpp[prelimOpp$cname=="UKRAINE",vars]
 toRemove = paste0('369_',2015:2016)
 prelimOpp = prelimOpp[which(!prelimOpp$ccodeYear %in% toRemove),]
 
@@ -411,7 +411,7 @@ toAdd = paste0('369_',2015:2016)
 formalOpp = rbind(formalOpp, data[which(data$ccodeYear %in% toAdd),])
 
 ###  venezuela
-prelimOpp[prelimOpp$cname==iccStates[16],vars]
+prelimOpp[prelimOpp$cname=="VENEZUELA, BOLIVARIAN REPUBLIC OF",vars]
 
 # 2. include same prelim pool int the formal pool 
 	# note: include a dummy prelim variable, account for lagged structure
