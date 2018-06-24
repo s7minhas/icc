@@ -123,6 +123,10 @@ data$prelim_icc_state[data$cname=="SUDAN" & data$year==2005] = 0
 data$prelim_icc_opp[data$cname=="SUDAN" & data$year==2005] = 0
 data$prelim_icc[data$cname=="SUDAN" & data$year==2005] = 0
 
+# fix libya
+data$prelim_icc_state[data$cname=="LIBYAN ARAB JAMAHIRIYA" & data$year==2011] = 0
+data$prelim_icc[data$cname=="LIBYAN ARAB JAMAHIRIYA" & data$year==2011] = 0
+
 # save and move onto merging
 save(data, file=paste0(pathData, 'baseData.rda'))
 
