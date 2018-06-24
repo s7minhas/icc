@@ -4,11 +4,6 @@ if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 ###############################################################
 
 ###############################################################
-# load base data
-load(paste0(pathData, 'baseData.rda'))
-###############################################################
-
-###############################################################
 # helper fn to merge data from component files
 addComponentData = function(
 	baseData=data, rdaPath, 
@@ -42,139 +37,131 @@ p5 = c(
 
 # merge variables ##############################################################
 # polity (-2016)
-data=addComponentData(
-	rdaPath=paste0(pathData, 'polity/polity.rda'),
-	objName='polity',
-	vars=c( "polity2" ) )
+buildData = function(data){
+	data=addComponentData(
+		baseData=data,
+		rdaPath=paste0(pathData, 'polity/polity.rda'),
+		objName='polity',
+		vars=c( "polity2" ) )
 
-# wbdata (-2017)
-data=addComponentData(
-	rdaPath=paste0(pathData, 'worldBank/worldBank.rda'),
-	objName='worldBank',
-	vars=c(
-		"gdp", "gdpCap", "gdpGr", "pop", "fdiInGDP", 
-		"fdiOutGDP", "aidGNI", 
-		"gdpLog", 'gdpCapLog', 'popLog' ) )
-data=addComponentData(
-	rdaPath=paste0(pathData, 'worldBank/worldBank.rda'),
-	objName='worldBank',
-	vars=c( 'region' ), lag=FALSE )
-data$region = char(data$region)
-data$africa = 0
-data$africa[data$region=="Sub-Saharan Africa "] = 1
-other = sort(unique(data$cname[which(data$region=='Middle East & North Africa')]))
-moreafrica = c(other[c(1,3,4,11,13,18)], 'NAMIBIA')
-data$africa[which(data$cname %in% moreafrica)] = 1
-data = data[,-match('region',names(data))]
+	# wbdata (-2017)
+	data=addComponentData(
+		baseData=data,		
+		rdaPath=paste0(pathData, 'worldBank/worldBank.rda'),
+		objName='worldBank',
+		vars=c(
+			"gdp", "gdpCap", "gdpGr", "pop", "fdiInGDP", 
+			"fdiOutGDP", "aidGNI", 
+			"gdpLog", 'gdpCapLog', 'popLog' ) )
+	data=addComponentData(
+		baseData=data,		
+		rdaPath=paste0(pathData, 'worldBank/worldBank.rda'),
+		objName='worldBank',
+		vars=c( 'region' ), lag=FALSE )
+	data$region = char(data$region)
+	data$africa = 0
+	data$africa[data$region=="Sub-Saharan Africa "] = 1
+	other = sort(unique(data$cname[which(data$region=='Middle East & North Africa')]))
+	moreafrica = c(other[c(1,3,4,11,13,18)], 'NAMIBIA')
+	data$africa[which(data$cname %in% moreafrica)] = 1
+	data = data[,-match('region',names(data))]
 
-# vdem (-2017)
-data=addComponentData(
-	rdaPath=paste0(pathData, 'vdem/vdem.rda'),
-	objName='vdem',
-	vars=c( "v2juhcind", "v2juncind" ) )	
+	# vdem (-2017)
+	data=addComponentData(
+		baseData=data,		
+		rdaPath=paste0(pathData, 'vdem/vdem.rda'),
+		objName='vdem',
+		vars=c( "v2juhcind", "v2juncind" ) )	
 
-# pts (-2016)
-data=addComponentData(
-	rdaPath=paste0(pathData, 'pts/pts.rda'),
-	objName='pts',
-	vars=c( "pts" ) )	
+	# pts (-2016)
+	data=addComponentData(
+		baseData=data,		
+		rdaPath=paste0(pathData, 'pts/pts.rda'),
+		objName='pts',
+		vars=c( "pts" ) )	
 
-# ideal points (-2015)
-data=addComponentData(
-	rdaPath=paste0(pathData, 'Voeten/idPt.rda'),
-	objName='idPt',
-	vars=c( 
-		paste0(p5, '_absidealdiff'),
-		'p5_absidealdiffAvg' ) )
+	# ideal points (-2015)
+	data=addComponentData(
+		baseData=data,		
+		rdaPath=paste0(pathData, 'Voeten/idPt.rda'),
+		objName='idPt',
+		vars=c( 
+			paste0(p5, '_absidealdiff'),
+			'p5_absidealdiffAvg' ) )
 
-# ged osv rebel (-2016)
-data=addComponentData(
-	rdaPath=paste0(pathData, 'ucdp/ged_osv.rda'),
-	objName='gedRebel',
-	vars=c( 'osv_rebel' ) )
-data$lag1_osv_rebel[is.na(data$lag1_osv_rebel)] = 0
+	# ged osv rebel (-2016)
+	data=addComponentData(
+		baseData=data,		
+		rdaPath=paste0(pathData, 'ucdp/ged_osv.rda'),
+		objName='gedRebel',
+		vars=c( 'osv_rebel' ) )
+	data$lag1_osv_rebel[is.na(data$lag1_osv_rebel)] = 0
 
-# ged osv state (-2016)
-data=addComponentData(
-	rdaPath=paste0(pathData, 'ucdp/ged_osv.rda'),
-	objName='gedState',
-	vars=c( 'osv_state' ) )
-data$lag1_osv_state[is.na(data$lag1_osv_state)] = 0
+	# ged osv state (-2016)
+	data=addComponentData(
+		baseData=data,		
+		rdaPath=paste0(pathData, 'ucdp/ged_osv.rda'),
+		objName='gedState',
+		vars=c( 'osv_state' ) )
+	data$lag1_osv_state[is.na(data$lag1_osv_state)] = 0
 
-# ged intervention (-2016)
-intvVars = c(
-	paste0(p5, '_intv_rebel'), 
-	paste0(p5, '_intv_state'), 
-	paste0(p5, '_intv_rebel_any'), 
-	paste0(p5, '_intv_state_any'), 
-	paste0('p5_', c(
-		'intv_rebel', 'intv_rebel_any', 'intv_rebel_mean', 'intv_rebel_prop',
-		'intv_state', 'intv_state_any', 'intv_state_mean', 'intv_state_prop'
-		)) )
-data=addComponentData(
-	rdaPath=paste0(pathData, 'ucdp/ged_intv.rda'),
-	objName='gedIntv',
-	vars=intvVars )
-varsToFix = paste0('lag1_', intvVars)
-for(v in varsToFix){ data[is.na(data[,v]),v] = 0 }
+	# ged intervention (-2016)
+	intvVars = c(
+		paste0(p5, '_intv_rebel'), 
+		paste0(p5, '_intv_state'), 
+		paste0(p5, '_intv_rebel_any'), 
+		paste0(p5, '_intv_state_any'), 
+		paste0('p5_', c(
+			'intv_rebel', 'intv_rebel_any', 'intv_rebel_mean', 'intv_rebel_prop',
+			'intv_state', 'intv_state_any', 'intv_state_mean', 'intv_state_prop'
+			)) )
+	data=addComponentData(
+		baseData=data,		
+		rdaPath=paste0(pathData, 'ucdp/ged_intv.rda'),
+		objName='gedIntv',
+		vars=intvVars )
+	varsToFix = paste0('lag1_', intvVars)
+	for(v in varsToFix){ data[is.na(data[,v]),v] = 0 }
 
-# ally (-2012)
-data=addComponentData(
-	rdaPath=paste0(pathData, 'cow_ally/ally.rda'),
-	objName='ally',
-	vars=c( 
-		paste0(p5, '_anyAlly'),
-		paste0(p5, '_any_NoNonAggAlly'),
-		paste0(p5, '_defAlly'),
-		'p5_anyAllyProp',
-		'p5_any_NoNonAggAllyProp',
-		'p5_defAllyProp'
-		 ) )
+	# ally (-2012)
+	data=addComponentData(
+		baseData=data,		
+		rdaPath=paste0(pathData, 'cow_ally/ally.rda'),
+		objName='ally',
+		vars=c( 
+			paste0(p5, '_anyAlly'),
+			paste0(p5, '_any_NoNonAggAlly'),
+			paste0(p5, '_defAlly'),
+			'p5_anyAllyProp',
+			'p5_any_NoNonAggAllyProp',
+			'p5_defAllyProp'
+			 ) )
 
-# trade (-2014)
-data=addComponentData(
-	rdaPath=paste0(pathData, 'cow_trade/trade.rda'),
-	objName='trade',
-	vars=c( 
-		paste0(p5, '_tradeProp'),
-		paste0(p5, '_trade'),		
-		'p5_trade',
-		'p5_tradeProp'
-		 ) )
+	# trade (-2014)
+	data=addComponentData(
+		baseData=data,		
+		rdaPath=paste0(pathData, 'cow_trade/trade.rda'),
+		objName='trade',
+		vars=c( 
+			paste0(p5, '_tradeProp'),
+			paste0(p5, '_trade'),		
+			'p5_trade',
+			'p5_tradeProp'
+			 ) )
+	return(data)
+}
+
+# load data
+load(paste0(pathData, 'sampFrameData.rda'))
+prelimState = buildData(prelimState)
+prelimOpp = buildData(prelimOpp)
+formalState = buildData(formalState)
+formalOpp = buildData(formalOpp)
 ###############################################################
 
 ###############################################################
 # save
-save(data, file=paste0(pathData, 'mergedData.rda'))
-write.csv(data, file=paste0(pathData, 'mergedData.csv'))
-
-# cor mat
-# corVars = names(data)[c(4:10,13:ncol(data))]
-# write.csv(cor(data[,corVars], use='pairwise.complete.obs'), 
-# 	file=paste0(pathData, 'corrMat.csv')
-# 	)
-###############################################################
-
-###############################################################
-# save data for states experiencing a prelim 
-
-## investigation separately
-rebPrelim <- data[data$prelim_icc_opp==1,]
-write.csv(cor(rebPrelim[,corVars], use='pairwise.complete.obs'), 
-	file=paste0(pathData, 'corrMat_rebelPrelim.csv')
-	)
-
-# check for observation loss
-allRebFormalOnsets <- apply(
-	data[data$formal_icc_opp==1,c('cname','year')], 1, 
-	function(x){paste(x[1],x[2],sep='_')})
-allRebFormalOnsets_withprelim <- apply(
-	rebPrelim[rebPrelim$formal_icc_opp==1,c('cname','year')], 1, 
-	function(x){paste(x[1],x[2],sep='_')})
-setdiff(allRebFormalOnsets,allRebFormalOnsets_withprelim)
-
-statePrelim <- data[data$prelim_icc_state==1,]
-write.csv(cor(statePrelim[,corVars], use='pairwise.complete.obs'), 
-	file=paste0(pathData, 'corrMat_statePrelim.csv')
-	)
+save(prelimState, prelimOpp, 
+	formalState, formalOpp, 
+	file=paste0(pathData, 'mergedData.rda'))
 ###############################################################

@@ -428,6 +428,14 @@ formalOpp = formalOpp[order(formalOpp$ccodeYear),]
 write.csv(formalOpp[,vars], file=paste0(pathData, 'formalOpp.csv'))
 ###############################################################
 
+###############################################################
+# save all
+save(
+	prelimState, prelimOpp, 
+	formalState, formalOpp,
+	file=paste0(pathData, 'sampFrameData.rda'))
+###############################################################
+
 ### dealing with formal pool ... 
 # 1. go back down to the monthly level ... only include cases that have experienced prelims
 # 2. include same prelim pool int the formal pool 
