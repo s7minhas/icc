@@ -1,7 +1,6 @@
 rm(list=ls())
-if(Sys.info()['user'] %in% c('s7m', 'janus829')){
-	pathGit='~/Research/icc/'
-	pathDrop='~/Dropbox/Research/icc/'
+if(Sys.info()['user'] %in% c('minhas')){
+	pathDrop='/home/minhas/for_ec2/'
 	pathData=paste0(pathDrop, 'data/')
 	pathResults=paste0(pathDrop,'results/')
 	pathGraphics=paste0(pathDrop,'graphics/') }
@@ -25,7 +24,7 @@ loadPkg=function(toLoad){
 loadPkg(c(
 	'foreign', 'haven',
 	'dplyr', 'reshape2', 'magrittr', 'lubridate', 'tidyr',
-	'ggplot2', 'latex2exp', 'Cairo',	# plotting
+	'ggplot2', 'latex2exp',	# plotting
 	'foreach', 'doParallel', # parallelization
 	'xtable', # tables
 	'devtools', # loading git packages

@@ -1,5 +1,5 @@
-if(Sys.info()['user'] %in% c('s7m', 'janus829')){
-	source('~/Research/icc/R/setup.R') }
+if(Sys.info()['user'] %in% c('minhas')){
+	source('/home/minhas/for_ec2/setup.R') }
 
 loadPkg('xgboost')
 loadPkg('bartMachine')
@@ -24,43 +24,17 @@ prelimStateForm = formula(
 xMat = prelimState[,prelimStateVars]
 y = prelimState$prelim_icc_state
 
-# mod = glm( prelimStateForm,
-# 	family=binomial(link='logit'),
-# 	data=prelimState )
-# summary(mod)
-
-# xgb = xgboost(data = data.matrix(xMat), 
-# 	label = y, 
-# 	eta = 0.1,
-# 	max_depth = 15, 
-# 	nround=25, 
-# 	subsample = 0.5,
-# 	colsample_bytree = 0.5,
-# 	seed = 6886,
-# 	eval_metric = "auc",
-# 	objective = "reg:logistic",
-# 	nthread = 3
-# )
-
-# xgb.importance(
-# 	feature_names=prelimStateVars,
-# 	model = xgb
-# 	)
-
 set.seed(6886)
-bm = bartMachineCV(
+bm_prelimState = bartMachine(
 	X = xMat,
 	y = y,
-	# num_trees=50,
-	# num_burn_in=250,
-	# num_iterations_after_burn_in=1000,
-	# alpha=.95, beta=2, k=2, q=.9, nu=3,
+	num_trees=50,
+	num_burn_in=250,
+	num_iterations_after_burn_in=1000,
+	alpha=.95, beta=2, k=2, q=.9, nu=3,
 	use_missing_data=TRUE
 	)
-
-plot_convergence_diagnostics(bm)
-plot_y_vs_yhat(bm, credible_intervals = TRUE)
-plot_y_vs_yhat(bm, prediction_intervals = TRUE)
+save(bm_prelimState, file=paste0(pathResults,'bm_prelimState.rda'))
 
 ## prelim opp
 prelimOppVars = c(
@@ -80,28 +54,17 @@ prelimOppForm = formula(
 xMat = prelimOpp[,prelimOppVars]
 y = prelimOpp$prelim_icc_opp
 
-mod = glm( prelimOppForm,
-	family=binomial(link='logit'),
-	data=prelimOpp )
-summary(mod)
-
-xgb = xgboost(data = data.matrix(xMat), 
-	label = y, 
-	eta = 0.1,
-	max_depth = 15, 
-	nround=25, 
-	subsample = 0.5,
-	colsample_bytree = 0.5,
-	seed = 6886,
-	eval_metric = "auc",
-	objective = "reg:logistic",
-	nthread = 3
+set.seed(6886)
+bm_prelimOpp = bartMachine(
+  X = xMat,
+  y = y,
+  num_trees=50,
+  num_burn_in=250,
+  num_iterations_after_burn_in=1000,
+  alpha=.95, beta=2, k=2, q=.9, nu=3,
+  use_missing_data=TRUE
 )
-
-xgb.importance(
-	feature_names=prelimOppVars,
-	model = xgb
-	)
+save(bm_prelimOpp, file=paste0(pathResults,'bm_prelimOpp.rda'))
 
 ## formal state
 formalStateVars = c(
@@ -125,28 +88,17 @@ formalStateForm = formula(
 xMat = formalState[,formalStateVars]
 y = formalState$formal_icc_state
 
-mod = glm( formalStateForm,
-	family=binomial(link='logit'),
-	data=formalState )
-summary(mod)
-
-xgb = xgboost(data = data.matrix(xMat), 
-	label = y, 
-	eta = 0.1,
-	max_depth = 15, 
-	nround=25, 
-	subsample = 0.5,
-	colsample_bytree = 0.5,
-	seed = 6886,
-	eval_metric = "auc",
-	objective = "reg:logistic",
-	nthread = 3
+set.seed(6886)
+bm_formalState = bartMachine(
+  X = xMat,
+  y = y,
+  num_trees=50,
+  num_burn_in=250,
+  num_iterations_after_burn_in=1000,
+  alpha=.95, beta=2, k=2, q=.9, nu=3,
+  use_missing_data=TRUE
 )
-
-xgb.importance(
-	feature_names=formalStateVars,
-	model = xgb
-	)
+save(bm_formalState, file=paste0(pathResults,'bm_formalState.rda'))
 
 ## formal opp
 formalOppVars = c(
@@ -170,25 +122,14 @@ formalOppForm = formula(
 xMat = formalOpp[,formalOppVars]
 y = formalOpp$formal_icc_opp
 
-mod = glm( formalOppForm,
-	family=binomial(link='logit'),
-	data=formalOpp )
-summary(mod)
-
-xgb = xgboost(data = data.matrix(xMat), 
-	label = y, 
-	eta = 0.1,
-	max_depth = 15, 
-	nround=25, 
-	subsample = 0.5,
-	colsample_bytree = 0.5,
-	seed = 6886,
-	eval_metric = "auc",
-	objective = "reg:logistic",
-	nthread = 3
+set.seed(6886)
+bm_formalOpp = bartMachine(
+  X = xMat,
+  y = y,
+  num_trees=50,
+  num_burn_in=250,
+  num_iterations_after_burn_in=1000,
+  alpha=.95, beta=2, k=2, q=.9, nu=3,
+  use_missing_data=TRUE
 )
-
-xgb.importance(
-	feature_names=formalOppVars,
-	model = xgb
-	)
+save(bm_formalOpp, file=paste0(pathResults,'bm_formalOpp.rda'))
