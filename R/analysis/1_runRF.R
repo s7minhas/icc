@@ -1,10 +1,8 @@
 if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	source('~/Research/icc/R/setup.R') }
 
-loadPkg('xgboost')
-loadPkg('bartMachine')
+loadPkg('randomForest')
 load(paste0(pathData, 'mergedData.rda'))
-
 
 ## prelim state
 prelimStateVars = c(
@@ -22,12 +20,11 @@ prelimStateForm = formula(
 		)
 	)
 xMat = prelimState[,prelimStateVars]
-y = prelimState$prelim_icc_state
+y = factor(prelimState$prelim_icc_state)
 
-# mod = glm( prelimStateForm,
-# 	family=binomial(link='logit'),
-# 	data=prelimState )
-# summary(mod)
+rf = randomForest(x=xMat, y=y, 
+	ntree=500
+	)
 
 # xgb = xgboost(data = data.matrix(xMat), 
 # 	label = y, 
