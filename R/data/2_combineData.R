@@ -166,4 +166,10 @@ formalOpp = buildData(formalOpp)
 save(prelimState, prelimOpp, 
 	formalState, formalOpp, 
 	file=paste0(pathData, 'mergedData.rda'))
+
+# checks
+write.csv(prelimState, file=paste0(pathData, 'prelimState.csv'))
+write.csv(prelimOpp, file=paste0(pathData, 'prelimOpp.csv'))
+write.csv(formalState, file=paste0(pathData, 'formalState.csv'))
+write.csv(formalOpp, file=paste0(pathData, 'formalOpp.csv'))
 ###############################################################

@@ -42,11 +42,11 @@ impData = sbgcop.mcmc(Y=toImp, seed=6886, verb=FALSE)
 formalStateImp = data.frame(impData$Y.pmean)
 
 mod = glm( formalStateForm,
-	family=binomial(link='logit'),
+	family=binomial(link='probit'),
 	data=formalStateImp )
-sink(file=paste0(pathGraphics, 'formalStateGLM.txt'))
+# sink(file=paste0(pathGraphics, 'formalStateGLM.txt'))
 summary(mod)
-sink()
+# sink()
 
 loadPkg('Zelig')
 z.out <- zelig(formalStateForm, model = "relogit", 
