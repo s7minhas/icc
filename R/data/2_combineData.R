@@ -87,7 +87,9 @@ buildData = function(data){
 		objName='idPt',
 		vars=c( 
 			paste0(p5, '_absidealdiff'),
-			'p5_absidealdiffAvg' ) )
+			'p5_absidealdiffAvg',
+			'p5_absidealdiffMin',
+			'p5_absidealdiffMax' ) )
 
 	# ged osv rebel (-2016)
 	data=addComponentData(

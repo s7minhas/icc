@@ -59,6 +59,10 @@ idPt$p5_absidealdiffSum = apply(idPt[,paste0(toKeep,'_absidealdiff')], 1, sum)
 denom = rep(5,nrow(idPt))
 denom = ifelse(idPt$cname1 %in% toKeep, 4, 5)
 idPt$p5_absidealdiffAvg = idPt$p5_absidealdiffSum/denom
+
+# min and max
+idPt$p5_absidealdiffMin = apply(idPt[,names(idPt)[4:8]], 1, min)
+idPt$p5_absidealdiffMax = apply(idPt[,names(idPt)[4:8]], 1, max)
 ###############################################################
 
 ###############################################################
