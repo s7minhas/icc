@@ -12,7 +12,7 @@ formalOppVars = c(
 	'icc_rat','lag1_civilwar','lag1_polity2',
 	'lag1_gdpCapLog','africa',
 	'lag1_v2juhcind',
-	'lag1_poi_osv_rebel_cumul',	
+	'lag1_poi_osv_rebel',	
 	'lag1_p5_absidealdiffMin'	
 	)
 formalOppForm = formula(
