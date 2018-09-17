@@ -103,8 +103,23 @@ gedRebel = rbind(
 ############################
 
 ############################
+# create running sum of osv variables
+gedState = lapply(unique(gedState$cname), function(x){
+	slice = gedState[which(gedState$cname==x),]
+	slice = slice[order(slice$year),]
+	slice$civDeaths_runSum = cumsum(slice$civDeaths)	
+	return(slice) }) %>% do.call('rbind', .)
+
+gedRebel = lapply(unique(gedRebel$cname), function(x){
+	slice = gedRebel[which(gedRebel$cname==x),]
+	slice = slice[order(slice$year),]
+	slice$civDeaths_runSum = cumsum(slice$civDeaths)	
+	return(slice) }) %>% do.call('rbind', .)
+############################
+
+############################
 # save
-names(gedRebel)[3] = 'osv_rebel'
-names(gedState)[3] = 'osv_state'
+names(gedRebel)[c(3,5)] = c('osv_rebel', 'osv_rebel_cumul')
+names(gedState)[c(3,5)] = c('osv_state', 'osv_state_cumul')
 save(gedRebel, gedState, file=paste0(pathData, 'ucdp/ged_osv.rda'))
 ############################

@@ -8,8 +8,11 @@ prelimStateVars = c(
 	'icc_rat','lag1_civilwar','lag1_polity2',
 	'lag1_gdpCapLog','africa',
 	'lag1_v2juhcind','lag1_pts',
-	'lag1_osv_state',	
-	'lag1_p5_absidealdiffMin'	
+	'lag1_osv_state_cumul',	
+	# p5 vars: 
+	# 'lag1_p5_absidealdiffMin'	 
+	# 'lag1_p5_latAngleMin'
+	'lag1_p5_defAllyAvg'
 	)
 prelimStateForm = formula(
 	paste0('prelim_icc_state ~ ', 
@@ -19,6 +22,7 @@ prelimStateForm = formula(
 
 # var transformations
 prelimState$lag1_osv_state = log(prelimState$lag1_osv_state+1)
+prelimState$lag1_osv_state_cumul = log(prelimState$lag1_osv_state_cumul+1)
 
 # add splines
 # functions to help calculate peace years

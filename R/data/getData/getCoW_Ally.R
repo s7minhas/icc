@@ -74,17 +74,23 @@ ally = ally %>%
 	spread(temp, value)
 ally[is.na(ally)] = 0
 
-# get p5 vars
-ally$p5_anyAlly = apply(ally[,paste0(toKeep,'_anyAlly')], 1, sum)
-ally$p5_any_NoNonAggAlly = apply(ally[,paste0(toKeep,'_any_NoNonAggAlly')], 1, sum)
-ally$p5_defAlly = apply(ally[,paste0(toKeep,'_defAlly')], 1, sum)
+# org for calculation
+pData = lapply(toKeep, function(v){
+	slice = ally[which(ally$cname1 == v),]
+	slice[,which(grepl(v, names(ally)))] = NA
+	return(slice) })
+pData[[length(pData) + 1 ]] = ally[which(!ally$cname1 %in% toKeep),]
 
-# calc proportions
-denom = rep(5,nrow(ally))
-denom = ifelse(ally$cname1 %in% toKeep, 4, 5)
-ally$p5_anyAllyProp = ally$p5_anyAlly/denom
-ally$p5_any_NoNonAggAllyProp = ally$p5_any_NoNonAggAlly/denom
-ally$p5_defAllyProp = ally$p5_defAlly/denom
+# loop over each using p5Vars function
+pData = lapply(pData, function(x){
+	p5Vars(x, paste0(toKeep,'_anyAlly'), 'anyAlly') })
+pData = lapply(pData, function(x){
+	p5Vars(x, paste0(toKeep,'_any_NoNonAggAlly'), 'any_NoNonAggAlly') })
+pData = lapply(pData, function(x){
+	p5Vars(x, paste0(toKeep,'_defAlly'), 'defAlly') })
+
+# reorg
+ally = do.call('rbind', pData)
 ###############################################################
 
 ###############################################################

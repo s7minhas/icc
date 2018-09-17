@@ -29,10 +29,6 @@ idPt = lapply(unique(idPtM$year), function(yr){
 	dFrame$ccode2 = panel$ccode[match(dFrame$cname2,panel$cname)]
 	out = dFrame[,c('ccode1','cname1','cname2','year','absidealdiff')]
 	return(out) }) %>% do.call('rbind', .)
-
-# Check for duplicates
-dyadidyr = paste(idPt$ccode1, idPt$ccode2, idPt$year, sep='_')
-stopifnot( length( table(dyadidyr)[table(dyadidyr)>1] ) == 0 )
 ###############################################################
 
 ###############################################################
@@ -50,19 +46,21 @@ idPt = idPt %>%
 	gather(variable, value, -(ccode1:year)) %>%
 	unite(temp, cname2, variable) %>%
 	spread(temp, value)
-idPt[is.na(idPt)] = 0
+idPt[is.na(idPt)] = NA
 
-# get p5 vars
-idPt$p5_absidealdiffSum = apply(idPt[,paste0(toKeep,'_absidealdiff')], 1, sum)
+# org for calculation
+pData = lapply(toKeep, function(v){
+	slice = idPt[which(idPt$cname1 == v),]
+	slice[,which(grepl(v, names(idPt)))] = NA
+	return(slice) })
+pData[[length(pData) + 1 ]] = idPt[which(!idPt$cname1 %in% toKeep),]
 
-# calc proportions
-denom = rep(5,nrow(idPt))
-denom = ifelse(idPt$cname1 %in% toKeep, 4, 5)
-idPt$p5_absidealdiffAvg = idPt$p5_absidealdiffSum/denom
+# loop over each using p5Vars function
+pData = lapply(pData, function(x){
+	p5Vars(x, paste0(toKeep,'_absidealdiff'), 'absidealdiff') })
 
-# min and max
-idPt$p5_absidealdiffMin = apply(idPt[,names(idPt)[4:8]], 1, min)
-idPt$p5_absidealdiffMax = apply(idPt[,names(idPt)[4:8]], 1, max)
+# reorg
+idPt = do.call('rbind', pData)
 ###############################################################
 
 ###############################################################

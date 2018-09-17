@@ -43,5 +43,25 @@ pasteMult = function(x,y,sepZ){
 	apply(expand.grid(x,y), 1, paste, collapse=sepZ) }
 cname = function(x) {countrycode(x,'country.name','country.name')}
 
+# helper to calculate p5 vars
+p5Vars = function(df, vars, baseLabel){
+	
+	# sum up
+	df$tmp = apply(df[,vars],1,sum,na.rm=TRUE)
+	names(df)[ncol(df)] = paste0('p5_',baseLabel)
+
+	# calc avg
+	df$tmp = apply(df[,vars], 1, mean, na.rm=TRUE)
+	names(df)[ncol(df)] = paste0('p5_',baseLabel,'Avg')	
+
+	# calc min/max
+	df$tmp = apply(df[,vars],1, min,na.rm=TRUE)
+	names(df)[ncol(df)] = paste0('p5_',baseLabel,'Min')	
+	df$tmp = apply(df[,vars],1, max,na.rm=TRUE)
+	names(df)[ncol(df)] = paste0('p5_',baseLabel,'Max')		
+
+	# 
+	return(df) }
+
 # helper dataset for matching country names
 load(paste0(pathData, 'panel.rda'))

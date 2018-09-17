@@ -12,7 +12,7 @@ formalOppVars = c(
 	'icc_rat','lag1_civilwar','lag1_polity2',
 	'lag1_gdpCapLog','africa',
 	'lag1_v2juhcind',
-	'lag1_poi_osv_rebel',	
+	'lag1_poi_osv_rebel_cumul',	
 	'lag1_p5_absidealdiffMin'	
 	)
 formalOppForm = formula(
@@ -28,7 +28,7 @@ formalOpp$lag1_poi_osv_rebel = log(formalOpp$lag1_poi_osv_rebel+1)
 # functions to help calculate peace years
 flipBin = function(x,a=0,b=1){ z=x ; z[x==a]=b ; z[x==b]=a ; return(z) }
 getPeaceCounter = function(x){
-	tmp = x %>% as.numeric() %>% flipBin()
+	tmp = x %>% as.numeric()
 	peaceT = tmp * ave(tmp, c(0, cumsum(diff(tmp) != 0)), FUN = seq_along)
 	return(peaceT) }
 
@@ -47,6 +47,7 @@ formalOppImp = data.frame(impData$Y.pmean)
 mod = glm( formalOppForm,
 	family=binomial(link='logit'),
 	data=formalOppImp )
+summary(mod)
 sink(file=paste0(pathGraphics, 'formalOppGLM.txt'))
 summary(mod)
 sink()

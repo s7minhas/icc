@@ -96,16 +96,18 @@ buildData = function(data){
 		baseData=data,		
 		rdaPath=paste0(pathData, 'ucdp/ged_osv.rda'),
 		objName='gedRebel',
-		vars=c( 'osv_rebel' ) )
+		vars=c( 'osv_rebel', 'osv_rebel_cumul' ) )
 	data$lag1_osv_rebel[is.na(data$lag1_osv_rebel)] = 0
+	data$lag1_osv_rebel_cumul[is.na(data$lag1_osv_rebel_cumul)] = 0
 
 	# ged osv state (-2016)
 	data=addComponentData(
 		baseData=data,		
 		rdaPath=paste0(pathData, 'ucdp/ged_osv.rda'),
 		objName='gedState',
-		vars=c( 'osv_state' ) )
+		vars=c( 'osv_state', 'osv_state_cumul' ) )
 	data$lag1_osv_state[is.na(data$lag1_osv_state)] = 0
+	data$lag1_osv_state_cumul[is.na(data$lag1_osv_state_cumul)] = 0
 
 	# ged intervention (-2016)
 	intvVars = c(
@@ -134,9 +136,9 @@ buildData = function(data){
 			paste0(p5, '_anyAlly'),
 			paste0(p5, '_any_NoNonAggAlly'),
 			paste0(p5, '_defAlly'),
-			'p5_anyAllyProp',
-			'p5_any_NoNonAggAllyProp',
-			'p5_defAllyProp'
+			'p5_anyAllyAvg',
+			'p5_any_NoNonAggAllyAvg',
+			'p5_defAllyAvg', 'p5_defAllyMin', 'p5_defAllyMax'
 			 ) )
 
 	# trade (-2014)
@@ -150,6 +152,19 @@ buildData = function(data){
 			'p5_trade',
 			'p5_tradeProp'
 			 ) )
+
+	# add net lat angle
+	data=addComponentData(
+		baseData=data,		
+		rdaPath=paste0(pathData, 'latAngle_MG/latAngle.rda'),
+		objName='latAngle',
+		vars=c( 
+			paste0(p5, '_latAngle'),
+			'p5_latAngleAvg',
+			'p5_latAngleMin',
+			'p5_latAngleMax'
+			 ) )
+
 	return(data)
 }
 
@@ -166,10 +181,4 @@ formalOpp = buildData(formalOpp)
 save(prelimState, prelimOpp, 
 	formalState, formalOpp, 
 	file=paste0(pathData, 'mergedData.rda'))
-
-# checks
-write.csv(prelimState, file=paste0(pathData, 'prelimState.csv'))
-write.csv(prelimOpp, file=paste0(pathData, 'prelimOpp.csv'))
-write.csv(formalState, file=paste0(pathData, 'formalState.csv'))
-write.csv(formalOpp, file=paste0(pathData, 'formalOpp.csv'))
 ###############################################################
