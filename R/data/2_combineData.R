@@ -36,8 +36,9 @@ p5 = c(
 ###############################################################
 
 # merge variables ##############################################################
-# polity (-2016)
 buildData = function(data){
+
+	# polity (-2016)
 	data=addComponentData(
 		baseData=data,
 		rdaPath=paste0(pathData, 'polity/polity.rda'),
@@ -109,37 +110,63 @@ buildData = function(data){
 	data$lag1_osv_state[is.na(data$lag1_osv_state)] = 0
 	data$lag1_osv_state_cumul[is.na(data$lag1_osv_state_cumul)] = 0
 
-	# ged intervention (-2016)
-	intvVars = c(
-		paste0(p5, '_intv_rebel'), 
-		paste0(p5, '_intv_state'), 
-		paste0(p5, '_intv_rebel_any'), 
-		paste0(p5, '_intv_state_any'), 
-		paste0('p5_', c(
-			'intv_rebel', 'intv_rebel_any', 'intv_rebel_mean', 'intv_rebel_prop',
-			'intv_state', 'intv_state_any', 'intv_state_mean', 'intv_state_prop'
-			)) )
+	# # ged intervention (-2016)
+	# intvVars = c(
+	# 	paste0(p5, '_intv_rebel'), 
+	# 	paste0(p5, '_intv_state'), 
+	# 	paste0(p5, '_intv_rebel_any'), 
+	# 	paste0(p5, '_intv_state_any'), 
+	# 	paste0('p5_', c(
+	# 		'intv_rebel', 'intv_rebel_any', 'intv_rebel_mean', 'intv_rebel_prop',
+	# 		'intv_state', 'intv_state_any', 'intv_state_mean', 'intv_state_prop'
+	# 		)) )
+	# data=addComponentData(
+	# 	baseData=data,		
+	# 	rdaPath=paste0(pathData, 'ucdp/ged_intv.rda'),
+	# 	objName='gedIntv',
+	# 	vars=intvVars )
+	# varsToFix = paste0('lag1_', intvVars)
+	# for(v in varsToFix){ data[is.na(data[,v]),v] = 0 }
+
+	# a&p intervention (-2016)
+	load(paste0(pathData, 'apIntervention/intv.rda'))
+	intvVars = names(intv)[-(1:2)]
 	data=addComponentData(
 		baseData=data,		
-		rdaPath=paste0(pathData, 'ucdp/ged_intv.rda'),
-		objName='gedIntv',
+		rdaPath=paste0(pathData, 'apIntervention/intv.rda'),
+		objName='intv',
 		vars=intvVars )
 	varsToFix = paste0('lag1_', intvVars)
-	for(v in varsToFix){ data[is.na(data[,v]),v] = 0 }
+	for(v in varsToFix){ data[is.na(data[,v]),v] = 0 }	
 
-	# ally (-2012)
+	# atop ally (-2016)
+	aVars = c( 
+		paste0(p5, '_anyAlly'),
+		paste0(p5, '_defAlly'),
+		'p5_anyAllyAvg','p5_anyAllyMin', 'p5_anyAllyMax',
+		'p5_defAllyAvg', 'p5_defAllyMin', 'p5_defAllyMax'
+		)
 	data=addComponentData(
 		baseData=data,		
-		rdaPath=paste0(pathData, 'cow_ally/ally.rda'),
+		rdaPath=paste0(pathData, 'atop_ally/ally.rda'),
 		objName='ally',
-		vars=c( 
-			paste0(p5, '_anyAlly'),
-			paste0(p5, '_any_NoNonAggAlly'),
-			paste0(p5, '_defAlly'),
-			'p5_anyAllyAvg',
-			'p5_any_NoNonAggAllyAvg',
-			'p5_defAllyAvg', 'p5_defAllyMin', 'p5_defAllyMax'
-			 ) )
+		vars=aVars )
+	varsToFix = paste0('lag1_', aVars)
+	for(v in varsToFix){ data[is.na(data[,v]),v] = 0 }		
+
+	# # cow ally (-2012)
+	# data=addComponentData(
+	# 	baseData=data,		
+	# 	rdaPath=paste0(pathData, 'cow_ally/ally.rda'),
+	# 	objName='ally',
+	# 	vars=c( 
+	# 		paste0(p5, '_anyAlly'),
+	# 		paste0(p5, '_any_NoNonAggAlly'),
+	# 		paste0(p5, '_defAlly'),
+	# 		'p5_anyAllyAvg',
+	# 		'p5_any_NoNonAggAllyAvg',
+	# 		'p5_defAllyAvg', 'p5_defAllyMin', 'p5_defAllyMax'
+	# 		 ) )
 
 	# trade (-2014)
 	data=addComponentData(
@@ -167,6 +194,10 @@ buildData = function(data){
 
 	return(data)
 }
+###############################################################
+
+###############################################################
+# by separate yearly samples for each dv type
 
 # load data
 load(paste0(pathData, 'sampFrameData.rda'))
@@ -174,11 +205,21 @@ prelimState = buildData(prelimState)
 prelimOpp = buildData(prelimOpp)
 formalState = buildData(formalState)
 formalOpp = buildData(formalOpp)
-###############################################################
 
-###############################################################
 # save
 save(prelimState, prelimOpp, 
 	formalState, formalOpp, 
 	file=paste0(pathData, 'mergedData.rda'))
+###############################################################
+
+###############################################################
+# by separate yearly samples for each dv type
+
+# load data
+load(paste0(pathData, 'baseData_yrly_ongoing.rda'))
+data = buildData(data)
+
+# save
+save(data, 
+	file=paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
 ###############################################################

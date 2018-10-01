@@ -300,7 +300,8 @@ vars = c(
 prelimState = prelimState[order(prelimState$ccodeYear),]
 write.csv(prelimState[,vars], file=paste0(pathData, 'prelimState.csv'))
 
-formalState = rbind(prelimState, formalState)
+# rbind together only if you want the prelim sample in the formal
+# formalState = rbind(prelimState, formalState)
 # remove duplicates
 ## result from some prelim and formal cases happening in the same year
 formalState = unique(formalState)
@@ -454,13 +455,19 @@ vars = c(
 prelimOpp = prelimOpp[order(prelimOpp$ccodeYear),]
 write.csv(prelimOpp[,vars], file=paste0(pathData, 'prelimOpp.csv'))
 
-formalOpp = rbind(prelimOpp, formalOpp)
+# rbind together only if you want the prelim sample in the formal
+# formalOpp = rbind(prelimOpp, formalOpp)
 # remove duplicates
 ## result from some prelim and formal cases happening in the same year
 formalOpp = unique(formalOpp)
 
 formalOpp = formalOpp[order(formalOpp$ccodeYear),]
 write.csv(formalOpp[,vars], file=paste0(pathData, 'formalOpp.csv'))
+###############################################################
+
+###############################################################
+# create onset/ongoing stuff
+
 ###############################################################
 
 ###############################################################
