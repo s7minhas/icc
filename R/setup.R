@@ -63,5 +63,53 @@ p5Vars = function(df, vars, baseLabel){
 	# 
 	return(df) }
 
+# rubin coef
+rubinCoef = function (coefMatrix, seMatrix){
+    numMods = nrow(coefMatrix)
+    ones = matrix(1, nrow = 1, ncol = numMods)
+    coefMelt = (ones %*% coefMatrix)/numMods
+    se2 = (ones %*% (seMatrix^2))/numMods
+    diff = coefMatrix - matrix(1, nrow = numMods, ncol = 1) %*% coefMelt
+    sq2 = (ones %*% (diff^2))/(numMods - 1)
+    seMelt = sqrt(se2 + sq2 * (1 + 1/numMods))
+    return(list(beta = coefMelt, se = seMelt)) }
+
+# quick table summ
+getTable = function(coefs, vnames, modelSumm, modelNames, digs=2){
+  noModels=length(modelSumm)
+  tableResults = matrix('', nrow=2*length(coefs), ncol=1+noModels)
+  tableResults[,1] = rep(coefs,2)
+  colnames(tableResults) = c('Variable',paste('Model',1:noModels))
+  for(ii in 2:ncol(tableResults)){
+    temp = modelSumm[[ii-1]]
+    temp = temp[match(tableResults[,'Variable'], rownames(temp)),]
+    estims = temp[1:length(coefs),'beta']
+    estims = round(as.numeric(as.character(estims)),digs)
+    tvals = abs(temp[1:length(coefs),'z'])
+    tvals = round(as.numeric(as.character(tvals)),digs)
+    estims = ifelse(tvals>=qnorm(0.95) & !is.na(tvals) & tvals<qnorm(0.975), 
+      paste('$', estims,'^{\\ast}$',sep=''), estims)
+    estims = ifelse(tvals>=qnorm(0.975) & !is.na(tvals), 
+      paste('$', estims,'^{\\ast\\ast}$',sep=''), estims)
+    tableResults[1:length(coefs),ii] = estims
+    serrors = temp[(length(coefs)+1):nrow(tableResults),'serror']
+    serrors = round(as.numeric(as.character(serrors)),digs)
+    serrors = paste('(',serrors,')',sep='')
+    serrors = ifelse(serrors=='(NA)','',serrors)
+    tableResults[(length(coefs)+1):nrow(tableResults),ii] = serrors
+  }
+
+  # Reorganizing rows and variable labels
+  tableFinal = NULL
+  for(ii in 1:length(coefs)){
+    temp = cbind('', t(tableResults[ii+length(coefs),2:ncol(tableResults)]))
+    tableFinal = rbind(tableFinal, tableResults[ii,], temp) }
+  tableFinal[,'Variable'] = vnames[match(tableFinal[,'Variable'],coefs)]
+  tableFinal[,'Variable'][is.na(tableFinal[,'Variable'])] = ''
+
+  tableFinal = rbind(tableFinal)
+  colnames(tableFinal)[2:(noModels+1)] = modelNames
+  return(tableFinal) }
+
 # helper dataset for matching country names
 load(paste0(pathData, 'panel.rda'))

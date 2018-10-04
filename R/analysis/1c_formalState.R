@@ -1,80 +1,151 @@
+###############################################################
 if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	source('~/Research/icc/R/setup.R') }
 
+#
+loadPkg(c('sbgcop','rstanarm'))
+###############################################################	
+
+###############################################################	
 load(paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
 
 # subset to states that have experienced a prelim
 formalState = data[data$prelim_icc_state==1 | data$formal_icc_state==1,]
-# formalState=data
+###############################################################	
 
+###############################################################	
 ## formal state
 formalStateVars = c(
-	'icc_rat','lag1_civilwar','lag1_polity2',
-	'lag1_gdpCapLog','africa',
+	'icc_rat','lag1_civilwar',
+	'lag1_polity2',
+	'lag1_gdpCapLog',
+	'africa',
 	'lag1_v2juncind','lag1_poi_pts',
 	'lag1_poi_osv_state',	
-	'lag1_p5_absidealdiffMin'
-	# 'lag1_p5int'
-	# 'lag1_p5_latAngleMin'
-	# 'lag1_p5_defAllyMin'	
-	)
-formalStateForm = formula(
-	paste0('formal_icc_state ~ ', 
-		paste(formalStateVars, collapse = ' + ')
-		)
+	# p5 vars: 
+	'lag1_p5_absidealdiffMin',
+	'lag1_p5_defAllyAvg',
+	'lag1_p5_gov_clean', 'lag1_p5_reb_clean'
 	)
 
 # var transformations
 formalState$lag1_poi_osv_state = log(formalState$lag1_poi_osv_state+1)
+###############################################################	
 
-# # add splines
-# # functions to help calculate peace years
-# flipBin = function(x,a=0,b=1){ z=x ; z[x==a]=b ; z[x==b]=a ; return(z) }
-# getPeaceCounter = function(x){
-# 	tmp = x %>% as.numeric() %>% flipBin()
-# 	peaceT = tmp * ave(tmp, c(0, cumsum(diff(tmp) != 0)), FUN = seq_along)
-# 	return(peaceT) }
-
-# # Calculate
-# formalState$cSpline = with(formalState,
-# 	by(formal_icc_state, cnameYear, function(y){
-# 		getPeaceCounter(y) } ) ) %>% unlist()
-# formalState$cSpline2 = formalState$cSpline^2
-# formalState$cSpline3 = formalState$cSpline^3
-
+###############################################################
 # impute
-loadPkg('sbgcop')
-toImp = data.matrix(formalState[,c('formal_icc_state',formalStateVars)])
-impData = sbgcop.mcmc(Y=toImp, seed=6886, verb=FALSE)
-formalStateImp = data.frame(impData$Y.pmean)
+if(!file.exists(paste0(pathData, 'formalState_imp.rda'))){
+	toImp = data.matrix(formalState[,c('formal_icc_state',formalStateVars)])
+	impData = sbgcop.mcmc(Y=toImp, seed=6886, verb=FALSE, nsamp=1000)
+	save(impData, file=paste0(pathData, 'formalState_imp.rda'))
+} else { load(paste0(pathData, 'formalState_imp.rda')) }
 
-mod = glm( formalStateForm,
-	family=binomial(link='probit'),
-	data=formalStateImp )
-# sink(file=paste0(pathGraphics, 'formalStateGLM.txt'))
-summary(mod)
-# sink()
+# pick a few from the posterior
+set.seed(6886)
+frame = data.frame(impData$Y.pmean)
+impDFs = lapply(sample(500:1000, 10), function(i){
+	x = data.frame(impData$Y.impute[,,i])
+	names(x) = names(frame); return(x) })
+###############################################################
 
-loadPkg('Zelig')
-z.out <- zelig(formalStateForm, model = "relogit", 
-	data = formalStateImp)
-sink(file=paste0(pathGraphics, 'formalStateKing.txt'))
-summary(z.out)
-sink()
+###############################################################
+# specs
+varSpecs = list(
+	base = formalStateVars[1:8],
+	base_UN = formalStateVars[1:9],
+	base_Ally = formalStateVars[c(1:8,10)],
+	base_int = formalStateVars[c(1:8,11:12)],
+	base_UN_int = formalStateVars[c(1:9,11:12)],
+	base_Ally_int = formalStateVars[c(1:8,10:12)],
+	all = formalStateVars )
 
-loadPkg('rstanarm')
+formSpecs = lapply(varSpecs, function(x){
+	formula( paste0('formal_icc_state ~ ', 
+			paste(x, collapse = ' + ') ) ) })
+
+# b model w/o imputation
 t_prior = student_t(df = 7, location = 0, scale = 2.5)
-fit1 = stan_glm(formalStateForm, data = formalStateImp, 
-	family = binomial(link = "logit"), 
-	prior = t_prior, prior_intercept = t_prior,
-	chains = 2, cores = 2, seed = 6886, iter = 1000)
-round(fit1$stan_summary[,c('2.5%','10%','mean', '90%','97.5%')],2)
+formalStateMods = lapply(formSpecs, function(f){
+	mod = stan_glm(f, data = formalState, 
+		family = binomial(link = "logit"), 
+		prior = t_prior, prior_intercept = t_prior,
+		chains = 4, cores = 2, seed = 6886, iter = 1000)
+	beta = mod$coefficients
+	serror = mod$ses
+	summ = data.frame(cbind(beta, serror))
+	summ$z = summ$beta/summ$serror	
+	return(summ) })
 
-gg = plot(fit1) +
-	ggtitle('Formal State') +
-	geom_vline(aes(xintercept=0), linetype=2) +
-	theme(
-		panel.border=element_blank(),
-		axis.ticks=element_blank()
+# # run model w/o imputation
+# formalStateMods = lapply(formSpecs, function(f){
+# 	mod = glm( f,
+# 		family=binomial(link='logit'),
+# 		data=formalState )	
+# 	beta = coef(mod)	
+# 	serror = sqrt(diag(vcov(mod)))		
+# 	summ = data.frame(cbind(beta, serror))
+# 	summ$z = summ$beta/summ$serror	
+# 	return(summ) })
+
+# clean table
+lazyCleanVars = gsub('_','',formalStateVars,fixed=TRUE)
+lazyCleanMods = gsub('_',' ',names(varSpecs),fixed=TRUE)
+lab='$^{**}$ and $^{*}$ indicate significance at $p< 0.05 $ and $p< 0.10 $, respectively.'
+res=getTable(formalStateVars,lazyCleanVars,formalStateMods,lazyCleanMods)
+print.xtable(xtable(res, align='llccccccc', caption=lab),
+	include.rownames=FALSE,
+	sanitize.text.function = identity,
+	hline.after=c(0,0,length(formalStateVars)*2,length(formalStateVars)*2),
+	size="footnotesize",	
+	file=paste0(pathResults, 'formalState.tex'))
+
+# b model w/ imputation
+t_prior = student_t(df = 7, location = 0, scale = 2.5)
+formalStateMods = lapply(formSpecs, function(f){
+	mods = lapply(impDFs, function(df){
+		mod = stan_glm(f, data = df, 
+			family = binomial(link = "logit"), 
+			prior = t_prior, prior_intercept = t_prior,
+			chains = 4, cores = 2, seed = 6886, iter = 1000)
+		beta = mod$coefficients
+		serror = mod$ses
+		return(list(beta=beta, serror=serror)) })
+	summ = rubinCoef(
+		do.call('rbind', lapply(mods, function(x){x$'beta'})),
+		do.call('rbind', lapply(mods, function(x){x$'serror'}))
 		)
-ggsave(gg, file=paste0(pathGraphics, 'formalStateStan.pdf'), width=10, height=5)
+	summ = data.frame(cbind(t(summ$beta), t(summ$se)))
+	names(summ) = c('beta', 'serror')
+	summ$z = summ$beta/summ$serror	
+	return(summ) })
+
+# # run model w/ imputation
+# formalStateMods = lapply(formSpecs, function(f){
+# 	mods = lapply(impDFs, function(df){
+# 		mod = glm( f,
+# 			family=binomial(link='logit'),
+# 			data=df )	
+# 		beta = coef(mod)	
+# 		serror = sqrt(diag(vcov(mod)))		
+# 		return(list(beta=beta, serror=serror)) })
+# 	summ = rubinCoef(
+# 		do.call('rbind', lapply(mods, function(x){x$'beta'})),
+# 		do.call('rbind', lapply(mods, function(x){x$'serror'}))
+# 		)
+# 	summ = data.frame(cbind(t(summ$beta), t(summ$se)))
+# 	names(summ) = c('beta', 'serror')
+# 	summ$z = summ$beta/summ$serror	
+# 	return(summ) })
+
+# clean table
+lazyCleanVars = gsub('_','',formalStateVars,fixed=TRUE)
+lazyCleanMods = gsub('_',' ',names(varSpecs),fixed=TRUE)
+lab='$^{**}$ and $^{*}$ indicate significance at $p< 0.05 $ and $p< 0.10 $, respectively.'
+res=getTable(formalStateVars,lazyCleanVars,formalStateMods,lazyCleanMods)
+print.xtable(xtable(res, align='llccccccc', caption=lab),
+	include.rownames=FALSE,
+	sanitize.text.function = identity,
+	hline.after=c(0,0,length(formalStateVars)*2,length(formalStateVars)*2),
+	size="footnotesize",	
+	file=paste0(pathResults, 'formalState_imp.tex'))
+###############################################################
