@@ -61,7 +61,6 @@ if(!file.exists(paste0(pathResults, 'sobState_mod.rda'))){
 		)
 	save(mod, file=paste0(pathResults, 'sobState_mod.rda'))
 } else {load(paste0(pathResults, 'sobState_mod.rda'))}
-summary(mod)
 
 # hier
 if(!file.exists(paste0(pathResults, 'sobState_mod_hier.rda'))){
@@ -75,5 +74,24 @@ if(!file.exists(paste0(pathResults, 'sobState_mod_hier.rda'))){
 		)
 	save(modHier, file=paste0(pathResults, 'sobState_mod_hier.rda'))
 } else {load(paste0(pathResults, 'sobState_mod_hier.rda'))}
-summary(modHier)
+
+# summarize
+sobStateMods = lapply(list(mod, modHier), function(x){
+	summ=data.frame(fixef(x)[,1:2])
+	names(summ) = c('beta','serror')
+	summ$z = summ$beta/summ$serror
+	return(summ) })
+
+# table
+# clean table
+lazyCleanVars = gsub('_','',sobStateVars,fixed=TRUE)
+lazyCleanMods = c('m1')
+lab='$^{**}$ and $^{*}$ indicate significance at $p< 0.05 $ and $p< 0.10 $, respectively.'
+res=getTable(sobStateVars,lazyCleanVars,sobStateMods[[1]],lazyCleanMods)
+print.xtable(xtable(res, align='llcc', caption=lab),
+	include.rownames=FALSE,
+	sanitize.text.function = identity,
+	hline.after=c(0,0,length(sobStateVars)*2,length(sobStateVars)*2),
+	size="footnotesize",	
+	file=paste0(pathResults, 'sobState.tex'))
 ###############################################################
