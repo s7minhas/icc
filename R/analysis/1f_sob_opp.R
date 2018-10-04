@@ -49,28 +49,31 @@ impDFs = lapply(sample(500:1000, 10), function(i){
 ###############################################################
 
 ###############################################################
-sobOppForm = formula(
-	paste0('icclevel_opp ~ ', 
-		paste(sobOppVars, collapse = ' + ') ) )
-
 # pool
-mod = brm(
-	formula=sobOppForm, 
-	data=frame,
-	family=cratio(link='logit')
-	)
+if(!file.exists(paste0(pathResults, 'sobOpp_mod.rda'))){
+	sobOppForm = formula(
+		paste0('icclevel_opp ~ ', 
+			paste(sobOppVars, collapse = ' + ') ) )
+	mod = brm(
+		formula=sobOppForm, 
+		data=frame,
+		family=cratio(link='logit')
+		)	
+	save(mod, file=paste0(pathResults, 'sobOpp_mod.rda'))
+} else {load(paste0(pathResults, 'sobOpp_mod.rda'))}
 summary(mod)
-save(mod, file=paste0(pathResults, 'sobOpp_mod.rda'))
 
 # hier
-sobOppForm = formula(
-	paste0('icclevel_opp ~ ', 
-		paste(sobOppVars, collapse = ' + '), '+(1|ccode)' ) )
-modHier = brm(
-	formula=sobOppForm, 
-	data=frame,
-	family=cratio(link='logit')
-	)
+if(!file.exists(paste0(pathResults, 'sobOpp_mod_hier.rda'))){
+	sobOppForm = formula(
+		paste0('icclevel_opp ~ ', 
+			paste(sobOppVars, collapse = ' + '), '+(1|ccode)' ) )
+	modHier = brm(
+		formula=sobOppForm, 
+		data=frame,
+		family=cratio(link='logit')
+		)
+	save(modHier, file=paste0(pathResults, 'sobOpp_mod_hier.rda'))
+} else {load(paste0(pathResults, 'sobOpp_mod_hier.rda'))}
 summary(modHier)
-save(modHier, file=paste0(pathResults, 'sobOpp_mod_hier.rda'))
 ###############################################################
