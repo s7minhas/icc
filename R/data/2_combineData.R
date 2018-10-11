@@ -219,6 +219,9 @@ save(prelimState, prelimOpp,
 load(paste0(pathData, 'baseData_yrly_ongoing.rda'))
 data = buildData(data)
 
+# create alternative icc level variables
+
+
 # save
 save(data, 
 	file=paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
