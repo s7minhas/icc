@@ -223,6 +223,7 @@ data = buildData(data)
 ###############################################################
 # create alternative icc level variables
 
+# model 1a
 ## sequential model with a recoded DV with the 
 ## following categories: 0=0, 1=1, 2=everything else (2-6)
 fx = function(y){x=0*y; x[y==1]=1; x[y>1]=2; return(x)}
@@ -230,6 +231,7 @@ data$icclevel_3 = fx(data$icclevel)
 data$icclevel_state_3 = fx(data$icclevel_state)
 data$icclevel_opp_3 = fx(data$icclevel_opp)
 
+# model 1b
 ## sequential model with DV recoded into the 
 ## following categories: 0=0, 1=1, 2=all 2s and 3s, 3=all 4s, 5s, and 6s
 fx = function(y){x=0*y; x[y==1]=1; x[y %in% c(2,3)]=2; x[y>3]=3; return(x)}
@@ -237,6 +239,7 @@ data$icclevel_4a = fx(data$icclevel)
 data$icclevel_state_4a = fx(data$icclevel_state)
 data$icclevel_opp_4a = fx(data$icclevel_opp)
 
+# model 1c
 ## sequential model with DV recoded into the
 ## following categories: 0=0, 1=1, 2=2, 3=everything else (3=6)
 fx = function(y){x=0*y; x[y==1]=1; x[y==2]=2; x[y>2]=3; return(x)}
@@ -244,6 +247,7 @@ data$icclevel_4b = fx(data$icclevel)
 data$icclevel_state_4b = fx(data$icclevel_state)
 data$icclevel_opp_4b = fx(data$icclevel_opp)
 
+# model 2a
 ## drop icclevel=0
 ## sequential model with DV recoded into the
 ## following categories: 0=all 1s, 1=all 2-3s, 3=all 4-6s
@@ -252,6 +256,7 @@ data$icclevel2_3a = fx(data$icclevel)
 data$icclevel2_state_3a = fx(data$icclevel_state)
 data$icclevel2_opp_3a = fx(data$icclevel_opp)
 
+# model 2b
 ## drop icclevel=0
 ## sequential model with DV recoded into the 
 ## following categories: 0=all 1s, 1=all 2s, 3=everything else (3-6)
