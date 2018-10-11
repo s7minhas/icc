@@ -35,17 +35,9 @@ Let me know if any of this is unclear!
 Ok,
 so, we talked through the variables, and I think if possible we want to generate separate coefficients for all of the variables of theoretical interest plus africa.  So, in the existing model, that includes the following:
 
-africa 
-lag1 v2juncind 
-lag1 pts  
-lag1 osv state cumul 
-lag1 osv rebel cumul 
-lag1 p5 absidealdiffMin 
-lag1 p5 defAllyAvg 
-lag1 p5 gov clean 
-lag1 p5 reb clean  
-
-if this makes the model too complicated to run, or generates nonsense results, then we can try to scale back the list.  but as a first go, we want to see what's happening across categories with all of these, if possible.
+Africa
+osv
+affinity scores
 
 The other quick question is about whether there is some way (or what is the best way) to judge the strength, importance, predictive power (or something else along these lines) of the legal variables (judiciary + pts + osv) versus the p5 variables.  this is a secondary question at this point, since we need to settle on final models first, but wanted to raise it as something we'd ideally like to be able to say something about in the paper.
 

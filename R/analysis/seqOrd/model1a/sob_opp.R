@@ -50,7 +50,7 @@ impDFs = lapply(sample(500:1000, 10), function(i){
 
 ###############################################################
 # category specific effects
-sobOppVars[c(5:9)] = paste0('cs(',sobOppVars[c(5:9)],')')
+sobOppVars[c(5,7,8)] = paste0('cs(',sobOppVars[c(5,7,8)],')')
 
 # pool
 if(!file.exists(paste0(pathResults, 'sobOpp_model1a.rda'))){
