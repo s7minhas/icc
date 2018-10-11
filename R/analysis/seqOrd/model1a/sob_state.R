@@ -50,7 +50,7 @@ impDFs = lapply(sample(500:1000, 10), function(i){
 
 ###############################################################
 # category specific effects
-sobStateVars[c(5:12)] = paste0('cs(',sobStateVars[c(5:12)],')')
+sobStateVars[c(5:10)] = paste0('cs(',sobStateVars[c(5:10)],')')
 
 # pool
 if(!file.exists(paste0(pathResults, 'sobState_model1a.rda'))){
