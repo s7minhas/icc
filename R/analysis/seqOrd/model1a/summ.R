@@ -17,8 +17,20 @@ sobMods = lapply(list(stateMod, oppMod), function(x){
 	names(summ) = c('beta','serror')
 	summ$z = summ$beta/summ$serror
 	return(summ) })
+names(sobMods) = c('state', 'opp')
 
 # vars
+sobOppVars = c(
+	'icc_rat','lag1_civilwar','lag1_polity2',
+	'lag1_gdpCapLog','africa',
+	'lag1_v2juncind',
+	'lag1_osv_rebel_cumul',	
+	# p5 vars: 
+	'lag1_p5_absidealdiffMin',
+	'lag1_p5_defAllyMax',
+	'lag1_p5_gov_clean', 'lag1_p5_reb_clean'
+	)
+
 sobStateVars = c(
 	'icc_rat','lag1_civilwar','lag1_polity2',
 	'lag1_gdpCapLog','africa',
@@ -32,8 +44,12 @@ sobStateVars = c(
 sobVars = unique(c(sobStateVars, sobOppVars))
 sobVars = sobVars[c(1:8,13,9:12)]
 sobVars = c(
-	sobVars[1:4],
-	pasteMult(c('[1]','[2]'), sobVars[5:12], sepZ='')
+	sobVars[c(1:4,6:7,11:13)],
+	sort(
+		pasteMult(
+			sobVars[c(5,8:10)], c('[1]','[2]'),
+			sepZ='')
+		)[c(1:2,7:8,5:6,3:4)]
 	)
 
 
@@ -51,24 +67,26 @@ print.xtable(xtable(res, align='llcc', caption=lab),
 	file=paste0(pathResults, 'sob_model1a.tex'))
 ###############################################################
 
-# ###############################################################
-# # summarize
-# sobStateMods = lapply(list(mod, modHier), function(x){
-# 	summ=data.frame(fixef(x)[,1:2])
-# 	names(summ) = c('beta','serror')
-# 	summ$z = summ$beta/summ$serror
-# 	return(summ) })
+###############################################################
+# summarize
+load(paste0(pathResults, 'sobOpp_model1a_hier.rda'))
+oppMod = modHier
+load(paste0(pathResults, 'sobState_model1a_hier.rda'))
+stateMod = modHier
+sobMods = lapply(list(stateMod, oppMod), function(x){
+	summ=data.frame(fixef(x)[,1:2])
+	names(summ) = c('beta','serror')
+	summ$z = summ$beta/summ$serror
+	return(summ) })
+names(sobMods) = c('state', 'opp')
 
-# # table
-# # clean table
-# lazyCleanVars = gsub('_','',sobStateVars,fixed=TRUE)
-# lazyCleanMods = c('m1')
-# lab='$^{**}$ and $^{*}$ indicate significance at $p< 0.05 $ and $p< 0.10 $, respectively.'
-# res=getTable(sobStateVars,lazyCleanVars,sobStateMods[[1]],lazyCleanMods)
-# print.xtable(xtable(res, align='llcc', caption=lab),
-# 	include.rownames=FALSE,
-# 	sanitize.text.function = identity,
-# 	hline.after=c(0,0,length(sobStateVars)*2,length(sobStateVars)*2),
-# 	size="footnotesize",	
-# 	file=paste0(pathResults, 'sobState.tex'))
-# ###############################################################
+# table
+# clean table
+res=getTable(sobVars,lazyCleanVars,sobMods,lazyCleanMods)
+print.xtable(xtable(res, align='llcc', caption=lab),
+	include.rownames=FALSE,
+	sanitize.text.function = identity,
+	hline.after=c(0,0,length(sobVars)*2,length(sobVars)*2),
+	size="footnotesize",	
+	file=paste0(pathResults, 'sob_model1a_hier.tex'))
+###############################################################
