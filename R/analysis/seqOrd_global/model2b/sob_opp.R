@@ -27,11 +27,11 @@ data$lag1_poi_osv_rebel = log(data$lag1_poi_osv_rebel+1)
 
 ###############################################################
 # impute
-if(!file.exists(paste0(pathData, 'sobOpp_imp.rda'))){
+if(!file.exists(paste0(pathData, 'sobOpp_imp_formal.rda'))){
 	toImp = data.matrix(data[,c('icclevel_opp',sobOppVars)])
 	impData = sbgcop.mcmc(Y=toImp, seed=6886, verb=FALSE, nsamp=1000)
-	save(impData, file=paste0(pathData, 'sobOpp_imp.rda'))
-} else { load(paste0(pathData, 'sobOpp_imp.rda')) }
+	save(impData, file=paste0(pathData, 'sobOpp_imp_formal.rda'))
+} else { load(paste0(pathData, 'sobOpp_imp_formal.rda')) }
 
 # pick a few from the posterior
 set.seed(6886)
