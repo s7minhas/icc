@@ -36,14 +36,14 @@ if(!file.exists(paste0(pathData, 'sobState_imp.rda'))){
 # pick a few from the posterior
 set.seed(6886)
 frame = data.frame(impData$Y.pmean)
-frame = cbind(data[,c('ccode','year','icclevel_state_3')], frame)
-frame$icclevel_state_3 = as.integer(frame$icclevel_state_3 + 1)
+frame = cbind(data[,c('ccode','year','icclevel_state_4b')], frame)
+frame$icclevel_state_4b = as.integer(frame$icclevel_state_4b + 1)
 frame$ccode = as.integer(frame$ccode)
 impDFs = lapply(sample(500:1000, 10), function(i){
 	x = data.frame(impData$Y.impute[,,i])
-	x = cbind(data[,c('ccode','year','icclevel_state_3')], x)
+	x = cbind(data[,c('ccode','year','icclevel_state_4b')], x)
 	names(x) = names(frame)
-	x$icclevel_state_3 = as.integer(x$icclevel_state_3 + 1)
+	x$icclevel_state_4b = as.integer(x$icclevel_state_4b + 1)
 	x$ccode = as.integer(x$ccode)
 	return(x) })
 ###############################################################
@@ -54,23 +54,23 @@ sobStateVars[c(5,8,9)] = paste0('cs(',sobStateVars[c(5,8,9)],')')
 
 # pool
 sobStateForm = formula(
-	paste0('icclevel_state_3 ~ ', 
+	paste0('icclevel_state_4b ~ ', 
 		paste(sobStateVars, collapse = ' + ') ) )
 mod = brm(
 	formula=sobStateForm, 
 	data=frame,
 	family=cratio(link='logit')
 	)
-save(mod, file=paste0(pathResults, 'sobState_model1a.rda'))
+save(mod, file=paste0(pathResults, 'sobState_model1c.rda'))
 
 # hier
 sobStateForm = formula(
-	paste0('icclevel_state_3 ~ ', 
+	paste0('icclevel_state_4b ~ ', 
 		paste(sobStateVars, collapse = ' + '), '+(1|ccode)' ) )
 modHier = brm(
 	formula=sobStateForm, 
 	data=frame,
 	family=cratio(link='logit')
 	)
-save(modHier, file=paste0(pathResults, 'sobState_model1a_hier.rda'))
+save(modHier, file=paste0(pathResults, 'sobState_model1c_hier.rda'))
 ###############################################################

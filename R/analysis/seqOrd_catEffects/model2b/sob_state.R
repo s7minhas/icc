@@ -13,8 +13,8 @@ load(paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
 sobStateVars = c(
 	'icc_rat','lag1_civilwar','lag1_polity2',
 	'lag1_gdpCapLog','africa',
-	'lag1_v2juncind','lag1_pts',
-	'lag1_osv_state_cumul',	
+	'lag1_v2juncind','lag1_poi_pts',
+	'lag1_poi_osv_state',	
 	# p5 vars: 
 	'lag1_p5_absidealdiffMin',
 	'lag1_p5_defAllyMax',
@@ -36,15 +36,17 @@ if(!file.exists(paste0(pathData, 'sobState_imp.rda'))){
 # pick a few from the posterior
 set.seed(6886)
 frame = data.frame(impData$Y.pmean)
-frame = cbind(data[,c('ccode','year','icclevel_state_3')], frame)
-frame$icclevel_state_3 = as.integer(frame$icclevel_state_3 + 1)
+frame = cbind(data[,c('ccode','year','icclevel2_state_3b')], frame)
+frame$icclevel2_state_3b = as.integer(frame$icclevel2_state_3b)
 frame$ccode = as.integer(frame$ccode)
+frame = na.omit(frame)
 impDFs = lapply(sample(500:1000, 10), function(i){
 	x = data.frame(impData$Y.impute[,,i])
-	x = cbind(data[,c('ccode','year','icclevel_state_3')], x)
+	x = cbind(data[,c('ccode','year','icclevel2_state_3b')], x)
 	names(x) = names(frame)
-	x$icclevel_state_3 = as.integer(x$icclevel_state_3 + 1)
+	x$icclevel2_state_3b = as.integer(x$icclevel2_state_3b)
 	x$ccode = as.integer(x$ccode)
+	x = na.omit(x)
 	return(x) })
 ###############################################################
 
@@ -54,23 +56,23 @@ sobStateVars[c(5,8,9)] = paste0('cs(',sobStateVars[c(5,8,9)],')')
 
 # pool
 sobStateForm = formula(
-	paste0('icclevel_state_3 ~ ', 
+	paste0('icclevel2_state_3b ~ ', 
 		paste(sobStateVars, collapse = ' + ') ) )
 mod = brm(
 	formula=sobStateForm, 
 	data=frame,
 	family=cratio(link='logit')
 	)
-save(mod, file=paste0(pathResults, 'sobState_model1a.rda'))
+save(mod, file=paste0(pathResults, 'sobState_model2b.rda'))
 
 # hier
 sobStateForm = formula(
-	paste0('icclevel_state_3 ~ ', 
+	paste0('icclevel2_state_3b ~ ', 
 		paste(sobStateVars, collapse = ' + '), '+(1|ccode)' ) )
 modHier = brm(
 	formula=sobStateForm, 
 	data=frame,
 	family=cratio(link='logit')
 	)
-save(modHier, file=paste0(pathResults, 'sobState_model1a_hier.rda'))
+save(modHier, file=paste0(pathResults, 'sobState_model2b_hier.rda'))
 ###############################################################

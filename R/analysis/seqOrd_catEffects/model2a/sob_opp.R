@@ -14,7 +14,7 @@ sobOppVars = c(
 	'icc_rat','lag1_civilwar','lag1_polity2',
 	'lag1_gdpCapLog','africa',
 	'lag1_v2juncind',
-	'lag1_osv_rebel_cumul',	
+	'lag1_poi_osv_rebel',	
 	# p5 vars: 
 	'lag1_p5_absidealdiffMin',
 	'lag1_p5_defAllyMax',
@@ -36,15 +36,17 @@ if(!file.exists(paste0(pathData, 'sobOpp_imp.rda'))){
 # pick a few from the posterior
 set.seed(6886)
 frame = data.frame(impData$Y.pmean)
-frame = cbind(data[,c('ccode','year','icclevel_opp_3')], frame)
-frame$icclevel_opp_3 = as.integer(frame$icclevel_opp_3 + 1)
+frame = cbind(data[,c('ccode','year','icclevel2_opp_3a')], frame)
+frame$icclevel2_opp_3a = as.integer(frame$icclevel2_opp_3a)
 frame$ccode = as.integer(frame$ccode)
+frame = na.omit(frame)
 impDFs = lapply(sample(500:1000, 10), function(i){
 	x = data.frame(impData$Y.impute[,,i])
-	x = cbind(data[,c('ccode','year','icclevel_opp_3')], x)
+	x = cbind(data[,c('ccode','year','icclevel2_opp_3a')], x)
 	names(x) = names(frame)
-	x$icclevel_opp_3 = as.integer(x$icclevel_opp_3 + 1)
+	x$icclevel2_opp_3a = as.integer(x$icclevel2_opp_3a)
 	x$ccode = as.integer(x$ccode)
+	x = na.omit(x)
 	return(x) })
 ###############################################################
 
@@ -54,23 +56,23 @@ sobOppVars[c(5,7,8)] = paste0('cs(',sobOppVars[c(5,7,8)],')')
 
 # pool
 sobOppForm = formula(
-	paste0('icclevel_opp_3 ~ ', 
+	paste0('icclevel2_opp_3a ~ ', 
 		paste(sobOppVars, collapse = ' + ') ) )
 mod = brm(
 	formula=sobOppForm, 
 	data=frame,
 	family=cratio(link='logit')
 	)	
-save(mod, file=paste0(pathResults, 'sobOpp_model1a.rda'))
+save(mod, file=paste0(pathResults, 'sobOpp_model2a.rda'))
 
 # hier
 sobOppForm = formula(
-	paste0('icclevel_opp_3 ~ ', 
+	paste0('icclevel2_opp_3a ~ ', 
 		paste(sobOppVars, collapse = ' + '), '+(1|ccode)' ) )
 modHier = brm(
 	formula=sobOppForm, 
 	data=frame,
 	family=cratio(link='logit')
 	)
-save(modHier, file=paste0(pathResults, 'sobOpp_model1a_hier.rda'))
+save(modHier, file=paste0(pathResults, 'sobOpp_model2a_hier.rda'))
 ###############################################################
