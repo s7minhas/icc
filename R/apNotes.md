@@ -2,6 +2,9 @@ Ok, we figured out a few different things we'd like to try:
 
 * for ALL of the following models, we'd like to try a dummy version of the p5 alliance variable instead of the current average version
 
+# model 0: icclevel
+1. sequential dv with categories in original six icclevel categories
+
 # model 1a: icclevel_opp_3, icclevel_state_3
 1. sequential model with a recoded DV with the following categories: 0=0, 1=1, 2=everything else (2-6)
 
