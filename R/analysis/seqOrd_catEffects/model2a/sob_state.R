@@ -22,7 +22,7 @@ sobStateVars = c(
 	)
 
 # var transformations
-data$lag1_osv_state_cumul = log(data$lag1_osv_state_cumul+1)
+data$lag1_poi_osv_state = log(data$lag1_poi_osv_state+1)
 ###############################################################
 
 ###############################################################

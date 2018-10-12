@@ -22,7 +22,7 @@ sobOppVars = c(
 	)
 
 # var transformations
-data$lag1_osv_rebel_cumul = log(data$lag1_osv_rebel_cumul+1)
+data$lag1_poi_osv_rebel = log(data$lag1_poi_osv_rebel+1)
 ###############################################################
 
 ###############################################################

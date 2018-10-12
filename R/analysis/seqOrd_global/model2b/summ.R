@@ -24,7 +24,7 @@ sobOppVars = c(
 	'icc_rat','lag1_civilwar','lag1_polity2',
 	'lag1_gdpCapLog','africa',
 	'lag1_v2juncind',
-	'lag1_osv_rebel_cumul',	
+	'lag1_poi_osv_rebel',	
 	# p5 vars: 
 	'lag1_p5_absidealdiffMin',
 	'lag1_p5_defAllyMax',
@@ -34,8 +34,8 @@ sobOppVars = c(
 sobStateVars = c(
 	'icc_rat','lag1_civilwar','lag1_polity2',
 	'lag1_gdpCapLog','africa',
-	'lag1_v2juncind','lag1_pts',
-	'lag1_osv_state_cumul',	
+	'lag1_v2juncind','lag1_poi_pts',
+	'lag1_poi_osv_state',	
 	# p5 vars: 
 	'lag1_p5_absidealdiffMin',
 	'lag1_p5_defAllyMax',
