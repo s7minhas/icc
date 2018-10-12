@@ -44,10 +44,10 @@ sobStateVars = c(
 sobVars = unique(c(sobStateVars, sobOppVars))
 sobVars = sobVars[c(1:8,13,9:12)]
 sobVars = c(
-	sobVars[c(1:4,6:7,11:13)],
+	sobVars[c(1:4,11:13)],
 	sort(
 		pasteMult(
-			sobVars[c(5,8:10)], paste0('[',1:2,']'),
+			sobVars[c(5:10)], paste0('[',1:2,']'),
 			sepZ='')
 		)
 	)

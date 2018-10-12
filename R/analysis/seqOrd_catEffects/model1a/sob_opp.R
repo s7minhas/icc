@@ -50,7 +50,7 @@ impDFs = lapply(sample(500:1000, 10), function(i){
 
 ###############################################################
 # category specific effects
-sobOppVars[c(5,7,8)] = paste0('cs(',sobOppVars[c(5,7,8)],')')
+sobOppVars[c(5:8)] = paste0('cs(',sobOppVars[c(5:8)],')')
 
 # pool
 sobOppForm = formula(
