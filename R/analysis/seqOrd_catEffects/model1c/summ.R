@@ -47,9 +47,9 @@ sobVars = c(
 	sobVars[c(1:4,6:7,11:13)],
 	sort(
 		pasteMult(
-			sobVars[c(5,8:10)], c('[1]','[2]'),
+			sobVars[c(5,8:10)], paste0('[',1:3,']'),
 			sepZ='')
-		)[c(1:2,7:8,5:6,3:4)]
+		)
 	)
 
 
