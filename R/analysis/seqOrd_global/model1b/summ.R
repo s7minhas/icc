@@ -48,7 +48,6 @@ sobVars = c(
 	sobVars[c(5,8:10)]
 	)
 
-
 # table
 # clean table
 lazyCleanVars = gsub('_',' ',sobVars,fixed=TRUE)

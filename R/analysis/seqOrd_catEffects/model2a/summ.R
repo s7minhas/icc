@@ -52,7 +52,6 @@ sobVars = c(
 		)
 	)
 
-
 # table
 # clean table
 lazyCleanVars = gsub('_',' ',sobVars,fixed=TRUE)
