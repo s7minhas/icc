@@ -49,8 +49,8 @@ impDFs = lapply(sample(500:1000, 10), function(i){
 ###############################################################
 
 ###############################################################
-## keep only icc ratifiers
-frame = frame[frame$lag1_civilwar==1 & frame$lag1_pts>3,]
+## keep only states 
+frame = frame[frame$lag1_civilwar==1 | frame$lag1_pts>=3,]
 
 # remove icc_rat covariate
 sobStateVars = sobStateVars[-which(sobStateVars %in% c('lag1_civilwar'))]
