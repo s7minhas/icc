@@ -1,0 +1,65 @@
+\documentclass[]{article}
+\usepackage{placeins}
+\begin{document}
+
+
+\tableofcontents
+
+\clearpage
+
+\section{Model descriptions}
+
+All models here use a recoded DV with the following categories: 0=0, 1=1, 2=everything else (2-6). Explanation of model labels where we use all of the data:
+
+\begin{itemize}
+	\item model 1a ... the original
+	\item model 1a1 drop: PTS, p5 gov clean, p5 reb clean, and p5 def ally max
+	\item model 1a2 drop: p5 def ally max
+	\item model 1a3 drop: p5 gov clean, p5 reb clean, p5 def ally max and add new intervention variable that =1 if P5 reb clean==1 OR p5 gov clean==1, and zero otherwise
+	\item model 1a4 drop: p5 gov clean, p5 reb clean, p5 def ally max and create a new 3 category intervention variable that =0 if P5 reb clean==0 AND p5 gov clean==0, 1 if P5 reb clean==1 OR p5 gov clean==1, and 2 if  P5 reb clean==1 AND p5 gov clean==1
+\end{itemize}
+
+For each of the models presented we present results using global and category specific covariate effects. Category specific covariate effects are calculated for: Africa, OSV, and affinity scores.
+\clearpage
+
+\section{Model 1a ... the original}
+\subsection{Global Covariate Effects}
+\input{/Users/s7m/Dropbox/Research/icc/Results/sob_model1a_global.tex}
+\clearpage
+\subsection{Category Specific Covariate Effects}
+\input{/Users/s7m/Dropbox/Research/icc/Results/sob_model1a.tex}
+\clearpage
+
+\section{Model 1a1}
+\subsection{Global Covariate Effects}
+\input{/Users/s7m/Dropbox/Research/icc/Results/sob_model1a_1_global.tex}
+\clearpage
+\subsection{Category Specific Covariate Effects}
+\input{/Users/s7m/Dropbox/Research/icc/Results/sob_model1a_1.tex}
+\clearpage
+
+\section{Model 1a2}
+\subsection{Global Covariate Effects}
+\input{/Users/s7m/Dropbox/Research/icc/Results/sob_model1a_2_global.tex}
+\clearpage
+\subsection{Category Specific Covariate Effects}
+\input{/Users/s7m/Dropbox/Research/icc/Results/sob_model1a_2.tex}
+\clearpage
+
+\section{Model 1a3}
+\subsection{Global Covariate Effects}
+\input{/Users/s7m/Dropbox/Research/icc/Results/sob_model1a_3_global.tex}
+\clearpage
+\subsection{Category Specific Covariate Effects}
+\input{/Users/s7m/Dropbox/Research/icc/Results/sob_model1a_3.tex}
+\clearpage
+
+\section{Model 1a4}
+\subsection{Global Covariate Effects}
+\input{/Users/s7m/Dropbox/Research/icc/Results/sob_model1a_4_global.tex}
+\clearpage
+\subsection{Category Specific Covariate Effects}
+\input{/Users/s7m/Dropbox/Research/icc/Results/sob_model1a_4.tex}
+\clearpage
+
+\end{document}
