@@ -1,1 +1,0 @@
-Rscript seqOrd_global/model2b/sob_opp.R; Rscript seqOrd_global/model2b/sob_state.R; Rscript seqOrd_catEffects/model2b/sob_opp.R; Rscript seqOrd_catEffects/model2b/sob_state.R; Rscript seqOrd_global/model2b/summ.R; Rscript seqOrd_catEffects/model2b/summ.R
