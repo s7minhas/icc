@@ -54,6 +54,7 @@ sobVars = c(
 
 # 
 sobVars = sobVars[-c(5:7,16:17)]
+sobVars = c(sobVars[1:4],'p5',sobVars[5:length(sobVars)])
 
 # table
 # clean table
