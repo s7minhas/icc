@@ -57,7 +57,7 @@ sobStateVars = c(sobStateVars, 'p5')
 
 ###############################################################
 # category specific effects
-sobStateVars[c(5:8)] = paste0('cs(',sobStateVars[c(5:8)],')')
+sobStateVars[c(5:9)] = paste0('cs(',sobStateVars[c(5:9)],')')
 
 # pool
 sobStateForm = formula(

@@ -49,16 +49,13 @@ impDFs = lapply(sample(500:1000, 10), function(i){
 ###############################################################
 # create p5 variable (2, 365, 220, 710, 200)
 frame$p5 = ifelse(
-	frame$ccode %in% c(2, 365, 220, 710, 200), 1, 0 )
+	frame$ccode %in% c(2, 365, 220, 710, 200), 0, 1 )
 
-# 
-# sobOppVars = c(sobOppVars, 'p5')
+# modify p5 var to be zero if p5 country
+frame$lag1_p5_absidealdiffMin = frame$p5*frame$lag1_p5_absidealdiffMin
 ###############################################################
 
 ###############################################################
-# category specific effects
-sobOppVars[c(5:8)] = paste0('cs(',sobOppVars[c(5:8)],')')
-
 # pool
 sobOppForm = formula(
 	paste0('icclevel_opp_3 ~ ', 
@@ -68,7 +65,7 @@ mod = brm(
 	data=frame,
 	family=cratio(link='logit')
 	)	
-save(mod, file=paste0(pathResults, 'sobOpp_model1a_1.rda'))
+save(mod, file=paste0(pathResults, 'sobOpp_model1a_1_newp5Var_global.rda'))
 
 # hier
 sobOppForm = formula(
@@ -79,5 +76,5 @@ modHier = brm(
 	data=frame,
 	family=cratio(link='logit')
 	)
-save(modHier, file=paste0(pathResults, 'sobOpp_model1a_1_hier.rda'))
+save(modHier, file=paste0(pathResults, 'sobOpp_model1a_1_newp5Var_global_hier.rda'))
 ###############################################################
