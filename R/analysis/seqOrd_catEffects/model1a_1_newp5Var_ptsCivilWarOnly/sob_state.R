@@ -56,8 +56,19 @@ frame$lag1_p5_absidealdiffMin = frame$p5*frame$lag1_p5_absidealdiffMin
 ###############################################################
 
 ###############################################################
+# only incl states with civ war or pts>=3 since 2002
+load(paste0(pathData, 'subset_ptsCivWar_cntries.rda'))
+
+## keep only states 
+frame = frame[which(frame$ccode %in% cntries$ccode),]
+
+# remove civil war covariate
+sobStateVars = sobStateVars[-which(sobStateVars %in% c('lag1_civilwar'))]
+###############################################################
+
+###############################################################
 # category specific effects
-sobStateVars[c(5:8)] = paste0('cs(',sobStateVars[c(5:8)],')')
+sobStateVars[c(4:7)] = paste0('cs(',sobStateVars[c(4:7)],')')
 
 # pool
 sobStateForm = formula(
@@ -68,7 +79,9 @@ mod = brm(
 	data=frame,
 	family=cratio(link='logit')
 	)
-save(mod, file=paste0(pathResults, 'sobState_model1a_1_newp5Var.rda'))
+save(mod, 
+	file=paste0(pathResults, 
+		'sobState_model1a_1_newp5Var_ptsCivilWarOnly.rda'))
 
 # hier
 sobStateForm = formula(
@@ -79,5 +92,7 @@ modHier = brm(
 	data=frame,
 	family=cratio(link='logit')
 	)
-save(modHier, file=paste0(pathResults, 'sobState_model1a_1_newp5Var_hier.rda'))
+save(modHier, 
+	file=paste0(pathResults, 
+		'sobState_model1a_1_newp5Var_ptsCivilWarOnly_hier.rda'))
 ###############################################################

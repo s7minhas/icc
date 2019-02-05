@@ -8,9 +8,9 @@ loadPkg(c('sbgcop','brms'))
 
 ###############################################################
 # summarize
-load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_ptsCivilWarOnly.rda'))
+load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_ptsCivilWarOnly_global.rda'))
 oppMod = mod
-load(paste0(pathResults, 'sobState_model1a_1_newp5Var_ptsCivilWarOnly.rda'))
+load(paste0(pathResults, 'sobState_model1a_1_newp5Var_ptsCivilWarOnly_global.rda'))
 stateMod = mod
 sobMods = lapply(list(stateMod, oppMod), function(x){
 	summ=data.frame(fixef(x)[,1:2])
@@ -44,16 +44,12 @@ sobStateVars = c(
 sobVars = unique(c(sobStateVars, sobOppVars))
 sobVars = sobVars[c(1:8,13,9:12)]
 sobVars = c(
-	sobVars[c(1:4,11:13)],
-	sort(
-		pasteMult(
-			sobVars[c(5:10)], paste0('[',1:2,']'),
-			sepZ='')
-		)
+	sobVars[c(1:4,6:7,11:13)],
+	sobVars[c(5,8:10)]
 	)
 
-# 
-sobVars = sobVars[-c(5:7,16:17)]
+#
+sobVars = sobVars[-c(6:9)]
 sobVars = sobVars[-2]
 
 # table
@@ -67,14 +63,14 @@ print.xtable(xtable(res, align='llcc', caption=lab),
 	sanitize.text.function = identity,
 	hline.after=c(0,0,length(sobVars)*2,length(sobVars)*2),
 	size="footnotesize",	
-	file=paste0(pathResults, 'sob_model1a_1_newp5Var_ptsCivilWarOnly.tex'))
+	file=paste0(pathResults, 'sob_model1a_1_newp5Var_ptsCivilWarOnly_global.tex'))
 ###############################################################
 
 ###############################################################
 # summarize
-load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_ptsCivilWarOnly_hier.rda'))
+load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_ptsCivilWarOnly_global_hier.rda'))
 oppMod = modHier
-load(paste0(pathResults, 'sobState_model1a_1_newp5Var_ptsCivilWarOnly_hier.rda'))
+load(paste0(pathResults, 'sobState_model1a_1_newp5Var_ptsCivilWarOnly_global_hier.rda'))
 stateMod = modHier
 sobMods = lapply(list(stateMod, oppMod), function(x){
 	summ=data.frame(fixef(x)[,1:2])
@@ -91,5 +87,5 @@ print.xtable(xtable(res, align='llcc', caption=lab),
 	sanitize.text.function = identity,
 	hline.after=c(0,0,length(sobVars)*2,length(sobVars)*2),
 	size="footnotesize",	
-	file=paste0(pathResults, 'sob_model1a_1_newp5Var_ptsCivilWarOnly_hier.tex'))
+	file=paste0(pathResults, 'sob_model1a_1_newp5Var_ptsCivilWarOnly_global_hier.tex'))
 ###############################################################

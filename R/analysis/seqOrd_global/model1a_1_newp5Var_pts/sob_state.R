@@ -10,38 +10,38 @@ loadPkg(c('sbgcop','brms'))
 load(paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
 
 ## prelim state
-sobOppVars = c(
+sobStateVars = c(
 	'icc_rat','lag1_civilwar','lag1_polity2',
 	'lag1_gdpCapLog','africa',
 	'lag1_v2juncind',
-	'lag1_osv_rebel_cumul',	
+	'lag1_osv_state_cumul',	'lag1_pts',
 	# p5 vars: 
 	'lag1_p5_absidealdiffMin'
 	)
 
 # var transformations
-data$lag1_osv_rebel_cumul = log(data$lag1_osv_rebel_cumul+1)
+data$lag1_osv_state_cumul = log(data$lag1_osv_state_cumul+1)
 ###############################################################
 
 ###############################################################
 # impute
-if(!file.exists(paste0(pathData, 'sobOpp_imp.rda'))){
-	toImp = data.matrix(data[,c('icclevel_opp',sobOppVars)])
+if(!file.exists(paste0(pathData, 'sobState_imp.rda'))){
+	toImp = data.matrix(data[,c('icclevel_state',sobStateVars)])
 	impData = sbgcop.mcmc(Y=toImp, seed=6886, verb=FALSE, nsamp=1000)
-	save(impData, file=paste0(pathData, 'sobOpp_imp.rda'))
-} else { load(paste0(pathData, 'sobOpp_imp.rda')) }
+	save(impData, file=paste0(pathData, 'sobState_imp.rda'))
+} else { load(paste0(pathData, 'sobState_imp.rda')) }
 
 # pick a few from the posterior
 set.seed(6886)
 frame = data.frame(impData$Y.pmean)
-frame = cbind(data[,c('ccode','year','icclevel_opp_3')], frame)
-frame$icclevel_opp_3 = as.integer(frame$icclevel_opp_3 + 1)
+frame = cbind(data[,c('ccode','year','icclevel_state_3')], frame)
+frame$icclevel_state_3 = as.integer(frame$icclevel_state_3 + 1)
 frame$ccode = as.integer(frame$ccode)
 impDFs = lapply(sample(500:1000, 10), function(i){
 	x = data.frame(impData$Y.impute[,,i])
-	x = cbind(data[,c('ccode','year','icclevel_opp_3')], x)
+	x = cbind(data[,c('ccode','year','icclevel_state_3')], x)
 	names(x) = names(frame)
-	x$icclevel_opp_3 = as.integer(x$icclevel_opp_3 + 1)
+	x$icclevel_state_3 = as.integer(x$icclevel_state_3 + 1)
 	x$ccode = as.integer(x$ccode)
 	return(x) })
 ###############################################################
@@ -56,43 +56,25 @@ frame$lag1_p5_absidealdiffMin = frame$p5*frame$lag1_p5_absidealdiffMin
 ###############################################################
 
 ###############################################################
-# only incl states with civ war or pts>=3 since 2002
-load(paste0(pathData, 'subset_ptsCivWar_cntries.rda'))
-
-## keep only states 
-frame = frame[which(frame$ccode %in% cntries$ccode),]
-
-# remove civil war covariate
-sobOppVars = sobOppVars[-which(sobOppVars %in% c('lag1_civilwar'))]
-###############################################################
-
-###############################################################
-# category specific effects
-sobOppVars[c(4:7)] = paste0('cs(',sobOppVars[c(4:7)],')')
-
 # pool
-sobOppForm = formula(
-	paste0('icclevel_opp_3 ~ ', 
-		paste(sobOppVars, collapse = ' + ') ) )
+sobStateForm = formula(
+	paste0('icclevel_state_3 ~ ', 
+		paste(sobStateVars, collapse = ' + ') ) )
 mod = brm(
-	formula=sobOppForm, 
-	data=frame,
-	family=cratio(link='logit')
-	)	
-save(mod, 
-	file=paste0(pathResults, 
-		'sobOpp_model1a_1_newp5Var_ptsCivilWarOnly.rda'))
-
-# hier
-sobOppForm = formula(
-	paste0('icclevel_opp_3 ~ ', 
-		paste(sobOppVars, collapse = ' + '), '+(1|ccode)' ) )
-modHier = brm(
-	formula=sobOppForm, 
+	formula=sobStateForm, 
 	data=frame,
 	family=cratio(link='logit')
 	)
-save(modHier, 
-	file=paste0(pathResults, 
-		'sobOpp_model1a_1_newp5Var_ptsCivilWarOnly_hier.rda'))
+save(mod, file=paste0(pathResults, 'sobState_model1a_1_newp5Var_global.rda'))
+
+# hier
+sobStateForm = formula(
+	paste0('icclevel_state_3 ~ ', 
+		paste(sobStateVars, collapse = ' + '), '+(1|ccode)' ) )
+modHier = brm(
+	formula=sobStateForm, 
+	data=frame,
+	family=cratio(link='logit')
+	)
+save(modHier, file=paste0(pathResults, 'sobState_model1a_1_newp5Var_global_hier.rda'))
 ###############################################################

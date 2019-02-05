@@ -67,9 +67,6 @@ sobOppVars = sobOppVars[-which(sobOppVars %in% c('lag1_civilwar'))]
 ###############################################################
 
 ###############################################################
-# category specific effects
-sobOppVars[c(4:7)] = paste0('cs(',sobOppVars[c(4:7)],')')
-
 # pool
 sobOppForm = formula(
 	paste0('icclevel_opp_3 ~ ', 
@@ -81,7 +78,7 @@ mod = brm(
 	)	
 save(mod, 
 	file=paste0(pathResults, 
-		'sobOpp_model1a_1_newp5Var_ptsCivilWarOnly.rda'))
+		'sobOpp_model1a_1_newp5Var_ptsCivilWarOnly_global.rda'))
 
 # hier
 sobOppForm = formula(
@@ -94,5 +91,5 @@ modHier = brm(
 	)
 save(modHier, 
 	file=paste0(pathResults, 
-		'sobOpp_model1a_1_newp5Var_ptsCivilWarOnly_hier.rda'))
+		'sobOpp_model1a_1_newp5Var_ptsCivilWarOnly_global_hier.rda'))
 ###############################################################
