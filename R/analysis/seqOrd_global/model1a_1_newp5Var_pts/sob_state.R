@@ -65,7 +65,7 @@ mod = brm(
 	data=frame,
 	family=cratio(link='logit')
 	)
-save(mod, file=paste0(pathResults, 'sobState_model1a_1_newp5Var_global.rda'))
+save(mod, file=paste0(pathResults, 'sobState_model1a_1_newp5Var_pts_global.rda'))
 
 # hier
 sobStateForm = formula(
@@ -76,5 +76,5 @@ modHier = brm(
 	data=frame,
 	family=cratio(link='logit')
 	)
-save(modHier, file=paste0(pathResults, 'sobState_model1a_1_newp5Var_global_hier.rda'))
+save(modHier, file=paste0(pathResults, 'sobState_model1a_1_newp5Var_pts_global_hier.rda'))
 ###############################################################

@@ -66,14 +66,14 @@ print.xtable(xtable(res, align='llcc', caption=lab),
 	sanitize.text.function = identity,
 	hline.after=c(0,0,length(sobVars)*2,length(sobVars)*2),
 	size="footnotesize",	
-	file=paste0(pathResults, 'sob_model1a_1_newp5Var.tex'))
+	file=paste0(pathResults, 'sob_model1a_1_newp5Var_pts.tex'))
 ###############################################################
 
 ###############################################################
 # summarize
 load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_hier.rda'))
 oppMod = modHier
-load(paste0(pathResults, 'sobState_model1a_1_newp5Var_hier.rda'))
+load(paste0(pathResults, 'sobState_model1a_1_newp5Var_pts_hier.rda'))
 stateMod = modHier
 sobMods = lapply(list(stateMod, oppMod), function(x){
 	summ=data.frame(fixef(x)[,1:2])
@@ -90,5 +90,5 @@ print.xtable(xtable(res, align='llcc', caption=lab),
 	sanitize.text.function = identity,
 	hline.after=c(0,0,length(sobVars)*2,length(sobVars)*2),
 	size="footnotesize",	
-	file=paste0(pathResults, 'sob_model1a_1_newp5Var_hier.tex'))
+	file=paste0(pathResults, 'sob_model1a_1_newp5Var_pts_hier.tex'))
 ###############################################################
