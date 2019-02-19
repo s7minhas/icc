@@ -1,13 +1,6 @@
 \section*{Modeling sequential variable}
 
-Observations distributed sequentially 
-
-\begin{eqnarray}
-	y_{1},...,y_{n} &\sim& \Pi^{(1,...J)} \nonumber \\
-	x_{i} &=& (x_{i1},...x_{ip}) \nonumber
-\end{eqnarray}
-
-Sequential model
+To model \emph{State- and Opposition-Focused ICC Transition} we need to account for the sequential way in which states and opposition actors transition through the ICC process. Specifically, both transition variables can only face a formal investigation after a preliminary has begun. More formally, in order for actor $i$ to receive a value of $j$ for $Y_{i}$, the actor must pass through all levels less than $j$. The probability of then reaching $j$,conditional on the event that the $j$^{th} level is reached, is given by: 
 
 \begin{eqnarray}
 	Pr(y_{i}={j} | y_{i} \geq {j}, \gamma, \beta) &=& F(\gamma_{j} - x_{i}^{'}\beta)\text{, where }\gamma = (\gamma_{1},...,\gamma_{J-1}) \nonumber \\
@@ -71,6 +64,50 @@ Sample from the joint posterior of $(\{z_{ij}\},\beta)$ by ??? sampling of ???:
 \end{eqnarray}
 
 \section*{Empirical Results}
+
+% latex table generated in R 3.5.0 by xtable 1.8-2 package
+% Fri Feb  1 20:29:20 2019
+\begin{table}[ht]
+\centering
+\begingroup\footnotesize
+\begin{tabular}{lcc}
+ Variable & state & rebel \\ 
+  \hline
+\hline
+icc rat & $1.23^{\ast\ast}$ & $2.02^{\ast\ast}$ \\ 
+   & (0.27) & (0.26) \\ 
+  lag1 civilwar & $2.72^{\ast\ast}$ & $2.41^{\ast\ast}$ \\ 
+   & (0.27) & (0.26) \\ 
+  lag1 polity2 & $0.13^{\ast\ast}$ & 0.01 \\ 
+   & (0.03) & (0.03) \\ 
+  lag1 gdpCapLog & $0.43^{\ast\ast}$ & $-0.25^{\ast\ast}$ \\ 
+   & (0.09) & (0.11) \\ 
+  africa[1] & 0.24 & $0.81^{\ast\ast}$ \\ 
+   & (0.29) & (0.25) \\ 
+  africa[2] & $10.74^{\ast\ast}$ & $6.42^{\ast\ast}$ \\ 
+   & (2) & (1.46) \\ 
+  lag1 osv rebel cumul[1] &  & $0.15^{\ast\ast}$ \\ 
+   &  & (0.04) \\ 
+  lag1 osv rebel cumul[2] &  & $-0.21^{\ast\ast}$ \\ 
+   &  & (0.09) \\ 
+  lag1 osv state cumul[1] & $0.2^{\ast\ast}$ &  \\ 
+   & (0.04) &  \\ 
+  lag1 osv state cumul[2] & $-0.6^{\ast\ast}$ &  \\ 
+   & (0.16) &  \\ 
+  lag1 p5 absidealdiffMin[1] & -0.58 & 0.53 \\ 
+   & (0.47) & (0.49) \\ 
+  lag1 p5 absidealdiffMin[2] & $6.46^{\ast\ast}$ & $4.1^{\ast\ast}$ \\ 
+   & (2.59) & (1.87) \\ 
+  lag1 v2juncind[1] & $-0.81^{\ast\ast}$ & $-0.43^{\ast\ast}$ \\ 
+   & (0.12) & (0.13) \\ 
+  lag1 v2juncind[2] & -0.35 & $-0.98^{\ast\ast}$ \\ 
+   & (0.58) & (0.48) \\ 
+   \hline
+\hline
+\end{tabular}
+\endgroup
+\caption{$^{**}$ and $^{*}$ indicate significance at $p< 0.05 $ and $p< 0.10 $, respectively.} 
+\end{table}
 
 \subsection*{Onset Models}
 
