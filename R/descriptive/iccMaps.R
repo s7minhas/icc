@@ -7,7 +7,7 @@ loadPkg(
 	c(
 		'sf','dplyr',
 		'rnaturalearth',
-		'rgeos','raster','cshapes',
+		'rgeos',
 		'cowplot','hrbrthemes'
 		))
 ###############################################################
@@ -24,29 +24,41 @@ data = data[,
 ###############################################################
 
 ###############################################################
-#
-map <- cshp(date = as.Date("2012-12-31")) %>%
-  # the map data has some points outside 180 degrees, this causes plotting 
-  # issues with projected data
-  # raster::crop(., extent(-180, 180, -90, 90)) %>%
-  st_as_sf() %>%
-  as_tibble() %>%
-  st_as_sf() %>%
-  st_transform("+proj=robin") %>%
-  st_simplify(dTolerance = 10000, preserveTopology = TRUE) %>%
-  dplyr::select("GWCODE", "CNTRY_NAME", "ISO1AL3", "geometry")
-
-# Cshapes maps are missing Greenland and some other places, get a background
-# map to show the correct world
-bg_map <- ne_countries(scale = 110, type = 'countries') %>%
+# quick base map using rnaturalearth
+map = ne_countries(scale = 110, type = 'countries') %>%
   st_as_sf() %>%
   st_transform("+proj=robin")
 
-# Main map
+# create common id to merge in data
+map$cname = countrycode(map$name_long, 'country.name', 'country.name')
+map$cname[map$name_long=='Dem. Rep. Korea'] = "KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"
+map$cname[map$name_long=='Northern Cyprus'] = NA
+map$cname[map$name_long=='Somaliland'] = NA
+
+# add ccode
+map$ccode = panel$ccode[match(map$cname, panel$cname)]
+
+# remove geo units with NA
+map = map[!is.na(map$ccode),]
+
+# choose what to plot
+mapData = data %>% dplyr::group_by(ccode) %>% 
+	dplyr::summarize(
+		icclevel_state_3 = max(icclevel_state_3),
+		icclevel_opp_3 = max(icclevel_opp_3),
+		icclevel_3 = max(icclevel_3)
+		) %>% data.frame()
+
+# merge in
+for(ii in 2:ncol(mapData)){
+	map$tmp = mapData[match(map$ccode,mapData$ccode),ii]
+	names(map)[ncol(map)] = names(mapData)[ii] }
+
+# viz
 p1 <- ggplot() + 
-  geom_sf(data = bg_map, size = .2, color = "white") +
-  # geom_sf(data = map, aes(fill = age_bins), size = .1, color = "white") +
-  geom_sf(data = map, size = .1, color = "white") +
+  geom_sf(data = map, aes(fill=icc_level_state_3), size = .2, color = "white") +
+  ## geom_sf(data = map, aes(fill = age_bins), size = .1, color = "white") +
+  # geom_sf(data = map, size = .1, color = "white") +
   theme_ipsum() +
   theme(axis.text = element_blank(),
         axis.ticks = element_blank(),
@@ -54,5 +66,5 @@ p1 <- ggplot() +
         panel.background = element_blank()) +
   scale_fill_viridis_d(guide = FALSE, direction = -1) +
   labs(x = "", y = "")    
-ggsave(p1, file='~/Desktop/tmp.pdf')
+p1
 ###############################################################	
