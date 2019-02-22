@@ -70,30 +70,37 @@ map$oppStage2[map$icclevel_opp_3<2] = 0
 
 ###############################################################
 # viz
-makeMap = function(mapForPlot, colorVar){
+mapCols = c("0" = "gray80", "1" = "gray50", "2" = "gray25")
+makeMap = function(mapForPlot, colorVar, colorVector=mapCols, mapTitle=NULL){
 	mapForPlot$mapColor = colorVar
 	p1 = ggplot() + 
 		geom_sf(data = mapForPlot, 
 			aes(fill=factor(mapColor)), 
 			size = .2, color = "white") +
 		labs(x = "", y = "") +
-		# geom_sf(data = map, size = .1, color = "white") +
-		# scale_fill_brewer() +
+		scale_fill_manual(values=colorVector) +
 		theme_ipsum() +
 		theme(
 			axis.text = element_blank(),
 			axis.ticks = element_blank(),
 			axis.line = element_blank(),
 			panel.background = element_blank(),
-			legend.position = 'none'
-		)
+			legend.position = 'none',
+			plot.title = element_text(
+				size = 8
+				)
+		) + 
+		ggtitle(mapTitle)
 	return(p1)	
 }
 
-s1 = makeMap(map, map$stateStage1)
-s2 = makeMap(map, map$stateStage2)
-o1 = makeMap(map, map$oppStage1)
-o2 = makeMap(map, map$oppStage2)
+s1 = makeMap(map, map$stateStage1, mapTitle='ICC Preliminary State')
+s2 = makeMap(map, map$stateStage2, mapTitle='ICC Formal State')
+o1 = makeMap(map, map$oppStage1, mapTitle='ICC Preliminary Rebel')
+o2 = makeMap(map, map$oppStage2, mapTitle='ICC Formal Rebel')
 
-grid.arrange(s1,s2,o1,o2, nrow=2, ncol=2)
+gg=grid.arrange(s1,s2,o1,o2, nrow=2, ncol=2)
+
+
+ggsave(gg, file='~/Desktop/tmp.pdf', width=10, height=4, device=cairo_pdf)
 ###############################################################	
