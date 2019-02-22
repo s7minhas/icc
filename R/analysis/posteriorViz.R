@@ -3,7 +3,7 @@ if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	source('~/Research/icc/R/setup.R') }
 
 #
-loadPkg(c('sbgcop','brms'))
+loadPkg(c('brms'))
 ###############################################################
 
 ###############################################################
@@ -58,9 +58,11 @@ sobVars = sobVars[-c(5:7,16:17)]
 # 
 x = data.frame(sobMods$'state')
 x$dirty = rownames(x) ; rownames(x) = NULL
-x$clean = c()
+# x$clean = c()
 
 # table
+oppBeta = posterior_samples(oppMod)
+
 # clean table
 lazyCleanVars = gsub('_',' ',sobVars,fixed=TRUE)
 lazyCleanMods = c('state','rebel')
