@@ -94,6 +94,11 @@ makeMap = function(mapForPlot, colorVar, colorVector=mapCols, mapTitle=NULL){
 	return(p1)	
 }
 
+## note from alyssa
+# one thing - can you add dates to the maps?
+# just to make it clear that these are only ICC onsets through 2016?
+# b/c there are a few more now (like the Philippines) that aren't
+# on here b/c our data end before they started.
 s1 = makeMap(map, map$stateStage1, mapTitle='ICC Preliminary State')
 s2 = makeMap(map, map$stateStage2, mapTitle='ICC Formal State')
 o1 = makeMap(map, map$oppStage1, mapTitle='ICC Preliminary Rebel')
