@@ -55,6 +55,16 @@ sobVars = c(
 # 
 sobVars = sobVars[-c(5:7,16:17)]
 
+#
+varKey = data.frame(dirty=sobVars, stringsAsFactors = FALSE)
+varKey$clean = c(
+	'ICC Ratification',
+	'Civil War$_{i,t-1}$',
+	'Polity$_{i,t-1}$',
+	'Log(GDP per capita)$_{i,t-1}$',
+	'Africa'
+	)
+
 # 
 x = data.frame(sobMods$'state')
 x$dirty = rownames(x) ; rownames(x) = NULL
@@ -63,15 +73,18 @@ x$dirty = rownames(x) ; rownames(x) = NULL
 # table
 oppBeta = posterior_samples(oppMod)
 
-# clean table
-lazyCleanVars = gsub('_',' ',sobVars,fixed=TRUE)
-lazyCleanMods = c('state','rebel')
-lab='$^{**}$ and $^{*}$ indicate significance at $p< 0.05 $ and $p< 0.10 $, respectively.'
-res=getTable(sobVars,lazyCleanVars,sobMods,lazyCleanMods)
-print.xtable(xtable(res, align='llcc', caption=lab),
-	include.rownames=FALSE,
-	sanitize.text.function = identity,
-	hline.after=c(0,0,length(sobVars)*2,length(sobVars)*2),
-	size="footnotesize",	
-	file=paste0(pathResults, 'sob_model1a_1_newp5Var.tex'))
+# marginal effects
+x = marginal_effects(
+	oppMod, 
+	effects='lag1_v2juncind', 
+	categorical=TRUE)[[1]]
+
+ggplot(x, 
+	aes(
+		x=lag1_v2juncind, y=estimate__, 
+		color=cats__, fill=cats__
+		)) + 
+	geom_line() + 
+	geom_ribbon(aes(ymin=lower__,ymax=upper__),alpha=.5) + 
+	facet_wrap(~cats__, scales='free_y')
 ###############################################################
