@@ -8,7 +8,7 @@ loadPkg(
 		'sf','dplyr',
 		'rnaturalearth',
 		'rgeos',
-		'cowplot','hrbrthemes'
+		'cowplot','hrbrthemes', 'gridExtra'
 		))
 ###############################################################
 
@@ -54,17 +54,46 @@ for(ii in 2:ncol(mapData)){
 	map$tmp = mapData[match(map$ccode,mapData$ccode),ii]
 	names(map)[ncol(map)] = names(mapData)[ii] }
 
+# break up icclevel into stages
+map$stateStage1 = map$icclevel_state_3
+map$stateStage1[map$icclevel_state_3>1] = 1
+
+map$stateStage2 = map$icclevel_state_3
+map$stateStage2[map$icclevel_state_3<2] = 0
+
+map$oppStage1 = map$icclevel_opp_3
+map$oppStage1[map$icclevel_opp_3>1] = 1
+
+map$oppStage2 = map$icclevel_opp_3
+map$oppStage2[map$icclevel_opp_3<2] = 0
+###############################################################
+
+###############################################################
 # viz
-p1 <- ggplot() + 
-  geom_sf(data = map, aes(fill=icc_level_state_3), size = .2, color = "white") +
-  ## geom_sf(data = map, aes(fill = age_bins), size = .1, color = "white") +
-  # geom_sf(data = map, size = .1, color = "white") +
-  theme_ipsum() +
-  theme(axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        axis.line = element_blank(),
-        panel.background = element_blank()) +
-  scale_fill_viridis_d(guide = FALSE, direction = -1) +
-  labs(x = "", y = "")    
-p1
+makeMap = function(mapForPlot, colorVar){
+	mapForPlot$mapColor = colorVar
+	p1 = ggplot() + 
+		geom_sf(data = mapForPlot, 
+			aes(fill=factor(mapColor)), 
+			size = .2, color = "white") +
+		labs(x = "", y = "") +
+		# geom_sf(data = map, size = .1, color = "white") +
+		# scale_fill_brewer() +
+		theme_ipsum() +
+		theme(
+			axis.text = element_blank(),
+			axis.ticks = element_blank(),
+			axis.line = element_blank(),
+			panel.background = element_blank(),
+			legend.position = 'none'
+		)
+	return(p1)	
+}
+
+s1 = makeMap(map, map$stateStage1)
+s2 = makeMap(map, map$stateStage2)
+o1 = makeMap(map, map$oppStage1)
+o2 = makeMap(map, map$oppStage2)
+
+grid.arrange(s1,s2,o1,o2, nrow=2, ncol=2)
 ###############################################################	
