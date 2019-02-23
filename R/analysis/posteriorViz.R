@@ -70,8 +70,47 @@ x = data.frame(sobMods$'state')
 x$dirty = rownames(x) ; rownames(x) = NULL
 # x$clean = c()
 
-# table
-oppBeta = fixef(oppMod, summary=FALSE)
+# viz
+oppBeta = data.frame(
+	fixef(oppMod, summary=FALSE),
+	stringsAsFactors = FALSE
+	)
+oppBeta$iteration = 1:nrow(oppBeta)
+
+# org vars
+gVars = colnames(oppBeta)[
+	!grepl('.',colnames(oppBeta), fixed=TRUE) ]
+l1Vars = colnames(oppBeta)[
+	grepl('.1.',colnames(oppBeta), fixed=TRUE) ]
+l2Vars = colnames(oppBeta)[
+	grepl('.2.',colnames(oppBeta), fixed=TRUE) ]
+
+# org data for plots
+gOppBeta = oppBeta[,gVars]
+l1OppBeta = oppBeta[,l1Vars]
+l2OppBeta = oppBeta[,l2Vars]
+
+# viz
+mcmc_areas(
+	gOppBeta,
+	pars = colnames(gOppBeta)[-ncol(gOppBeta)],
+	prob = 0.95
+	) +
+	theme_bw() +
+	theme(
+		axis.ticks=element_blank(),
+		panel.border=element_blank()
+		)
+	
+
+ggData = melt(gOppBeta, id='iteration')
+ggplot(ggData, aes(x=value, y=variable)) +
+	geom_density() +
+	xlab('') + ylab('') +
+	theme( 
+		panel.border=element_blank(),
+		axis.ticks=element_blank()
+		)
 
 # marginal effects
 load(paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
