@@ -90,6 +90,20 @@ gOppBeta = oppBeta[,gVars]
 l1OppBeta = oppBeta[,l1Vars]
 l2OppBeta = oppBeta[,l2Vars]
 
+# stdz vars
+x=gOppBeta
+stdzCoef = function(coefVar, baseVar){
+	return( coefVar/(2*sd(baseVar)) ) }
+vars = c('lag1_polity2', 'lag1_gdpCapLog')
+for(v in vars){
+	gOppBeta[,v] = stdzCoef(gOppBeta[,v], oppMod$data[,v]) }
+
+head(x[,-ncol(x)])
+head(gOppBeta[,-ncol(gOppBeta)])
+
+summary(x[,-ncol(x)])
+summary(gOppBeta[,-ncol(gOppBeta)])
+
 # viz
 mcmc_areas(
 	gOppBeta,
