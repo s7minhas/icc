@@ -106,6 +106,8 @@ o2 = makeMap(map, map$oppStage2, mapTitle='ICC Formal Rebel')
 
 gg=grid.arrange(s1,s2,o1,o2, nrow=2, ncol=2)
 
-
-ggsave(gg, file='~/Desktop/tmp.pdf', width=10, height=4, device=cairo_pdf)
+ggsave(gg, 
+	file=paste0(pathGraphics, 'iccMaps.pdf'),
+	width=10, height=4
+	)
 ###############################################################	

@@ -71,7 +71,7 @@ x$dirty = rownames(x) ; rownames(x) = NULL
 # x$clean = c()
 
 # table
-oppBeta = posterior_samples(oppMod)
+oppBeta = fixef(oppMod, summary=FALSE)
 
 # marginal effects
 load(paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
