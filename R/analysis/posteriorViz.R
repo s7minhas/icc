@@ -92,11 +92,15 @@ l2OppBeta = oppBeta[,l2Vars]
 
 # stdz vars
 x=gOppBeta
-stdzCoef = function(coefVar, baseVar){
-	return( coefVar/(2*sd(baseVar)) ) }
-vars = c('lag1_polity2', 'lag1_gdpCapLog')
+stdzCoef = function(coefVar, baseVar, dv){
+	# return( coefVar/(2*sd(baseVar)) ) }
+	return( coefVar *(sd(baseVar)/sd(dv)) ) }	
+vars = colnames(gOppBeta)
 for(v in vars){
-	gOppBeta[,v] = stdzCoef(gOppBeta[,v], oppMod$data[,v]) }
+	gOppBeta[,v] = stdzCoef(
+		gOppBeta[,v], 
+		oppMod$data[,v],
+		oppMod$data$icclevel_opp_3) }
 
 head(x[,-ncol(x)])
 head(gOppBeta[,-ncol(gOppBeta)])
