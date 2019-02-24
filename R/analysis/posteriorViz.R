@@ -3,7 +3,7 @@ if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	source('~/Research/icc/R/setup.R') }
 
 #
-loadPkg(c('brms'))
+loadPkg(c('brms','latex2exp','bayesplot'))
 ###############################################################
 
 ###############################################################
@@ -14,49 +14,25 @@ load(paste0(pathResults, 'sobState_model1a_1_newp5Var.rda'))
 stateMod = mod
 
 # vars
-sobOppVars = c(
-	'icc_rat','lag1_civilwar','lag1_polity2',
-	'lag1_gdpCapLog','africa',
-	'lag1_v2juncind',
-	'lag1_osv_rebel_cumul',	
-	# p5 vars: 
-	'lag1_p5_absidealdiffMin',
-	'lag1_p5_defAllyMax',
-	'lag1_p5_gov_clean', 'lag1_p5_reb_clean'
+vars = unique(
+	c(
+		rownames(fixef(oppMod)), 
+		rownames(fixef(stateMod)))
 	)
-
-sobStateVars = c(
-	'icc_rat','lag1_civilwar','lag1_polity2',
-	'lag1_gdpCapLog','africa',
-	'lag1_v2juncind','lag1_pts',
-	'lag1_osv_state_cumul',	
-	# p5 vars: 
-	'lag1_p5_absidealdiffMin',
-	'lag1_p5_defAllyMax',
-	'lag1_p5_gov_clean', 'lag1_p5_reb_clean'
-	)
-sobVars = unique(c(sobStateVars, sobOppVars))
-sobVars = sobVars[c(1:8,13,9:12)]
-sobVars = c(
-	sobVars[c(1:4,11:13)],
-	sort(
-		pasteMult(
-			sobVars[c(5:10)], paste0('[',1:2,']'),
-			sepZ='')
-		)
-	)
-
-# 
-sobVars = sobVars[-c(5:7,16:17)]
-
-#
-varKey = data.frame(dirty=sobVars, stringsAsFactors = FALSE)
+vars = unique(gsub('\\[[1-9]\\]','',vars))
+varKey = data.frame(
+	dirty = vars, stringsAsFactors = FALSE )
 varKey$clean = c(
+	'Intercept',
 	'ICC Ratification',
-	'Civil War$_{i,t-1}$',
-	'Polity$_{i,t-1}$',
-	'Log(GDP per capita)$_{i,t-1}$',
-	'Africa'
+	'Civil War$_{t-1}$',
+	'Polity$_{t-1}$',
+	'Log(GDP per capita)$_{t-1}$',
+	'Africa',
+	'Judicial\n Independence$_{t-1}$',
+	'Cumulative\n Rebel OSV$_{t-1}$',
+	'P5 Closeness$_{t-1}$',
+	'Cumulative\n Govt. OSV$_{t-1}$'
 	)
 
 # viz
@@ -64,7 +40,6 @@ oppBeta = data.frame(
 	fixef(oppMod, summary=FALSE),
 	stringsAsFactors = FALSE
 	)
-oppBeta$iteration = 1:nrow(oppBeta)
 
 # org vars
 gVars = colnames(oppBeta)[
@@ -75,35 +50,39 @@ l2Vars = colnames(oppBeta)[
 	grepl('.2.',colnames(oppBeta), fixed=TRUE) ]
 
 # org data for plots
-gOppBeta = oppBeta[,gVars]
-l1OppBeta = oppBeta[,l1Vars]
-l2OppBeta = oppBeta[,l2Vars]
+gModBeta = oppBeta[,gVars]
+l1ModBeta = oppBeta[,l1Vars]
+l2ModBeta = oppBeta[,l2Vars]
 
 # stdz vars
 stdzCoef = function(coefVar, baseVar, dv){
 	return( coefVar * (sd(baseVar)/sd(dv)) ) }	
-vars = colnames(gOppBeta)[-ncol(gOppBeta)]
+vars = colnames(gModBeta)[-ncol(gModBeta)]
 for(v in vars){
-	gOppBeta[,v] = stdzCoef(
-		gOppBeta[,v], 
+	gModBeta[,v] = stdzCoef(
+		gModBeta[,v], 
 		oppMod$data[,v],
 		oppMod$data$icclevel_opp_3) }
 
 # viz
 # mcmc_areas_data	
-gOppBeta = gOppBeta[,-ncol(gOppBeta)]
+varLabs = varKey$clean
+names(varLabs) = varKey$dirty
 
 color_scheme_set("gray")
 mcmc_areas(
-	gOppBeta,
-	pars = colnames(gOppBeta),
+	gModBeta,
+	pars = colnames(gModBeta),
 	prob = 0.95, prob_outer=1,
 	point_est = 'mean'
 	) +
-	geom_vline(aes(xintercept=0), 
+	geom_vline(
+		aes(xintercept=0), 
 		color='black', linetype='dashed'
 		) +
-	theme_bw() +
+	# scale_y_discrete('', labels=varLabs) +
+	scale_y_discrete('', labels=TeX(varLabs)) +
+ 	theme_bw() +
 	theme(
 		axis.ticks=element_blank(),
 		panel.border=element_blank()
