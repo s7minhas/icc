@@ -54,22 +54,53 @@ gModBeta = oppBeta[,gVars]
 l1ModBeta = oppBeta[,l1Vars]
 l2ModBeta = oppBeta[,l2Vars]
 
-# stdz vars
-stdzCoef = function(coefVar, baseVar, dv){
-	return( coefVar * (sd(baseVar)/sd(dv)) ) }	
-vars = colnames(gModBeta)[-ncol(gModBeta)]
-for(v in vars){
-	gModBeta[,v] = stdzCoef(
-		gModBeta[,v], 
-		oppMod$data[,v],
-		oppMod$data$icclevel_opp_3) }
+###
+prepData = function(gModBeta, typeLab){
+	# stdz vars
+	stdzCoef = function(coefVar, baseVar, dv){
+		return( coefVar * (sd(baseVar)/sd(dv)) ) }	
+	vars = colnames(gModBeta)[-ncol(gModBeta)]
+	for(v in vars){
+		gModBeta[,v] = stdzCoef(
+			gModBeta[,v], 
+			oppMod$data[,v],
+			oppMod$data$icclevel_opp_3) }
+
+	## prep data
+	data = mcmc_areas_data(
+	    gModBeta,
+	    pars = colnames(gModBeta),
+	    prob = 0.95, prob_outer=1,
+	    point_est = 'mean'
+	    ) 
+
+	x = mcmc_areas_data(
+	    gModBeta, pars = colnames(gModBeta),
+	    prob = 0.9, prob_outer=1, 
+	    point_est = 'mean' ) %>% data.frame(.,stringsAsFactors = FALSE)
+	x = x[x$interval=='inner',] ; x$interval = 'inner2'
+
+	datas <- split(data, data$interval)
+	datas$inner2 = x
+
+	# add type
+	datas = lapply(datas, function(x){x$type=typeLab;return(x)})
+
+	#
+	return(datas) }
+
+#
+ggGlobal = prepData(oppBeta[,gVars], 'global')
+ggLevel1 = prepData(oppBeta[,gVars], 'l1')
+ggLevel2 = prepData(oppBeta[,gVars], 'l2')
 
 # viz
-# mcmc_areas_data	
+color_scheme_set("gray")
 varLabs = varKey$clean
 names(varLabs) = varKey$dirty
+datas = ggGlobal
 
-color_scheme_set("gray")
+
 mcmc_areas(
 	gModBeta,
 	pars = colnames(gModBeta),
@@ -80,11 +111,10 @@ mcmc_areas(
 		aes(xintercept=0), 
 		color='black', linetype='dashed'
 		) +
-	# scale_y_discrete('', labels=varLabs) +
 	scale_y_discrete('', labels=TeX(varLabs)) +
  	theme_bw() +
 	theme(
 		axis.ticks=element_blank(),
 		panel.border=element_blank()
 		)
-###############################################################
+###############################################################	
