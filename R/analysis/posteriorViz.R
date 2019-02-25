@@ -3,7 +3,7 @@ if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	source('~/Research/icc/R/setup.R') }
 
 #
-loadPkg(c('brms','latex2exp','bayesplot', 'Cairo'))
+loadPkg(c('brms','latex2exp','bayesplot', 'Cairo', 'gridExtra'))
 source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
 ###############################################################
 
@@ -57,19 +57,19 @@ l2Vars = colnames(oppBeta)[
 # viz
 varLabs = varKey$clean
 names(varLabs) = varKey$dirty
+ggGlobal = mcmcViz(
+	prepData(oppBeta[,gVars], 
+		'Global Effects'), varLabs)
+ggLevel1 = mcmcViz(
+	prepData(oppBeta[,l1Vars], 
+		'No ICC to Prelim Effects'), varLabs)
+ggLevel2 = mcmcViz(
+	prepData(oppBeta[,l2Vars], 
+		'ICC Prelim to Formal Effects'), varLabs)
 
-###
-ggGlobal = prepData(oppBeta[,gVars], 'Global Effects') %>%
-	addSomeColor(oppBeta[,gVars], .) %>%
-	mcmcViz(., coefp_colors, varLabs)
-ggGlobal
-
-ggGlobal = prepData(oppBeta[,gVars], 'Global Effects')
-ggLevel1 = prepData(oppBeta[,l1Vars], 'No ICC to Prelim Effects')
-ggLevel2 = prepData(oppBeta[,l2Vars], 'ICC Prelim to Formal Effects')
-
-ggGlobal = prepData(oppBeta[,gVars], 'Global Effects')
-ggGlobal = addSomeColor(oppBeta[,gVars], ggGlobal)
-ggGlobalViz = mcmcViz(ggGlobal, coefp_colors, varLabs)
-ggGlobalViz
+#
+grid.arrange(
+	list(ggGlobal,ggLevel1,ggLevel2),
+	nrow=2, ncol=2
+	)
 ###############################################################	

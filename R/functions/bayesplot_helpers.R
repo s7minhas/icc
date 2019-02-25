@@ -15,42 +15,6 @@ stdzCoef = function(coefVar, baseVar, dv){
 	stdzVar = coefVar * (sd(baseVar)/sd(dv))
 	return( stdzVar ) }
 
-# prep data into format for coef dist plot
-prepData = function(gModBeta, typeLab){
-	vars = colnames(gModBeta)
-	vars = vars[!grepl('Intercept',vars)]
-	for(v in vars){
-		gModBeta[,v] = stdzCoef(
-			gModBeta[,v], 
-			oppMod$data[,cleaner(v)],
-			oppMod$data$icclevel_opp_3) }
-
-	## prep data
-	data = mcmc_areas_data(
-	    gModBeta,
-	    pars = colnames(gModBeta),
-	    prob = 0.95, prob_outer=1,
-	    point_est = 'mean'
-	    ) 
-	dataList <- split(data, data$interval)
-
-	# add one more inner dist 
-	x = mcmc_areas_data(
-		    gModBeta, pars = colnames(gModBeta),
-		    prob = 0.9, prob_outer=1, 
-		    point_est = 'mean'
-	    ) %>%
-		data.frame(.,stringsAsFactors = FALSE)
-	x = x[x$interval=='inner',] ; x$interval = 'inner2'
-	dataList$inner2 = x
-
-	# add type
-	dataList = lapply(dataList, function(x){x$type=typeLab;return(x)})
-
-	#
-	return(dataList) }
-
-### modified version of bayesplot viz function	
 # colors for sig
 coefp_colors = c(
     "Positive"=rgb(54, 144, 192, maxColorValue=255),
@@ -88,8 +52,47 @@ addSomeColor = function(rawBeta, dataList){
 	    return(x) })
 	return(dataList) }
 
+# prep data into format for coef dist plot
+prepData = function(gModBeta, typeLab){
+	vars = colnames(gModBeta)
+	vars = vars[!grepl('Intercept',vars)]
+	for(v in vars){
+		gModBeta[,v] = stdzCoef(
+			gModBeta[,v], 
+			oppMod$data[,cleaner(v)],
+			oppMod$data$icclevel_opp_3) }
+
+	## prep data
+	data = mcmc_areas_data(
+	    gModBeta,
+	    pars = colnames(gModBeta),
+	    prob = 0.95, prob_outer=1,
+	    point_est = 'mean'
+	    ) 
+	dataList <- split(data, data$interval)
+
+	# add one more inner dist 
+	x = mcmc_areas_data(
+		    gModBeta, pars = colnames(gModBeta),
+		    prob = 0.9, prob_outer=1, 
+		    point_est = 'mean'
+	    ) %>%
+		data.frame(.,stringsAsFactors = FALSE)
+	x = x[x$interval=='inner',] ; x$interval = 'inner2'
+	dataList$inner2 = x
+
+	# add type
+	dataList = lapply(dataList, function(x){x$type=typeLab;return(x)})
+
+	# add some color
+	dataList = addSomeColor(gModBeta, dataList)
+
+	#
+	return(dataList) }
+
+### modified version of bayesplot viz function	
 # make final viz
-mcmcViz = function(dataList, colorsForCoef, varLabels){
+mcmcViz = function(dataList, varLabels, colorsForCoef=coefp_colors){
 	# dist ranges
 	x_lim <- range(dataList$outer$x)
 	x_range <- diff(x_lim)
