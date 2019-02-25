@@ -68,7 +68,7 @@ mapCols = c("0" = "gray85", "1" = "gray60", "2" = "gray25")
 gg = ggplot() + 
 	geom_sf(data = map, 
 		aes(fill=factor(value)), 
-		size = .2, color = "white") +
+		size = .2, color = "gray90") +
 	labs(x = "", y = "") +
 	scale_fill_manual(
 		'', 
@@ -78,7 +78,7 @@ gg = ggplot() +
 			'Reached Preliminary\nStage',
 			'Reached Formal\nStage'
 			) ) +
-	facet_wrap(~variable) +
+	facet_wrap(~variable,nrow=2) +
 	theme_light(base_family="Source Sans Pro") +
 	theme_ipsum() +
 	theme(
@@ -86,6 +86,8 @@ gg = ggplot() +
 		axis.ticks = element_blank(),
 		axis.line = element_blank(),
 		panel.background = element_blank(),
+		panel.grid.major = element_line(colour = 'transparent'),
+		panel.grid.minor = element_line(colour = 'transparent'),
 		legend.position =  'bottom',
 		legend.text = element_text(
 			size = 6, family="Source Sans Pro Light"),
@@ -96,8 +98,9 @@ gg = ggplot() +
         	fill = "#525252", color='#525252')
 		)
 
+# save
 ggsave(gg, 
 	file=paste0(pathGraphics, 'iccMaps.pdf'),
-	width=10, height=4, device=cairo_pdf
+	width=5, height=10, device=cairo_pdf
 	)
 ###############################################################	
