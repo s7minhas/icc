@@ -3,7 +3,7 @@ if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	source('~/Research/icc/R/setup.R') }
 
 #
-loadPkg(c('brms','latex2exp','bayesplot'))
+loadPkg(c('brms','latex2exp','bayesplot', 'Cairo'))
 source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
 ###############################################################
 
@@ -55,9 +55,9 @@ l2Vars = colnames(oppBeta)[
 	grepl('.2.',colnames(oppBeta), fixed=TRUE) ]
 
 ###
-ggGlobal = prepData(oppBeta[,gVars], 'global')
-ggLevel1 = prepData(oppBeta[,l1Vars], 'l1')
-ggLevel2 = prepData(oppBeta[,l2Vars], 'l2')
+ggGlobal = prepData(oppBeta[,gVars], 'Global Effects')
+ggLevel1 = prepData(oppBeta[,l1Vars], 'No ICC to Prelim Effects')
+ggLevel2 = prepData(oppBeta[,l2Vars], 'ICC Prelim to Formal Effects')
 
 # viz
 color_scheme_set("gray")
