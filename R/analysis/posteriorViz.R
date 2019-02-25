@@ -33,7 +33,7 @@ varKey$clean = c(
 	'Log(GDP per capita)$_{t-1}$',
 	'Africa',
 	'Judicial\n Independence$_{t-1}$',
-	'Cumulative\n Rebel OSV$_{t-1}$',
+	'Cumulative\n Opp OSV$_{t-1}$',
 	'P5 Closeness$_{t-1}$',
 	'Cumulative\n Govt OSV$_{t-1}$'
 	)
@@ -44,9 +44,9 @@ varKey = rbind(varKey,
 
 # create model summaries
 ## labels for facets
-gLab = paste0('Global Effects (',c('Rebel','State'),' Model)')
-l1Lab = paste0('No ICC to Prelim Effects (',c('Rebel','State'),' Model)')
-l2Lab = paste0('ICC Prelim to Formal Effects (',c('Rebel','State'),' Model)')
+gLab = paste0('Global Effects (',c('Opposition','State'),' Model)')
+l1Lab = paste0('No ICC to Prelim Effects (',c('Opposition','State'),' Model)')
+l2Lab = paste0('ICC Prelim to Formal Effects (',c('Opposition','State'),' Model)')
 
 # generate pdfs
 ggB = ggplot()+geom_blank(aes(1,1)) + cowplot::theme_nothing()	   		
