@@ -8,7 +8,7 @@ loadPkg(
 		'sf','dplyr',
 		'rnaturalearth',
 		'rgeos',
-		'cowplot','hrbrthemes', 'gridExtra'
+		'cowplot','hrbrthemes', 'gridExtra', 'Cairo'
 		))
 ###############################################################
 
@@ -31,7 +31,9 @@ map = ne_countries(scale = 110, type = 'countries') %>%
 
 # create common id to merge in data
 map$cname = countrycode(map$name_long, 'country.name', 'country.name')
-map$cname[map$name_long=='Dem. Rep. Korea'] = "KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"
+map$cname[
+	map$name_long=='Dem. Rep. Korea'
+	] = "KOREA, DEMOCRATIC PEOPLE'S REPUBLIC OF"
 map$cname[map$name_long=='Northern Cyprus'] = NA
 map$cname[map$name_long=='Somaliland'] = NA
 
@@ -45,69 +47,57 @@ map = map[!is.na(map$ccode),]
 mapData = data %>% dplyr::group_by(ccode) %>% 
 	dplyr::summarize(
 		icclevel_state_3 = max(icclevel_state_3),
-		icclevel_opp_3 = max(icclevel_opp_3),
-		icclevel_3 = max(icclevel_3)
+		icclevel_opp_3 = max(icclevel_opp_3)
 		) %>% data.frame()
 
 # merge in
-for(ii in 2:ncol(mapData)){
-	map$tmp = mapData[match(map$ccode,mapData$ccode),ii]
-	names(map)[ncol(map)] = names(mapData)[ii] }
+mapData = mapData[match(map$ccode,mapData$ccode),]
+map$variable = 'State-Focused ICC Transitions through 2016'
+map$value = mapData$icclevel_state_3
 
-# break up icclevel into stages
-map$stateStage1 = map$icclevel_state_3
-map$stateStage1[map$icclevel_state_3>1] = 1
-
-map$stateStage2 = map$icclevel_state_3
-map$stateStage2[map$icclevel_state_3<2] = 0
-
-map$oppStage1 = map$icclevel_opp_3
-map$oppStage1[map$icclevel_opp_3>1] = 1
-
-map$oppStage2 = map$icclevel_opp_3
-map$oppStage2[map$icclevel_opp_3<2] = 0
+x = map
+x$variable = 'Opposition-Focused ICC Transitions through 2016'
+x$value = mapData$icclevel_opp_3
+map = rbind(map, x)
+map$variable = factor(map$variable, levels=unique(map$variable))
 ###############################################################
 
 ###############################################################
 # viz
-mapCols = c("0" = "gray80", "1" = "gray50", "2" = "gray25")
-makeMap = function(mapForPlot, colorVar, colorVector=mapCols, mapTitle=NULL){
-	mapForPlot$mapColor = colorVar
-	p1 = ggplot() + 
-		geom_sf(data = mapForPlot, 
-			aes(fill=factor(mapColor)), 
-			size = .2, color = "white") +
-		labs(x = "", y = "") +
-		scale_fill_manual(values=colorVector) +
-		theme_ipsum() +
-		theme(
-			axis.text = element_blank(),
-			axis.ticks = element_blank(),
-			axis.line = element_blank(),
-			panel.background = element_blank(),
-			legend.position = 'none',
-			plot.title = element_text(
-				size = 8
-				)
-		) + 
-		ggtitle(mapTitle)
-	return(p1)	
-}
-
-## note from alyssa
-# one thing - can you add dates to the maps?
-# just to make it clear that these are only ICC onsets through 2016?
-# b/c there are a few more now (like the Philippines) that aren't
-# on here b/c our data end before they started.
-s1 = makeMap(map, map$stateStage1, mapTitle='ICC Preliminary State')
-s2 = makeMap(map, map$stateStage2, mapTitle='ICC Formal State')
-o1 = makeMap(map, map$oppStage1, mapTitle='ICC Preliminary Rebel')
-o2 = makeMap(map, map$oppStage2, mapTitle='ICC Formal Rebel')
-
-gg=grid.arrange(s1,s2,o1,o2, nrow=2, ncol=2)
+mapCols = c("0" = "gray85", "1" = "gray60", "2" = "gray25")
+gg = ggplot() + 
+	geom_sf(data = map, 
+		aes(fill=factor(value)), 
+		size = .2, color = "white") +
+	labs(x = "", y = "") +
+	scale_fill_manual(
+		'', 
+		values=mapCols,
+		labels=c(
+			'No ICC\nInvestigation',
+			'Reached Preliminary\nStage',
+			'Reached Formal\nStage'
+			) ) +
+	facet_wrap(~variable) +
+	theme_light(base_family="Source Sans Pro") +
+	theme_ipsum() +
+	theme(
+		axis.text = element_blank(),
+		axis.ticks = element_blank(),
+		axis.line = element_blank(),
+		panel.background = element_blank(),
+		legend.position =  'bottom',
+		legend.text = element_text(
+			size = 6, family="Source Sans Pro Light"),
+        strip.text.x = element_text(size = 9, color='white',
+            family="Source Sans Pro Semibold", 
+            angle=0, hjust=.05),
+        strip.background = element_rect(
+        	fill = "#525252", color='#525252')
+		)
 
 ggsave(gg, 
 	file=paste0(pathGraphics, 'iccMaps.pdf'),
-	width=10, height=4
+	width=10, height=4, device=cairo_pdf
 	)
 ###############################################################	
