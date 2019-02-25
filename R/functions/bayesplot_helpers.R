@@ -2,10 +2,6 @@
 library(bayesplot)
 library(ggridges)
 
-geom_area_ridges <- function(...) {
-  ggridges::geom_density_ridges(
-    ..., stat = "identity", scale = .95) }
-
 ### modified version of bayesplot data building function
 # remove category-specific labels
 cleaner = function(x){gsub('\\.[0-9]\\.', '', x)}
@@ -14,15 +10,6 @@ cleaner = function(x){gsub('\\.[0-9]\\.', '', x)}
 stdzCoef = function(coefVar, baseVar, dv){
 	stdzVar = coefVar * (sd(baseVar)/sd(dv))
 	return( stdzVar ) }
-
-# colors for sig
-coefp_colors = c(
-    "Positive"=rgb(54, 144, 192, maxColorValue=255),
-    "Negative"= rgb(222, 45, 38, maxColorValue=255),
-    "Positive at 90"=rgb(158, 202, 225, maxColorValue=255),
-    "Negative at 90"= rgb(252, 146, 114, maxColorValue=255),
-    "Insignificant" = rgb(150, 150, 150, maxColorValue=255)
-    )
 
 # add sig col to beta df gen from getCIVecs
 getSigVec = function(beta){
@@ -75,7 +62,7 @@ prepData = function(gModBeta, typeLab){
 	x = mcmc_areas_data(
 		    gModBeta, pars = colnames(gModBeta),
 		    prob = 0.9, prob_outer=1, 
-		    point_est = 'mean'
+		    point_est = 'median'
 	    ) %>%
 		data.frame(.,stringsAsFactors = FALSE)
 	x = x[x$interval=='inner',] ; x$interval = 'inner2'
@@ -91,7 +78,22 @@ prepData = function(gModBeta, typeLab){
 	return(dataList) }
 
 ### modified version of bayesplot viz function	
-# make final viz
+
+# fn from bayesplot needs this
+geom_area_ridges <- function(...) {
+  ggridges::geom_density_ridges(
+    ..., stat = "identity", scale = .95) }
+
+# colors for sig
+coefp_colors = c(
+    "Positive"=rgb(54, 144, 192, maxColorValue=255),
+    "Negative"= rgb(222, 45, 38, maxColorValue=255),
+    "Positive at 90"=rgb(158, 202, 225, maxColorValue=255),
+    "Negative at 90"= rgb(252, 146, 114, maxColorValue=255),
+    "Insignificant" = rgb(150, 150, 150, maxColorValue=255)
+    )
+
+# revised fn for final viz
 mcmcViz = function(dataList, varLabels, colorsForCoef=coefp_colors){
 	# dist ranges
 	x_lim <- range(dataList$outer$x)

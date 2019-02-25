@@ -3,7 +3,12 @@ if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	source('~/Research/icc/R/setup.R') }
 
 #
-loadPkg(c('brms','latex2exp','bayesplot', 'Cairo', 'gridExtra'))
+loadPkg(
+	c(
+		'brms', 'bayesplot',
+		'latex2exp', 'Cairo', 'gridExtra', 'cowplot'
+		) 
+	)
 source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
 ###############################################################
 
@@ -61,15 +66,22 @@ ggGlobal = mcmcViz(
 	prepData(oppBeta[,gVars], 
 		'Global Effects'), varLabs)
 ggLevel1 = mcmcViz(
-	prepData(oppBeta[,l1Vars], 
+	prepData(oppBeta[,l1Vars[-1]], 
 		'No ICC to Prelim Effects'), varLabs)
 ggLevel2 = mcmcViz(
-	prepData(oppBeta[,l2Vars], 
-		'ICC Prelim to Formal Effects'), varLabs)
+	prepData(oppBeta[,l2Vars[-1]], 
+		'ICC Prelim to Formal Effects'), varLabs) +
+	theme(
+		axis.text.y = element_blank()
+		)
 
 #
+blankPlot <- ggplot()+geom_blank(aes(1,1)) + 
+  cowplot::theme_nothing()
+
 grid.arrange(
-	list(ggGlobal,ggLevel1,ggLevel2),
-	nrow=2, ncol=2
+	arrangeGrob(blankPlot,ggGlobal,blankPlot, widths=c(.1,.7,.2)),
+	arrangeGrob(ggLevel1, ggLevel2, ncol=2, widths=c(.55,.45)),	
+	nrow=2
 	)
 ###############################################################	
