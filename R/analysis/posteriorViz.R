@@ -54,17 +54,22 @@ l1Vars = colnames(oppBeta)[
 l2Vars = colnames(oppBeta)[
 	grepl('.2.',colnames(oppBeta), fixed=TRUE) ]
 
+# viz
+varLabs = varKey$clean
+names(varLabs) = varKey$dirty
+
 ###
+ggGlobal = prepData(oppBeta[,gVars], 'Global Effects') %>%
+	addSomeColor(oppBeta[,gVars], .) %>%
+	mcmcViz(., coefp_colors, varLabs)
+ggGlobal
+
 ggGlobal = prepData(oppBeta[,gVars], 'Global Effects')
 ggLevel1 = prepData(oppBeta[,l1Vars], 'No ICC to Prelim Effects')
 ggLevel2 = prepData(oppBeta[,l2Vars], 'ICC Prelim to Formal Effects')
 
-# viz
-color_scheme_set("gray")
-varLabs = varKey$clean
-names(varLabs) = varKey$dirty
-
-datas = ggGlobal
-datas = ggLevel1
-
+ggGlobal = prepData(oppBeta[,gVars], 'Global Effects')
+ggGlobal = addSomeColor(oppBeta[,gVars], ggGlobal)
+ggGlobalViz = mcmcViz(ggGlobal, coefp_colors, varLabs)
+ggGlobalViz
 ###############################################################	

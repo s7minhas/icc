@@ -7,12 +7,16 @@ geom_area_ridges <- function(...) {
     ..., stat = "identity", scale = .95) }
 
 ### modified version of bayesplot data building function
+# remove category-specific labels
 cleaner = function(x){gsub('\\.[0-9]\\.', '', x)}
 
+# stdz vars
+stdzCoef = function(coefVar, baseVar, dv){
+	stdzVar = coefVar * (sd(baseVar)/sd(dv))
+	return( stdzVar ) }
+
+# prep data into format for coef dist plot
 prepData = function(gModBeta, typeLab){
-	# stdz vars
-	stdzCoef = function(coefVar, baseVar, dv){
-		return( coefVar * (sd(baseVar)/sd(dv)) ) }
 	vars = colnames(gModBeta)
 	vars = vars[!grepl('Intercept',vars)]
 	for(v in vars){
@@ -28,7 +32,9 @@ prepData = function(gModBeta, typeLab){
 	    prob = 0.95, prob_outer=1,
 	    point_est = 'mean'
 	    ) 
+	dataList <- split(data, data$interval)
 
+	# add one more inner dist 
 	x = mcmc_areas_data(
 		    gModBeta, pars = colnames(gModBeta),
 		    prob = 0.9, prob_outer=1, 
@@ -36,15 +42,13 @@ prepData = function(gModBeta, typeLab){
 	    ) %>%
 		data.frame(.,stringsAsFactors = FALSE)
 	x = x[x$interval=='inner',] ; x$interval = 'inner2'
-
-	datas <- split(data, data$interval)
-	datas$inner2 = x
+	dataList$inner2 = x
 
 	# add type
-	datas = lapply(datas, function(x){x$type=typeLab;return(x)})
+	dataList = lapply(dataList, function(x){x$type=typeLab;return(x)})
 
 	#
-	return(datas) }
+	return(dataList) }
 
 ### modified version of bayesplot viz function	
 # colors for sig
@@ -85,8 +89,6 @@ addSomeColor = function(rawBeta, dataList){
 	return(dataList) }
 
 # make final viz
-mcmcViz(datas, coefp_colors, varLabs)
-
 mcmcViz = function(dataList, colorsForCoef, varLabels){
 	# dist ranges
 	x_lim <- range(dataList$outer$x)
