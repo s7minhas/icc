@@ -21,10 +21,7 @@ stateMod = mod
 
 # vars
 varsRaw = unique(
-	c(
-		rownames(fixef(oppMod)), 
-		rownames(fixef(stateMod)))
-	)
+	c( rownames(fixef(oppMod)), rownames(fixef(stateMod)) ) )
 vars = unique(gsub('\\[[1-9]\\]','',varsRaw))
 varKey = data.frame(
 	dirty = vars, stringsAsFactors = FALSE )
@@ -62,7 +59,6 @@ rebelViz = arrangeGrob(
 ggsave(rebelViz, 
 	file=paste0(pathGraphics, 'rebelCoefSumm.pdf'),
 	width=8, height=6, device=cairo_pdf)
-system(paste0('open ',pathGraphics, 'rebelCoefSumm.pdf'))
 
 ## state model
 stateSumm = vizWrapper(stateMod, gLab[2], l1Lab[2], l2Lab[2])
@@ -73,5 +69,4 @@ stateViz = arrangeGrob(
 ggsave(stateViz, 
 	file=paste0(pathGraphics, 'stateCoefSumm.pdf'),
 	width=8, height=6, device=cairo_pdf)
-system(paste0('open ',pathGraphics, 'stateCoefSumm.pdf'))
 ###############################################################	

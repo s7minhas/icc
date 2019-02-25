@@ -1,9 +1,9 @@
 ####
-library(bayesplot)
-library(ggridges)
-library(gridExtra)
-library(Cairo)
-library(latex2exp)
+# library(bayesplot)
+# library(ggridges)
+# library(gridExtra)
+# library(Cairo)
+# library(latex2exp)
 
 ### modified version of bayesplot data building function
 # add color column for coef dist plot
