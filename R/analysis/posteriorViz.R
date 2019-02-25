@@ -38,50 +38,40 @@ varKey$clean = c(
 	'Judicial\n Independence$_{t-1}$',
 	'Cumulative\n Rebel OSV$_{t-1}$',
 	'P5 Closeness$_{t-1}$',
-	'Cumulative\n Govt. OSV$_{t-1}$'
+	'Cumulative\n Govt OSV$_{t-1}$'
 	)
 addCats = function(x,toAdd){
 	x$dirty=paste0(x$dirty,toAdd);x}
 varKey = rbind(varKey,
 	addCats(varKey,'.1.'),addCats(varKey,'.2.') )
 
-# viz
-oppBeta = data.frame(
-	fixef(oppMod, summary=FALSE),
-	stringsAsFactors = FALSE
-	)
+# create model summaries
+## labels for facets
+gLab = paste0('Global Effects (',c('Rebel','State'),' Model)')
+l1Lab = paste0('No ICC to Prelim Effects (',c('Rebel','State'),' Model)')
+l2Lab = paste0('ICC Prelim to Formal Effects (',c('Rebel','State'),' Model)')
 
-# org vars
-gVars = colnames(oppBeta)[
-	!grepl('.',colnames(oppBeta), fixed=TRUE) ]
-l1Vars = colnames(oppBeta)[
-	grepl('.1.',colnames(oppBeta), fixed=TRUE) ]
-l2Vars = colnames(oppBeta)[
-	grepl('.2.',colnames(oppBeta), fixed=TRUE) ]
+# generate pdfs
+ggB = ggplot()+geom_blank(aes(1,1)) + cowplot::theme_nothing()	   		
+## rebel model
+rebelSumm = vizWrapper(oppMod, gLab[1], l1Lab[1], l2Lab[1])
+rebelViz = arrangeGrob(
+	arrangeGrob(ggB,rebelSumm$g,ggB, widths=c(.15,.65,.2)),
+	arrangeGrob(rebelSumm$l1, rebelSumm$l2, ncol=2, widths=c(.55,.45)),	
+	nrow=2 )
+ggsave(rebelViz, 
+	file=paste0(pathGraphics, 'rebelCoefSumm.pdf'),
+	width=8, height=6, device=cairo_pdf)
+system(paste0('open ',pathGraphics, 'rebelCoefSumm.pdf'))
 
-# viz
-varLabs = varKey$clean
-names(varLabs) = varKey$dirty
-ggGlobal = mcmcViz(
-	prepData(oppBeta[,gVars], 
-		'Global Effects'), varLabs)
-ggLevel1 = mcmcViz(
-	prepData(oppBeta[,l1Vars[-1]], 
-		'No ICC to Prelim Effects'), varLabs)
-ggLevel2 = mcmcViz(
-	prepData(oppBeta[,l2Vars[-1]], 
-		'ICC Prelim to Formal Effects'), varLabs) +
-	theme(
-		axis.text.y = element_blank()
-		)
-
-#
-blankPlot <- ggplot()+geom_blank(aes(1,1)) + 
-  cowplot::theme_nothing()
-
-grid.arrange(
-	arrangeGrob(blankPlot,ggGlobal,blankPlot, widths=c(.1,.7,.2)),
-	arrangeGrob(ggLevel1, ggLevel2, ncol=2, widths=c(.55,.45)),	
-	nrow=2
-	)
+## state model
+stateSumm = vizWrapper(stateMod, gLab[2], l1Lab[2], l2Lab[2])
+stateViz = arrangeGrob(
+	arrangeGrob(ggB,stateSumm$g,ggB, widths=c(.15,.65,.2)),
+	arrangeGrob(stateSumm$l1, stateSumm$l2, ncol=2, widths=c(.55,.45)),	
+	nrow=2 )
+ggsave(stateViz, 
+	file=paste0(pathGraphics, 'stateCoefSumm.pdf'),
+	width=8, height=6, device=cairo_pdf)
+system(paste0('open ',pathGraphics, 'stateCoefSumm.pdf'))
 ###############################################################	

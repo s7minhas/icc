@@ -1,28 +1,24 @@
 ####
 library(bayesplot)
 library(ggridges)
+library(gridExtra)
+library(Cairo)
+library(latex2exp)
 
 ### modified version of bayesplot data building function
-# remove category-specific labels
-cleaner = function(x){gsub('\\.[0-9]\\.', '', x)}
-
-# stdz vars
-stdzCoef = function(coefVar, baseVar, dv){
-	stdzVar = coefVar * (sd(baseVar)/sd(dv))
-	return( stdzVar ) }
-
-# add sig col to beta df gen from getCIVecs
-getSigVec = function(beta){
-    beta$sig = NA
-    beta$sig[beta$lo90 > 0 & beta$lo95 < 0] = "Positive at 90"
-    beta$sig[beta$lo95 > 0] = "Positive"
-    beta$sig[beta$hi90 < 0 & beta$hi95 > 0] = "Negative at 90"
-    beta$sig[beta$hi95 < 0] = "Negative"
-    beta$sig[beta$lo90 < 0 & beta$hi90 > 0] = "Insignificant"
-    return(beta) }
-
 # add color column for coef dist plot
 addSomeColor = function(rawBeta, dataList){
+
+	# add sig col to beta df gen from getCIVecs
+	getSigVec = function(beta){
+	    beta$sig = NA
+	    beta$sig[beta$lo90 > 0 & beta$lo95 < 0] = "Positive at 90"
+	    beta$sig[beta$lo95 > 0] = "Positive"
+	    beta$sig[beta$hi90 < 0 & beta$hi95 > 0] = "Negative at 90"
+	    beta$sig[beta$hi95 < 0] = "Negative"
+	    beta$sig[beta$lo90 < 0 & beta$hi90 > 0] = "Insignificant"
+	    return(beta) }
+
 	# add coefp_colors
 	sigSumm = apply(rawBeta, 2, function(x){
 	    qt95 = quantile(x, probs=c(0.025, 0.975))
@@ -40,14 +36,24 @@ addSomeColor = function(rawBeta, dataList){
 	return(dataList) }
 
 # prep data into format for coef dist plot
-prepData = function(gModBeta, typeLab){
+prepData = function(gModBeta, stanModel, typeLab){
+
+	# remove category-specific labels
+	cleaner = function(x){gsub('\\.[0-9]\\.', '', x)}
+
+	# stdz vars
+	stdzCoef = function(coefVar, baseVar, dv){
+		stdzVar = coefVar * (sd(baseVar)/sd(dv))
+		return( stdzVar ) }
+
+	# scale vars for plotting
 	vars = colnames(gModBeta)
 	vars = vars[!grepl('Intercept',vars)]
 	for(v in vars){
 		gModBeta[,v] = stdzCoef(
 			gModBeta[,v], 
-			oppMod$data[,cleaner(v)],
-			oppMod$data$icclevel_opp_3) }
+			stanModel$data[,cleaner(v)],
+			stanModel$data[,1]) }
 
 	## prep data
 	data = mcmc_areas_data(
@@ -78,12 +84,6 @@ prepData = function(gModBeta, typeLab){
 	return(dataList) }
 
 ### modified version of bayesplot viz function	
-
-# fn from bayesplot needs this
-geom_area_ridges <- function(...) {
-  ggridges::geom_density_ridges(
-    ..., stat = "identity", scale = .95) }
-
 # colors for sig
 coefp_colors = c(
     "Positive"=rgb(54, 144, 192, maxColorValue=255),
@@ -95,6 +95,12 @@ coefp_colors = c(
 
 # revised fn for final viz
 mcmcViz = function(dataList, varLabels, colorsForCoef=coefp_colors){
+
+	# fn from bayesplot needs this
+	geom_area_ridges <- function(...) {
+	  ggridges::geom_density_ridges(
+	    ..., stat = "identity", scale = .95) }
+
 	# dist ranges
 	x_lim <- range(dataList$outer$x)
 	x_range <- diff(x_lim)
@@ -107,10 +113,10 @@ mcmcViz = function(dataList, varLabels, colorsForCoef=coefp_colors){
 	    alpha=.3, data = dataList$inner)
 	args_inner2 <- list(
 	    mapping = aes_(height = ~density, color=~sig, fill=~sig), 
-	    alpha=.6, data = dataList$inner2)
+	    alpha=.4, data = dataList$inner2)
 	args_point <- list(
-	    mapping = aes_(height = ~density, color=~sig, fill=~sig), data = dataList$point, 
-	    color = NA, size=.25)
+	    mapping = aes_(height = ~density, color=~sig, fill=~sig), 
+	    data = dataList$point, color = NA)
 	args_outer <- list(
 	    mapping = aes_(height = ~density, color=~sig), alpha=.6, fill = NA)
 
@@ -144,15 +150,51 @@ mcmcViz = function(dataList, varLabels, colorsForCoef=coefp_colors){
 	        color='grey60', linetype='dashed'
 	        ) +
 	    scale_y_discrete('', labels=TeX(varLabels)) +
+	    theme_light(base_family="Source Sans Pro") +
 	    theme_bw() +
 	    facet_wrap(~type, scales='free_x') +
 	    theme(
 	        axis.ticks=element_blank(),
 	        panel.border=element_blank(),
+			axis.text.x=element_text(family="Source Sans Pro Light"),
+			axis.text.y=element_text(family="Source Sans Pro Light", hjust=0),
 	        strip.text.x = element_text(size = 9, color='white',
-	            # family="Source Sans Pro Semibold", 
+	            family="Source Sans Pro Semibold", 
 	            angle=0, hjust=.05),
 	        strip.background = element_rect(fill = "#525252", color='#525252')        
 	        )	
 	   #
 	   return(gg) }
+
+# wrapper function around various stages necessary to process model
+vizWrapper = function(model, gLab, l1Lab, l2Lab){
+	# viz
+	betaMatrix = data.frame(
+		fixef(model, summary=FALSE),
+		stringsAsFactors = FALSE
+		)
+
+	# org vars
+	gVars = colnames(betaMatrix)[
+		!grepl('.',colnames(betaMatrix), fixed=TRUE) ]
+	l1Vars = colnames(betaMatrix)[
+		grepl('.1.',colnames(betaMatrix), fixed=TRUE) ]
+	l2Vars = colnames(betaMatrix)[
+		grepl('.2.',colnames(betaMatrix), fixed=TRUE) ]
+
+	# viz
+	varLabs = varKey$clean
+	names(varLabs) = varKey$dirty
+	ggGlobal = mcmcViz(
+		prepData(betaMatrix[,gVars], model, gLab), varLabs)
+	ggLevel1 = mcmcViz(
+		prepData(betaMatrix[,l1Vars[-1]], model, l1Lab), varLabs)
+	ggLevel2 = mcmcViz(
+		prepData(betaMatrix[,l2Vars[-1]], model, l2Lab), varLabs) +
+		theme(
+			axis.text.y = element_blank()
+			)
+
+	# arrange viz
+	## helper for arranging plot
+	return( list(g=ggGlobal,l1=ggLevel1,l2=ggLevel2) ) }
