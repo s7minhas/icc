@@ -1,14 +1,21 @@
 \section*{Modeling sequential variable}
 
-To model \emph{State- and Opposition-Focused ICC Transition} we need to account for the sequential way in which states and opposition actors transition through the ICC process. Specifically, both transition variables can only face a formal investigation after a preliminary has begun. More formally, in order for actor $i$ to receive a value of $j$ for $Y_{i}$, the actor must pass through all levels less than $j$. The probability of then reaching $j$,conditional on the event that the $j$^{th} level is reached, is given by: 
+% sm: check to make sure we have adequately distinguished what constitutes start of prelim and start of formal
+To model \emph{State- and Opposition-Focused ICC Transition} we need to account for the sequential way in which states and opposition actors transition through the ICC process (i.e., no ICC investigation, preliminary, and formal). Typically, scholars would use an ordinal regression framework to model such processes. In these models, the probability of interest is the cumulative probability  
+
+Specifically, both transition variables can only face a formal investigation after a preliminary has begun.
+
+More formally, in order for actor $i$ to receive a value of $j$ for $Y_{i}$, the actor must pass through all levels less than $j$. The probability of then reaching $j$, conditional on the event that the $j^{th}$ level is reached, is given by: 
 
 \begin{eqnarray}
-	Pr(y_{i}={j} | y_{i} \geq {j}, \gamma, \beta) &=& F(\gamma_{j} - x_{i}^{'}\beta)\text{, where }\gamma = (\gamma_{1},...,\gamma_{J-1}) \nonumber \\
-	Pr(y_{i}={j}|\gamma_{1},\beta) &=& F(\gamma_{j} - x_{i}^{'}\beta)\text{ }\prod^{j-1}_{k=1}\text{ }\{1-F(\gamma_{k}-x_{i}^{'}\beta)\} \nonumber
+	Pr(y_{i}={j} | Y_{i} \geq {j}, \gamma, \beta) &=& F(\gamma_{j} - x_{i}^{'}\beta) \nonumber \\
+	Pr(Y_{i}={j}|\gamma_{1},\beta) &=& F(\gamma_{j} - x_{i}^{'}\beta)\text{ }\prod^{j-1}_{k=1}\text{ }\{1-F(\gamma_{k}-x_{i}^{'}\beta)\} \nonumber
 \end{eqnarray}
 
+$\gamma = (\gamma_{1},...,\gamma_{J-1})$ 
+
 \begin{eqnarray}
-	Pr(y_{i}=J|\beta_{1},\gamma) &=&\text{}\prod^{j-1}_{k=1}\text{ }\{1-F(\gamma_{k}-x_{i}^{'}\beta)\} \nonumber
+	Pr(y_{i}=J|\beta_{1},\gamma) &=&\text{}\prod^{J-1}_{k=1}\text{ }\{1-F(\gamma_{k}-x_{i}^{'}\beta)\} \nonumber
 \end{eqnarray}
 
 Latent variable representation
@@ -65,53 +72,28 @@ Sample from the joint posterior of $(\{z_{ij}\},\beta)$ by ??? sampling of ???:
 
 \section*{Empirical Results}
 
-% latex table generated in R 3.5.0 by xtable 1.8-2 package
-% Fri Feb  1 20:29:20 2019
-\begin{table}[ht]
-\centering
-\begingroup\footnotesize
-\begin{tabular}{lcc}
- Variable & state & rebel \\ 
-  \hline
-\hline
-icc rat & $1.23^{\ast\ast}$ & $2.02^{\ast\ast}$ \\ 
-   & (0.27) & (0.26) \\ 
-  lag1 civilwar & $2.72^{\ast\ast}$ & $2.41^{\ast\ast}$ \\ 
-   & (0.27) & (0.26) \\ 
-  lag1 polity2 & $0.13^{\ast\ast}$ & 0.01 \\ 
-   & (0.03) & (0.03) \\ 
-  lag1 gdpCapLog & $0.43^{\ast\ast}$ & $-0.25^{\ast\ast}$ \\ 
-   & (0.09) & (0.11) \\ 
-  africa[1] & 0.24 & $0.81^{\ast\ast}$ \\ 
-   & (0.29) & (0.25) \\ 
-  africa[2] & $10.74^{\ast\ast}$ & $6.42^{\ast\ast}$ \\ 
-   & (2) & (1.46) \\ 
-  lag1 osv rebel cumul[1] &  & $0.15^{\ast\ast}$ \\ 
-   &  & (0.04) \\ 
-  lag1 osv rebel cumul[2] &  & $-0.21^{\ast\ast}$ \\ 
-   &  & (0.09) \\ 
-  lag1 osv state cumul[1] & $0.2^{\ast\ast}$ &  \\ 
-   & (0.04) &  \\ 
-  lag1 osv state cumul[2] & $-0.6^{\ast\ast}$ &  \\ 
-   & (0.16) &  \\ 
-  lag1 p5 absidealdiffMin[1] & -0.58 & 0.53 \\ 
-   & (0.47) & (0.49) \\ 
-  lag1 p5 absidealdiffMin[2] & $6.46^{\ast\ast}$ & $4.1^{\ast\ast}$ \\ 
-   & (2.59) & (1.87) \\ 
-  lag1 v2juncind[1] & $-0.81^{\ast\ast}$ & $-0.43^{\ast\ast}$ \\ 
-   & (0.12) & (0.13) \\ 
-  lag1 v2juncind[2] & -0.35 & $-0.98^{\ast\ast}$ \\ 
-   & (0.58) & (0.48) \\ 
-   \hline
-\hline
-\end{tabular}
-\endgroup
-\caption{$^{**}$ and $^{*}$ indicate significance at $p< 0.05 $ and $p< 0.10 $, respectively.} 
-\end{table}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{iccPaper/stateCoefSumm.pdf}
+    \caption{Parameter estimates from State-Focused ICC Transition model visualized through posterior distributions with median values designated by vertical line, lightly shaded portion indicating the 95\% credible interval, and darker shaded portion the 90\% credible interval.}
+    \label{fig:stateModel}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{iccPaper/rebelCoefSumm.pdf}
+    \caption{Parameter estimates from Opposition-Focused ICC Transition model visualized through posterior distributions with median values designated by vertical line, lightly shaded portion indicating the 95\% credible interval, and darker shaded portion the 90\% credible interval.}
+    \label{fig:rebelModel}
+\end{figure}
+
+% what variables are mostly impactful
+% everything from africa down
 
 \subsection*{Onset Models}
 
-In Table 1, we present the results for the preliminary examination models.  We use probit with robust standard errors to estimate this model. We first discuss the results for the onset of ICC involvement directed against governments.  Perhaps most significantly, we find no statistical support for the impact of Africa on the onset of such examinations. This result is important given conventional wisdom, which suggests that the ICC and OTP are biased against African states and groups.  The underlying data support this finding; the ICC has initiated 19 investigations against governments or governments and subnational actors, but only 5 involve African states. Thus, both the statistical results and basic trends in the data do not indicate that the ICC has an African bias, at least in this initial stage of ICC involvement. 
+In Figure 1, we present the results for the state and rebel focused ICC escalation models.  
+
+We first discuss the results for the onset of ICC involvement directed against governments.  Perhaps most significantly, we find no statistical support for the impact of Africa on the onset of such examinations. This result is important given conventional wisdom, which suggests that the ICC and OTP are biased against African states and groups.  The underlying data support this finding; the ICC has initiated 19 investigations against governments or governments and subnational actors, but only 5 involve African states. Thus, both the statistical results and basic trends in the data do not indicate that the ICC has an African bias, at least in this initial stage of ICC involvement. 
 
 We find mixed support for the legal mandate variables.  As expected, we see that the government OSV variable is positive and statistically significant. In line with our argument on the ICC’s mandate, this suggests that the OTP is more likely to start a preliminary examination against governments that have intentionally killed more civilians since 2002.  In contrast, we fail to find support for the rule of law variable. This results is largely as expected; as discussed in the theory section above, a strong, independent judiciary may only prevent the escalation of ICC involvement to the formal investigation stage. We discuss this result in greater detail below, where tests allow us to more directly examine the effect of an independent judiciary on the specific decision to initiate a formal investigation. Thus, the results provide some support for the legal mandate argument.
 
