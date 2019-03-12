@@ -73,6 +73,9 @@ for(ctry in cntries){
 	id = id + 1
 	newFrame = rbind(newFrame, slice)
 }
+
+frame = newFrame
+frame$id = factor(frame$id)
 ###############################################################
 
 ###############################################################
@@ -83,17 +86,17 @@ sobStateVars[c(5:8)] = paste0('cs(',sobStateVars[c(5:8)],')')
 sobStateForm = formula(
 	paste0('icclevel_state_3 ~ ', 
 		paste(sobStateVars, collapse = ' + ') ) )
-mod = brm(
-	formula=sobStateForm, 
-	data=frame,
-	family=cratio(link='logit')
-	)
-save(mod, file=paste0(pathResults, 'sobState_model1a_1_newp5Var.rda'))
+# mod = brm(
+# 	formula=sobStateForm, 
+# 	data=frame,
+# 	family=cratio(link='logit')
+# 	)
+# save(mod, file=paste0(pathResults, 'sobState_model1a_1_newp5Var.rda'))
 
 # hier
 sobStateForm = formula(
 	paste0('icclevel_state_3 ~ ', 
-		paste(sobStateVars, collapse = ' + '), '+(1|ccode)' ) )
+		paste(sobStateVars, collapse = ' + '), '+(1|id)' ) )
 modHier = brm(
 	formula=sobStateForm, 
 	data=frame,
