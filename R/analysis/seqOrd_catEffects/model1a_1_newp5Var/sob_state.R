@@ -73,39 +73,6 @@ for(ctry in cntries){
 	id = id + 1
 	newFrame = rbind(newFrame, slice)
 }
-
-cntries = unique(frame$ccode[frame$icclevel_state_3>1])
-
-slice2 = frame[
-	frame$ccode %in% setdiff(frame$ccode, cntries), 
-	c('ccode','year','icclevel_state_3') ]
-n2 = length(unique(slice2$ccode))
-ids = data.frame(
-	x=unique(slice2$ccode), 
-	id=1:n2,
-	stringsAsFactors = FALSE)
-slice2$id = ids$id[match(slice2$ccode,ids$x)]
-
-slice = frame[
-	frame$ccode %in% cntries, 
-	c('ccode','year','icclevel_state_3') ]
-ids = data.frame(
-	x=unique(slice$ccode), 
-	id=(n2+1):(length(unique(slice$ccode)) + n2),
-	stringsAsFactors = FALSE)
-slice$id = ids$id[match(slice$ccode,ids$x)]	
-
-x = slice[slice$ccode==101,]
-
-tmp = lapply(unique(slice$ccode), function(x){
-	tmp = slice[slice$ccode==x,]
-	return(min(diff(tmp$icclevel_state_3)))
-})
-names(tmp) = unique(slice$ccode)
-tmp[tmp<0]
-totest = names(tmp)
-
-fck = newFrame[newFrame$ccode %in% totest, c('ccode','year','icclevel_state_3','id')]
 ###############################################################
 
 ###############################################################
