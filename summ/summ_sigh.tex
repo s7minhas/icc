@@ -1,0 +1,32 @@
+\documentclass[]{article}
+\usepackage{placeins}
+\begin{document}
+
+
+\tableofcontents
+
+\clearpage
+
+\section*{Model descriptions}
+
+All models here use a recoded DV with the following categories: 0=0, 1=1, 2=everything else (2-6). Explanation of model labels where we use all of the data:
+
+\begin{itemize}
+	\item model1a1 v2: new p5 var a la prorok (p5 countries get a score of 0)
+	\item model1a1 v3: new p5 var a la prorok with fix to allow for leaping buildings in a single bound (p5 countries get a score of 0)
+\end{itemize}
+
+For each of the models presented we present results using global and category specific covariate effects. Category specific covariate effects are calculated for: Africa, OSV, and affinity scores.
+\clearpage
+
+\section{Model 1a1 v2}
+\subsection{Category Specific Covariate Effects}
+\input{/Users/s7m/Dropbox/Research/icc/Results/sob_model1a_1_newp5Var.tex}
+\clearpage
+
+\section{Model 1a1 v3}
+\subsection{Category Specific Covariate Effects}
+\input{/Users/s7m/Dropbox/Research/icc/Results/sob_model1a_1_newp5Var_hier.tex}
+\clearpage
+
+\end{document}
