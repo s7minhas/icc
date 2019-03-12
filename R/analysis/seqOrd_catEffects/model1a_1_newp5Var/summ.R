@@ -54,26 +54,28 @@ sobVars = c(
 
 # 
 sobVars = sobVars[-c(5:7,16:17)]
+sobVars = sobVars[-6]
+sobVars[5] = 'africa'
 
 # table
 # clean table
 lazyCleanVars = gsub('_',' ',sobVars,fixed=TRUE)
 lazyCleanMods = c('state','rebel')
 lab='$^{**}$ and $^{*}$ indicate significance at $p< 0.05 $ and $p< 0.10 $, respectively.'
-res=getTable(sobVars,lazyCleanVars,sobMods,lazyCleanMods)
-print.xtable(xtable(res, align='llcc', caption=lab),
-	include.rownames=FALSE,
-	sanitize.text.function = identity,
-	hline.after=c(0,0,length(sobVars)*2,length(sobVars)*2),
-	size="footnotesize",	
-	file=paste0(pathResults, 'sob_model1a_1_newp5Var.tex'))
+# res=getTable(sobVars,lazyCleanVars,sobMods,lazyCleanMods)
+# print.xtable(xtable(res, align='llcc', caption=lab),
+# 	include.rownames=FALSE,
+# 	sanitize.text.function = identity,
+# 	hline.after=c(0,0,length(sobVars)*2,length(sobVars)*2),
+# 	size="footnotesize",	
+# 	file=paste0(pathResults, 'sob_model1a_1_newp5Var.tex'))
 ###############################################################
 
 ###############################################################
 # summarize
-load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_hier.rda'))
+load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_hier_v2.rda'))
 oppMod = modHier
-load(paste0(pathResults, 'sobState_model1a_1_newp5Var_hier.rda'))
+load(paste0(pathResults, 'sobState_model1a_1_newp5Var_hier_v2.rda'))
 stateMod = modHier
 sobMods = lapply(list(stateMod, oppMod), function(x){
 	summ=data.frame(fixef(x)[,1:2])

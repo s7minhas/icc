@@ -80,7 +80,7 @@ frame$id = factor(frame$id)
 
 ###############################################################
 # category specific effects
-sobOppVars[c(5:8)] = paste0('cs(',sobOppVars[c(5:8)],')')
+sobOppVars[c(6:8)] = paste0('cs(',sobOppVars[c(6:8)],')')
 
 # pool
 sobOppForm = formula(
@@ -102,5 +102,8 @@ modHier = brm(
 	data=frame,
 	family=cratio(link='logit')
 	)
-save(modHier, file=paste0(pathResults, 'sobOpp_model1a_1_newp5Var_hier.rda'))
+save(modHier, 
+	file=paste0(
+		pathResults, 'sobOpp_model1a_1_newp5Var_hier_v2.rda'
+		))
 ###############################################################
