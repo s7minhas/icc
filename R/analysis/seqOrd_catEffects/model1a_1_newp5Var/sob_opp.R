@@ -56,6 +56,56 @@ frame$lag1_p5_absidealdiffMin = frame$p5*frame$lag1_p5_absidealdiffMin
 ###############################################################
 
 ###############################################################
+# add random effect by case id
+cntries = unique(frame$ccode)
+id = 1
+newFrame = NULL
+for(ctry in cntries){
+	slice = frame[frame$ccode == ctry,]
+	iccChange = diff(slice$icclevel_opp_3)
+	slice$id = id
+	if(length(which(iccChange<0))>=1){
+		id = id + 1
+		newCase = (which(iccChange<0)+1):nrow(slice)
+		if(length(which(iccChange<0))>1){ stop('hi') }
+		slice$id[newCase] = id
+	}
+	id = id + 1
+	newFrame = rbind(newFrame, slice)
+}
+
+cntries = unique(frame$ccode[frame$icclevel_opp_3>1])
+
+slice2 = frame[
+	frame$ccode %in% setdiff(frame$ccode, cntries), 
+	c('ccode','year','icclevel_opp_3') ]
+n2 = length(unique(slice2$ccode))
+ids = data.frame(
+	x=unique(slice2$ccode), 
+	id=1:n2,
+	stringsAsFactors = FALSE)
+slice2$id = ids$id[match(slice2$ccode,ids$x)]
+
+slice = frame[
+	frame$ccode %in% cntries, 
+	c('ccode','year','icclevel_opp_3') ]
+ids = data.frame(
+	x=unique(slice$ccode), 
+	id=(n2+1):(length(unique(slice$ccode)) + n2),
+	stringsAsFactors = FALSE)
+slice$id = ids$id[match(slice$ccode,ids$x)]	
+
+x = slice[slice$ccode==101,]
+
+tmp = lapply(unique(slice$ccode), function(x){
+	tmp = slice[slice$ccode==x,]
+	return(min(diff(tmp$icclevel_opp_3)))
+})
+names(tmp) = unique(slice$ccode)
+tmp[tmp<0]
+###############################################################
+
+###############################################################
 # category specific effects
 sobOppVars[c(5:8)] = paste0('cs(',sobOppVars[c(5:8)],')')
 
