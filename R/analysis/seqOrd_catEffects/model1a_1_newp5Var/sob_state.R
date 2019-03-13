@@ -101,7 +101,8 @@ sobStateForm = formula(
 modHier = brm(
 	formula=sobStateForm, 
 	data=frame,
-	family=cratio(link='logit')
+	family=cratio(link='logit'), 
+	cores=4
 	)
 save(modHier, 
 	file=paste0(
