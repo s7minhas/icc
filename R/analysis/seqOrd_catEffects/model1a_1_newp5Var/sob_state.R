@@ -80,7 +80,7 @@ frame$id = factor(frame$id)
 
 ###############################################################
 # category specific effects
-sobStateVars[c(6:8)] = paste0('cs(',sobStateVars[c(6:8)],')')
+sobStateVars[c(7:8)] = paste0('cs(',sobStateVars[c(7:8)],')')
 
 # pool
 sobStateForm = formula(
@@ -104,6 +104,6 @@ modHier = brm(
 	)
 save(modHier, 
 	file=paste0(
-		pathResults, 'sobState_model1a_1_newp5Var_hier_v2.rda'
+		pathResults, 'sobState_model1a_1_newp5Var_hier_v3.rda'
 		))
 ###############################################################

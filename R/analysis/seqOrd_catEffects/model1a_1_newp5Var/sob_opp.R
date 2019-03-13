@@ -80,7 +80,7 @@ frame$id = factor(frame$id)
 
 ###############################################################
 # category specific effects
-sobOppVars[c(6:8)] = paste0('cs(',sobOppVars[c(6:8)],')')
+sobOppVars[c(7:8)] = paste0('cs(',sobOppVars[c(7:8)],')')
 
 # pool
 sobOppForm = formula(
@@ -104,6 +104,6 @@ modHier = brm(
 	)
 save(modHier, 
 	file=paste0(
-		pathResults, 'sobOpp_model1a_1_newp5Var_hier_v2.rda'
+		pathResults, 'sobOpp_model1a_1_newp5Var_hier_v3.rda'
 		))
 ###############################################################

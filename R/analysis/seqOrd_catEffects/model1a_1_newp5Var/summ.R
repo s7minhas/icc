@@ -54,8 +54,14 @@ sobVars = c(
 
 # 
 sobVars = sobVars[-c(5:7,16:17)]
+
+# fix for v2
 sobVars = sobVars[-6]
 sobVars[5] = 'africa'
+
+# fix for v3
+sobVars = sobVars[-13]
+sobVars[12] = 'lag1_v2juncind'
 
 # table
 # clean table
@@ -92,5 +98,5 @@ print.xtable(xtable(res, align='llcc', caption=lab),
 	sanitize.text.function = identity,
 	hline.after=c(0,0,length(sobVars)*2,length(sobVars)*2),
 	size="footnotesize",	
-	file=paste0(pathResults, 'sob_model1a_1_newp5Var_hier.tex'))
+	file=paste0(pathResults, 'sob_model1a_1_newp5Var_hier_v2.tex'))
 ###############################################################
