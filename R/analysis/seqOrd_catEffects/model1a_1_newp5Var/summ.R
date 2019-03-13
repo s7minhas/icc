@@ -55,13 +55,16 @@ sobVars = c(
 # 
 sobVars = sobVars[-c(5:7,16:17)]
 
-# fix for v2
-sobVars = sobVars[-6]
-sobVars[5] = 'africa'
+# # fix for v2
+# sobVars = sobVars[-6]
+# sobVars[5] = 'africa'
 
 # fix for v3
+sobVars = sobVars[-6]
+sobVars[5] = 'africa'
 sobVars = sobVars[-13]
 sobVars[12] = 'lag1_v2juncind'
+sobVars = sobVars[c(1:5,12,6:11)]
 
 # table
 # clean table
@@ -79,9 +82,9 @@ lab='$^{**}$ and $^{*}$ indicate significance at $p< 0.05 $ and $p< 0.10 $, resp
 
 ###############################################################
 # summarize
-load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_hier_v2.rda'))
+load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_hier_v3.rda'))
 oppMod = modHier
-load(paste0(pathResults, 'sobState_model1a_1_newp5Var_hier_v2.rda'))
+load(paste0(pathResults, 'sobState_model1a_1_newp5Var_hier_v3.rda'))
 stateMod = modHier
 sobMods = lapply(list(stateMod, oppMod), function(x){
 	summ=data.frame(fixef(x)[,1:2])
@@ -98,5 +101,5 @@ print.xtable(xtable(res, align='llcc', caption=lab),
 	sanitize.text.function = identity,
 	hline.after=c(0,0,length(sobVars)*2,length(sobVars)*2),
 	size="footnotesize",	
-	file=paste0(pathResults, 'sob_model1a_1_newp5Var_hier_v2.tex'))
+	file=paste0(pathResults, 'sob_model1a_1_newp5Var_hier_v3.tex'))
 ###############################################################
