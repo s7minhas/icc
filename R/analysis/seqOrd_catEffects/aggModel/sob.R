@@ -65,8 +65,8 @@ impDFs = lapply(sample(500:1000, 10), function(i){
 frame$p5 = ifelse(
 	frame$ccode %in% c(2, 365, 220, 710, 200), 0, 1 )
 
-# modify p5 var to be zero if p5 country
-frame$lag1_p5_absidealdiffMin = frame$p5*frame$lag1_p5_absidealdiffMin
+# # modify p5 var to be zero if p5 country
+# frame$lag1_p5_absidealdiffMin = frame$p5*frame$lag1_p5_absidealdiffMin
 
 # create summed osv var
 frame$lag1_osv_cumul = frame$lag1_osv_rebel_cumul + frame$lag1_osv_state_cumul
@@ -121,7 +121,7 @@ sobStateForm = formula(
 # 	family=cratio(link='logit'), 
 # 	cores=4
 # 	)
-summary(modHier)
+# summary(modHier)
 
 
 f1 = formula(icc_nojumps ~ 
