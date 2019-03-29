@@ -1,6 +1,9 @@
 ###############################################################
 if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	source('~/Research/icc/R/setup.R') }
+
+#
+loadPkg('lubridate')
 ###############################################################
 
 ###############################################################
@@ -10,13 +13,19 @@ orig  = read_dta(
 	paste0(pathData, 'icc_from_ap/iccdata_013018.dta')
 	)
 
+# civilwar fix
+orig$civilwar[is.na(orig$civilwar)] = 0
+
 vars = c(
 	'icclevel',
 	'icclevel_state',
 	'icclevel_opp',
-	'poi_osv_state', 'poi_osv_rebel',
-	'poi_osv_total', 'poi_pts',
+	'osv_rebel','osv_state','osv_total',
+	'pts',
+	'poi_osv_rebel','poi_osv_state','poi_osv_total',
+	'poi_pts',
 	'civilwar',
+	'africa',
 	'icc_stage1',
 	'icc_stage2',
 	'icc_onset',
@@ -50,50 +59,75 @@ apData$m = ifelse(
 apData$date = ymd(
 	paste(apData$year,apData$m,apData$d, sep='-') )
 apData$cdate = paste(apData$cname, apData$date, sep='_')
-apData = apData[,c('cname','cdate','date',ids,vars)]
 
-# subset to temporal frame
-# if based on dv we'd go through 2016
-# however because of if restrictions we go 
-# to 12/2015
-apData = apData[
-	which(
-		apData$date > as.Date('2002-06-01', format='%Y-%m-%d') &
-		apData$date < as.Date('2016-12-01', format='%Y-%m-%d')
-		)
-	,]
+# add month + 1 for lagging
+apData$dateLag = apData$date
+month(apData$dateLag) = month(apData$dateLag) + 1
+apData$cdateLag = paste(apData$cname, apData$dateLag, sep='_')
+
+# reorder data
+apData = apData[,c(
+	'cname',
+	'cdate','date','cdateLag','dateLag',
+	ids,vars)]
 ###############################################################
 
 ###############################################################
-# aggregate to year level
+# create some helper vars
 data = apData %>% 
 	dplyr::mutate(
-		prelim_icc = ifelse(icclevel==1, 1, 0),
-		formal_icc = ifelse(icclevel>1, 1, 0),
-		prelim_icc_state = ifelse(icclevel_state==1, 1, 0),
-		formal_icc_state = ifelse(icclevel_state>1, 1, 0),
-		prelim_icc_opp = ifelse(icclevel_opp==1, 1, 0),
-		formal_icc_opp = ifelse(icclevel_opp>1, 1, 0)
+		prelim_icc = ifelse(any(icclevel==1), 1, 0),
+		formal_icc = ifelse(any(icclevel>1), 1, 0),
+		prelim_icc_state = ifelse(any(icclevel_state==1), 1, 0),
+		formal_icc_state = ifelse(any(icclevel_state>1), 1, 0),
+		prelim_icc_opp = ifelse(any(icclevel_opp==1), 1, 0),
+		formal_icc_opp = ifelse(any(icclevel_opp>1), 1, 0),
+		icc_stage1 = ifelse(any(icc_stage1>=1), 1, 0),
+		icc_stage2 = ifelse(any(icc_stage2>=1), 1, 0),
+		icc_onset = ifelse(any(icc_onset>=1), 1, 0)
 		) %>% data.frame()
 
-# add year level ids
+# add year level ids (useful for merging yearly data)
 data$cnameYear = with(data, paste(cname, year, sep='_'))
 data$ccodeYear = with(data, paste(ccode, year, sep='_'))
 ###############################################################
 
 ###############################################################
+# create running sum of osv variables
+data = lapply(unique(data$cname), function(x){
+	slice = data[which(data$cname==x),]
+	slice = slice[order(slice$date),]
+	slice$osv_rebel_cumul = cumsum(slice$osv_rebel)
+	slice$osv_state_cumul = cumsum(slice$osv_state)
+	slice$osv_total_cumul = cumsum(slice$osv_total)
+	return(slice) }) %>% do.call('rbind', .)
+###############################################################
+
+###############################################################
 # add lagged versions of poi and civilwar var
-tmp = data; tmp$date = tmp$date %m+% months(1)
-tmp$cdate = with(tmp, paste(cname, date, sep='_'))
-vars = names(data)[11:15]
+vars = c(
+	"osv_rebel", "osv_state", "osv_total", 
+	"osv_rebel_cumul", "osv_state_cumul", "osv_total_cumul", 
+	'poi_osv_rebel', 'poi_osv_state','poi_osv_total',
+	"pts", 'poi_pts', "civilwar" )
 
 for(v in vars){
-	data$tmp = tmp[match(data$cdate, tmp$cdate),v]
+	data$tmp = data[match(data$cdate, data$cdateLag),v]
 	names(data)[ncol(data)] = paste0('lag1_', v) }
-
-# remove original non-lagged versions
-data = data[,-match(vars, names(data))]
 ###############################################################
+
+###############################################################
+# subset to temporal frame
+# if based on dv we'd go through 2016
+# however because of if restrictions we go 
+# to 12/2015
+data = data[
+	which(
+		data$date > as.Date('2002-06-01', format='%Y-%m-%d') &
+		data$date < as.Date('2016-12-01', format='%Y-%m-%d')
+		)
+	,]
+###############################################################	
 
 ###############################################################
 # small fixes
@@ -118,13 +152,5 @@ data$prelim_icc[data$cname=="LIBYAN ARAB JAMAHIRIYA" & data$year==2011] = 0
 data = data[order(data$ccodeYear),]
 
 # save and move onto merging
-save(data, file=paste0(pathData, 'baseData_mthly.rda'))
+save(data, file=paste0(pathData, 'baseData_mnthly_ongoing.rda'))
 ###############################################################
-
-###############################################################
-
-### dealing with formal pool ... 
-# 1. go back down to the monthly level ... only include cases that have experienced prelims
-# 2. include same prelim pool int the formal pool 
-	# note: include a dummy prelim variable, account for lagged structure
-	# note: for sudan libya turn icclevel into zero, because they were referred from unsc

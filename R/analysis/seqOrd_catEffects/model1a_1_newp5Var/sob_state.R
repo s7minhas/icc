@@ -1,6 +1,6 @@
 ###############################################################
 if(Sys.info()['user'] %in% c('s7m', 'janus829')){
-	source('~/Research/icc/R/setup.R') }
+  source('~/Research/icc/R/setup.R') }
 
 #
 loadPkg(c('sbgcop','brms'))
@@ -8,48 +8,71 @@ loadPkg(c('sbgcop','brms'))
 
 ###############################################################
 load(paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
+yData = data
+load(paste0(pathData, 'mergedData_mnthly_ongoing.rda.rda'))
 
 ## prelim state
 sobStateVars = c(
-	'icc_rat','lag1_civilwar','lag1_polity2',
-	'lag1_gdpCapLog','africa',
-	'lag1_v2juncind',
-	'lag1_osv_state_cumul',	
-	# p5 vars: 
-	'lag1_p5_absidealdiffMin'
-	)
+  'icc_rat','lag1_civilwar','lag1_polity2',
+  'lag1_gdpCapLog','africa',
+  'lag1_v2juncind',
+  'lag1_osv_state_cumul',	
+  # p5 vars: 
+  'lag1_p5_absidealdiffMin'
+)
 
 # var transformations
 data$lag1_osv_state_cumul = log(data$lag1_osv_state_cumul+1)
+data$lag1_osv_state_cumul[is.na(data$lag1_osv_state_cumul)] = 0
 ###############################################################
 
 ###############################################################
 # impute
-if(!file.exists(paste0(pathData, 'sobState_imp.rda'))){
-	toImp = data.matrix(data[,c('icclevel_state',sobStateVars)])
-	impData = sbgcop.mcmc(Y=toImp, seed=6886, verb=FALSE, nsamp=1000)
-	save(impData, file=paste0(pathData, 'sobState_imp.rda'))
-} else { load(paste0(pathData, 'sobState_imp.rda')) }
+# if(!file.exists(paste0(pathData, 'sobState_imp.rda'))){
+# toImp = data.matrix(data[,c('icclevel_state',sobStateVars)])
+# impData = sbgcop.mcmc(Y=toImp, seed=6886, verb=FALSE, nsamp=1000)
+# save(impData, file=paste0(pathData, 'sobState_imp.rda'))
+# } else { load(paste0(pathData, 'sobState_imp.rda')) }
+load(paste0(pathData, 'sobState_imp.rda'))
 
 # pick a few from the posterior
 set.seed(6886)
 frame = data.frame(impData$Y.pmean)
-frame = cbind(data[,c('ccode','year','icclevel_state_3')], frame)
+frame = cbind(yData[,c('ccode','year','icclevel_state_3')], frame)
 frame$icclevel_state_3 = as.integer(frame$icclevel_state_3 + 1)
 frame$ccode = as.integer(frame$ccode)
-impDFs = lapply(sample(500:1000, 10), function(i){
-	x = data.frame(impData$Y.impute[,,i])
-	x = cbind(data[,c('ccode','year','icclevel_state_3')], x)
-	names(x) = names(frame)
-	x$icclevel_state_3 = as.integer(x$icclevel_state_3 + 1)
-	x$ccode = as.integer(x$ccode)
-	return(x) })
+frame$ccodeYear = with(frame, paste(ccode, year, sep='_'))
+# impDFs = lapply(sample(500:1000, 10), function(i){
+# 	x = data.frame(impData$Y.impute[,,i])
+# 	x = cbind(data[,c('ccode','year','icclevel_state_3')], x)
+# 	names(x) = names(frame)
+# 	x$icclevel_state_3 = as.integer(x$icclevel_state_3 + 1)
+# 	x$ccode = as.integer(x$ccode)
+# 	return(x) })
+
+yrlyVars = c(
+  'lag1_polity2', 'lag1_gdpCapLog', 
+  'lag1_v2juncind', 'lag1_p5_absidealdiffMin'
+)
+for(v in yrlyVars){
+  data[,v] = frame[match(data$ccodeYear,frame$ccodeYear),v]
+}
+
+data = data[,c(
+  'ccode','cname','year','date',
+  'icclevel_state_3',
+  sobStateVars
+)]
+
+frame = data
+frame$icclevel_state_3 = as.integer(frame$icclevel_state_3 + 1)
+frame$ccode = as.integer(frame$ccode)
 ###############################################################
 
 ###############################################################
 # create p5 variable (2, 365, 220, 710, 200)
 frame$p5 = ifelse(
-	frame$ccode %in% c(2, 365, 220, 710, 200), 0, 1 )
+  frame$ccode %in% c(2, 365, 220, 710, 200), 0, 1 )
 
 # modify p5 var to be zero if p5 country
 frame$lag1_p5_absidealdiffMin = frame$p5*frame$lag1_p5_absidealdiffMin
@@ -60,19 +83,38 @@ frame$lag1_p5_absidealdiffMin = frame$p5*frame$lag1_p5_absidealdiffMin
 cntries = unique(frame$ccode)
 id = 1
 newFrame = NULL
+cntries = cntries[-c(90,136)]
 for(ctry in cntries){
-	slice = frame[frame$ccode == ctry,]
-	iccChange = diff(slice$icclevel_state_3)
-	slice$id = id
-	if(length(which(iccChange<0))>=1){
-		id = id + 1
-		newCase = (which(iccChange<0)+1):nrow(slice)
-		if(length(which(iccChange<0))>1){ stop('hi') }
-		slice$id[newCase] = id
-	}
-	id = id + 1
-	newFrame = rbind(newFrame, slice)
+  slice = frame[frame$ccode == ctry,]
+  slice = slice[order(slice$date),]
+  iccChange = diff(slice$icclevel_state_3)
+  slice$id = id
+  if(length(which(iccChange<0))>=1){
+    id = id + 1
+    newCase = (which(iccChange<0)+1):nrow(slice)
+    if(length(which(iccChange<0))>1){ stop('hi') }
+    slice$id[newCase] = id
+  }
+  id = id + 1
+  newFrame = rbind(newFrame, slice)
 }
+
+# fix congo drc
+slice = frame[frame$ccode %in% c(490,666),]
+slice = frame[frame$ccode == 490,]
+slice$id = 200
+slice = slice[order(slice$date),]
+slice$id[slice$date > as.Date('2005-02-01')] = 201
+slice$id[slice$date > as.Date('2012-12-01')] = 202
+newFrame = rbind(newFrame, slice)
+
+# fix israel
+slice = frame[frame$ccode == 666,]
+slice$id = 203
+slice = slice[order(slice$date),]
+slice$id[slice$date > as.Date('2012-04-01')] = 204
+slice$id[slice$date > as.Date('2014-11-01')] = 205
+newFrame = rbind(newFrame, slice)
 
 frame = newFrame
 frame$id = factor(frame$id)
@@ -89,9 +131,11 @@ sobStateForm = formula(
 # mod = brm(
 # 	formula=sobStateForm, 
 # 	data=frame,
-# 	family=cratio(link='logit')
+# 	family=cratio(link='logit'),
+# 	cores=4
 # 	)
-# save(mod, file=paste0(pathResults, 'sobState_model1a_1_newp5Var.rda'))
+# # save(mod, file=paste0(pathResults, 'sobState_model1a_1_newp5Var.rda'))
+# summary(mod)
 
 # hier
 frame$icclevel_state_3 = factor(frame$icclevel_state_3, ordered=TRUE)
@@ -104,8 +148,9 @@ modHier = brm(
 	family=cratio(link='logit'), 
 	cores=4
 	)
-save(modHier, 
-	file=paste0(
-		pathResults, 'sobState_model1a_1_newp5Var_hier.rda'
-		))
+summary(modHier)
+# save(modHier, 
+# 	file=paste0(
+# 		pathResults, 'sobState_model1a_1_newp5Var_hier.rda'
+# 		))
 ###############################################################

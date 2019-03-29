@@ -8,6 +8,8 @@ loadPkg(c('sbgcop','brms'))
 
 ###############################################################
 load(paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
+yData = data
+load(paste0(pathData, 'mergedData_mnthly_ongoing.rda.rda'))
 
 ## prelim state
 sobOppVars = c(
@@ -21,29 +23,52 @@ sobOppVars = c(
 
 # var transformations
 data$lag1_osv_rebel_cumul = log(data$lag1_osv_rebel_cumul+1)
+# data$lag1_osv_rebel_cumul[data$cname=='UNITED STATES'] = 0
+data$lag1_osv_rebel_cumul[is.na(data$lag1_osv_rebel_cumul)] = 0
 ###############################################################
 
 ###############################################################
-# impute
-if(!file.exists(paste0(pathData, 'sobOpp_imp.rda'))){
-	toImp = data.matrix(data[,c('icclevel_opp',sobOppVars)])
-	impData = sbgcop.mcmc(Y=toImp, seed=6886, verb=FALSE, nsamp=1000)
-	save(impData, file=paste0(pathData, 'sobOpp_imp.rda'))
-} else { load(paste0(pathData, 'sobOpp_imp.rda')) }
+# impute yearly level data
+# if(!file.exists(paste0(pathData, 'sobOpp_imp.rda'))){
+	# toImp = data.matrix(data[,c('icclevel_opp',sobOppVars)])
+	# impData = sbgcop.mcmc(Y=toImp, seed=6886, verb=FALSE, nsamp=1000)
+	# save(impData, file=paste0(pathData, 'sobOpp_imp.rda'))
+# } else { load(paste0(pathData, 'sobOpp_imp.rda')) }
+load(paste0(pathData, 'sobOpp_imp.rda'))
 
 # pick a few from the posterior
 set.seed(6886)
 frame = data.frame(impData$Y.pmean)
-frame = cbind(data[,c('ccode','year','icclevel_opp_3')], frame)
+frame = cbind(yData[,c('ccode','year','icclevel_opp_3')], frame)
 frame$icclevel_opp_3 = as.integer(frame$icclevel_opp_3 + 1)
 frame$ccode = as.integer(frame$ccode)
-impDFs = lapply(sample(500:1000, 10), function(i){
-	x = data.frame(impData$Y.impute[,,i])
-	x = cbind(data[,c('ccode','year','icclevel_opp_3')], x)
-	names(x) = names(frame)
-	x$icclevel_opp_3 = as.integer(x$icclevel_opp_3 + 1)
-	x$ccode = as.integer(x$ccode)
-	return(x) })
+frame$ccodeYear = with(frame, paste(ccode, year, sep='_'))
+# impDFs = lapply(sample(500:1000, 10), function(i){
+# 	x = data.frame(impData$Y.impute[,,i])
+# 	x = cbind(data[,c('ccode','year','icclevel_opp_3')], x)
+# 	names(x) = names(frame)
+# 	x$icclevel_opp_3 = as.integer(x$icclevel_opp_3 + 1)
+# 	x$ccode = as.integer(x$ccode)
+# 	return(x) })
+
+#
+yrlyVars = c(
+	'lag1_polity2', 'lag1_gdpCapLog', 
+	'lag1_v2juncind', 'lag1_p5_absidealdiffMin'
+	)
+for(v in yrlyVars){
+	data[,v] = frame[match(data$ccodeYear,frame$ccodeYear),v]
+}
+
+data = data[,c(
+	'ccode','cname','year','date',
+	'icclevel_opp_3',
+	sobOppVars
+	)]
+
+frame = data
+frame$icclevel_opp_3 = as.integer(frame$icclevel_opp_3 + 1)
+frame$ccode = as.integer(frame$ccode)
 ###############################################################
 
 ###############################################################
@@ -62,6 +87,7 @@ id = 1
 newFrame = NULL
 for(ctry in cntries){
 	slice = frame[frame$ccode == ctry,]
+	slice = slice[order(slice$date),]
 	iccChange = diff(slice$icclevel_opp_3)
 	slice$id = id
 	if(length(which(iccChange<0))>=1){
@@ -86,11 +112,12 @@ sobOppVars[c(5:8)] = paste0('cs(',sobOppVars[c(5:8)],')')
 sobOppForm = formula(
 	paste0('icclevel_opp_3 ~ ', 
 		paste(sobOppVars, collapse = ' + ') ) )
-# mod = brm(
-# 	formula=sobOppForm, 
-# 	data=frame,
-# 	family=cratio(link='logit')
-# 	)	
+mod = brm(
+	formula=sobOppForm, 
+	data=frame,
+	family=cratio(link='logit'),
+	cores=4
+	)	
 # save(mod, file=paste0(pathResults, 'sobOpp_model1a_1_newp5Var.rda'))
 
 # hier
@@ -104,8 +131,8 @@ modHier = brm(
 	family=cratio(link='logit'),
 	cores=4
 	)
-save(modHier, 
-	file=paste0(
-		pathResults, 'sobOpp_model1a_1_newp5Var_hier.rda'
-		))
+# save(modHier, 
+# 	file=paste0(
+# 		pathResults, 'sobOpp_model1a_1_newp5Var_hier.rda'
+# 		))
 ###############################################################
