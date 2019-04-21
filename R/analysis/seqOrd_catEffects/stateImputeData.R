@@ -3,102 +3,13 @@ if(Sys.info()['user'] %in% c('s7m', 'janus829')){
   source('~/Research/icc/R/setup.R') }
 
 #
-loadPkg(c('sbgcop','brms'))
+loadPkg('sbgcop')
 ###############################################################
 
 ###############################################################
 load(paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
-# yData = data
-# load(paste0(pathData, 'mergedData_mnthly_ongoing.rda.rda'))
-
-newVars = c(
-'lag1_v2juhcind',
-'lag1_p5_absidealdiffMax',
-'lag1_p5_latAngleMin',
-'lag1_p5_defAllyMax',
-'lag1_p5_gov_clean',
-'lag1_p5_reb_clean',
-'lag1_pts'  
-  )
-
-## prelim state
-sobStateVars = c(
-  'icc_rat','lag1_civilwar','lag1_polity2',
-  'lag1_gdpCapLog','africa',
-  'lag1_v2juncind',
-  'lag1_osv_state_cumul',	
-  # p5 vars: 
-  'lag1_p5_absidealdiffMin'
-)
-
-spec1 = c(
-  'icclevel_state',
-  'icc_rat', 'lag1_civilwar', 
-  'lag1_polity2',
-  'lag1_gdpCapLog',
-  'africa',
-  'lag1_v2juhcind',
-  'lag1_osv_state_cumul',
-  'lag1_p5_absidealdiffMin'
-  )
-
-spec3 = c(
-  'icclevel_state',
-  'icc_rat', 'lag1_civilwar', 
-  'lag1_polity2',
-  'lag1_gdpCapLog',
-  'africa',
-  'lag1_v2juhcind',
-  'lag1_osv_state_cumul',
-  'lag1_p5_absidealdiffMax'
-  )
-
-spec4 = c(
-  'icclevel_state',
-  'icc_rat', 'lag1_civilwar', 
-  'lag1_polity2',
-  'lag1_gdpCapLog',
-  'africa',
-  'lag1_v2juhcind',
-  'lag1_osv_state_cumul',
-  'lag1_p5_latAngleMin'
-  )
-
-spec5 = c(
-  'icclevel_state',
-  'icc_rat', 'lag1_civilwar', 
-  'lag1_polity2',
-  'lag1_gdpCapLog',
-  'africa',
-  'lag1_v2juhcind',
-  'lag1_osv_state_cumul',
-  'lag1_p5_defAllyMax'
-  )
-
-spec6 = c(
-  'icclevel_state',
-  'icc_rat', 'lag1_civilwar', 
-  'lag1_polity2',
-  'lag1_gdpCapLog',
-  'africa',
-  'lag1_v2juhcind',
-  'lag1_osv_state_cumul',
-  'lag1_p5_gov_clean'
-  )
-
-spec7 = c(
-  'icclevel_state',
-  'icc_rat', 'lag1_civilwar', 
-  'lag1_polity2',
-  'lag1_gdpCapLog',
-  'africa',
-  'lag1_v2juhcind',
-  'lag1_osv_state_cumul',
-  'lag1_p5_absidealdiffMin',
-  'lag1_p5_defAllyMax',
-  'lag1_p5_gov_clean'
-  )
-spec1=spec7
+yData = data
+load(paste0(pathData, 'mergedData_mnthly_ongoing.rda.rda'))
 
 # var transformations
 data$lag1_osv_state_cumul = log(data$lag1_osv_state_cumul+1)
@@ -106,13 +17,28 @@ data$lag1_osv_state_cumul[is.na(data$lag1_osv_state_cumul)] = 0
 ###############################################################
 
 ###############################################################
+# all vars
+allVars = c(
+	# 'lag1_v2juncind', 
+	"lag1_v2juhcind", 
+	"lag1_p5_absidealdiffMax", "lag1_p5_absidealdiffMin",
+	"lag1_p5_latAngleMin", "lag1_p5_defAllyMax",
+	"lag1_p5_gov_clean", "lag1_p5_reb_clean",
+	"lag1_pts", "africa", 
+	"lag1_polity2", "lag1_gdpCapLog",
+	"lag1_osv_state_cumul",
+	"icc_rat", "lag1_civilwar",
+	"icclevel_state"
+	)
+###############################################################
+
+###############################################################
 # impute
-# if(!file.exists(paste0(pathData, 'sobState_imp.rda'))){
-toImp = data.matrix(data[,spec1])
-impData = sbgcop.mcmc(Y=toImp, seed=6886, verb=FALSE, nsamp=1000)
-save(impData, file=paste0(pathData, 'sobState_impv2.rda'))
-# } else { load(paste0(pathData, 'sobState_imp.rda')) }
-# load(paste0(pathData, 'sobState_imp.rda'))
+if(!file.exists(paste0(pathData, 'sobState_all.rda'))){
+	toImp = data.matrix(yData[,allVars])
+	impData = sbgcop.mcmc(Y=toImp, seed=6886, verb=FALSE, nsamp=1000)
+	save(impData, file=paste0(pathData, 'sobState_all.rda'))
+} else { load(paste0(pathData, 'sobState_all.rda')) }
 
 # pick a few from the posterior
 set.seed(6886)
@@ -123,8 +49,12 @@ frame$ccode = as.integer(frame$ccode)
 frame$ccodeYear = with(frame, paste(ccode, year, sep='_'))
 
 yrlyVars = c(
-  'lag1_polity2', 'lag1_gdpCapLog', 
-  'lag1_v2juncind', 'lag1_p5_absidealdiffMin'
+	"lag1_v2juhcind", 
+	"lag1_p5_absidealdiffMax", "lag1_p5_absidealdiffMin",
+	"lag1_p5_latAngleMin", "lag1_p5_defAllyMax",
+	"lag1_p5_gov_clean", "lag1_p5_reb_clean",
+	"lag1_pts", "lag1_civilwar",
+	"lag1_polity2", "lag1_gdpCapLog"
 )
 for(v in yrlyVars){
   data[,v] = frame[match(data$ccodeYear,frame$ccodeYear),v]
@@ -133,7 +63,7 @@ for(v in yrlyVars){
 data = data[,c(
   'ccode','cname','year','date',
   'icclevel_state_3',
-  sobStateVars
+  allVars
 )]
 
 frame = data
@@ -148,6 +78,33 @@ frame$p5 = ifelse(
 
 # modify p5 var to be zero if p5 country
 frame$lag1_p5_absidealdiffMin = frame$p5*frame$lag1_p5_absidealdiffMin
+###############################################################
+
+###############################################################
+# remove jumping cases based on AP rule
+x = frame[,c('cname','date','icclevel_state_3')]
+cntries = sort(unique(x$cname))
+for(cntry in cntries){	
+	s=x[x$cname==cntry,]
+	delta = diff(s$icclevel_state_3)
+	delta = which(delta>=2)
+	if(any(delta >= 2)){
+	d00=delta-2;d0=delta-1;d1=delta+1;d2=delta+2
+	ids=sort(c(delta,d00,d0,d1,d2))
+	ids = ids[ids>0]
+	print(s[ids,])
+	}
+}
+
+# fixes to drc congo
+frame$icclevel_state_3[
+	frame$cname=='CONGO, THE DEMOCRATIC REPUBLIC OF' &
+	frame$date == as.Date('2004-11-01')
+	] = 2
+frame$icclevel_state_3[
+	frame$cname=='CONGO, THE DEMOCRATIC REPUBLIC OF' &
+	frame$date == as.Date('2006-09-01')
+	] = 2	
 ###############################################################
 
 ###############################################################
@@ -193,36 +150,6 @@ frame$id = factor(frame$id)
 ###############################################################
 
 ###############################################################
-# category specific effects
-sobStateVars[c(5:8)] = paste0('cs(',sobStateVars[c(5:8)],')')
-
-# pool
-sobStateForm = formula(
-	paste0('icclevel_state_3 ~ ', 
-		paste(sobStateVars, collapse = ' + ') ) )
-# mod = brm(
-# 	formula=sobStateForm, 
-# 	data=frame,
-# 	family=cratio(link='logit'),
-# 	cores=4
-# 	)
-# # save(mod, file=paste0(pathResults, 'sobState_model1a_1_newp5Var.rda'))
-# summary(mod)
-
-# hier
-frame$icclevel_state_3 = factor(frame$icclevel_state_3, ordered=TRUE)
-sobStateForm = formula(
-	paste0('icclevel_state_3 ~ ', 
-		paste(sobStateVars, collapse = ' + '), '+(1|id)' ) )
-modHier = brm(
-	formula=sobStateForm, 
-	data=frame,
-	family=cratio(link='logit'), 
-	cores=4
-	)
-summary(modHier)
-# save(modHier, 
-# 	file=paste0(
-# 		pathResults, 'sobState_model1a_1_newp5Var_hier.rda'
-# 		))
+# save
+save(frame, file=paste0(pathData, 'stateFrame.rda'))
 ###############################################################

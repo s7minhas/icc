@@ -16,6 +16,7 @@ source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
 # summarize
 pathGraphics='~/Desktop/'
 pathResults='~/Desktop/'
+pathResults = '~/Dropbox/forec2/'
 load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var.rda'))
 oppMod = mod
 load(paste0(pathResults, 'sobState_model1a_1_newp5Var.rda'))

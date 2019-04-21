@@ -76,15 +76,15 @@ apData = apData[,c(
 # create some helper vars
 data = apData %>% 
 	dplyr::mutate(
-		prelim_icc = ifelse(any(icclevel==1), 1, 0),
-		formal_icc = ifelse(any(icclevel>1), 1, 0),
-		prelim_icc_state = ifelse(any(icclevel_state==1), 1, 0),
-		formal_icc_state = ifelse(any(icclevel_state>1), 1, 0),
-		prelim_icc_opp = ifelse(any(icclevel_opp==1), 1, 0),
-		formal_icc_opp = ifelse(any(icclevel_opp>1), 1, 0),
-		icc_stage1 = ifelse(any(icc_stage1>=1), 1, 0),
-		icc_stage2 = ifelse(any(icc_stage2>=1), 1, 0),
-		icc_onset = ifelse(any(icc_onset>=1), 1, 0)
+		prelim_icc = ifelse(icclevel==1, 1, 0),
+		formal_icc = ifelse(icclevel>1, 1, 0),
+		prelim_icc_state = ifelse(icclevel_state==1, 1, 0),
+		formal_icc_state = ifelse(icclevel_state>1, 1, 0),
+		prelim_icc_opp = ifelse(icclevel_opp==1, 1, 0),
+		formal_icc_opp = ifelse(icclevel_opp>1, 1, 0),
+		icc_stage1 = ifelse(icc_stage1>=1, 1, 0),
+		icc_stage2 = ifelse(icc_stage2>=1, 1, 0),
+		icc_onset = ifelse(icc_onset>=1, 1, 0)
 		) %>% data.frame()
 
 # add year level ids (useful for merging yearly data)

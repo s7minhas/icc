@@ -150,7 +150,7 @@ mcmcViz = function(dataList, varLabels, colorsForCoef=coefp_colors){
 	        color='grey60', linetype='dashed'
 	        ) +
 	    scale_y_discrete('', labels=TeX(varLabels)) +
-	    theme_light(base_family="Source Sans Pro") +
+	    # theme_light(base_family="Source Sans Pro") +
 	    theme_bw() +
 	    facet_wrap(~type, scales='free_x') +
 	    theme(
