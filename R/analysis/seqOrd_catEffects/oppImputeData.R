@@ -129,5 +129,7 @@ frame$id = factor(frame$id)
 
 ###############################################################
 # save
+frame$icclevel_opp_3 = factor(
+	frame$icclevel_opp_3, ordered=TRUE)
 save(frame, file=paste0(pathData, 'oppFrame.rda'))
 ###############################################################

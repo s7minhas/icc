@@ -151,5 +151,7 @@ frame$id = factor(frame$id)
 
 ###############################################################
 # save
+frame$icclevel_state_3 = factor(
+	frame$icclevel_state_3, ordered=TRUE)
 save(frame, file=paste0(pathData, 'stateFrame.rda'))
 ###############################################################
