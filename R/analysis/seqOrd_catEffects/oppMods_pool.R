@@ -56,7 +56,6 @@ stratVars = list(
 
 specs = lapply(stratVars,
   function(x){ c(baseVars, x)})
-
 poolForms = lapply(specs, genForms, pool=TRUE)
 ###############################################################
 

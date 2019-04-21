@@ -56,7 +56,6 @@ stratVars = list(
 
 specs = lapply(stratVars,
   function(x){ c(baseVars, x)})
-
 hierForms = lapply(specs, genForms, pool=FALSE)
 ###############################################################
 
