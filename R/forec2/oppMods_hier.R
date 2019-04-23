@@ -61,11 +61,9 @@ hierForms = lapply(specs, genForms, pool=FALSE)
 
 ###############################################################
 # run
-i=5
-pathResults=paste0(pathResults, '/fromec2/')
-# cl=makeCluster(24) ; registerDoParallel(cl)
-# shh=foreach(i = 1:length(hierForms), 
-#   .packages=c('brms')) %dopar% {
+cl=makeCluster(24) ; registerDoParallel(cl)
+shh=foreach(i = 1:length(hierForms), 
+  .packages=c('brms')) %dopar% {
   mod = brm(
     formula=hierForms[[i]], 
     data=frame,
@@ -74,8 +72,8 @@ pathResults=paste0(pathResults, '/fromec2/')
     )
   save(mod, 
     file=paste0(
-      pathResults, 'sobOpp_hierSpec',i,'.rda')
+      pathResults, '/fromec2/sobOpp_hierSpec',i,'.rda')
   )
-# }
-# stopCluster(cl)
+}
+stopCluster(cl)
 ###############################################################

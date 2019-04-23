@@ -61,11 +61,9 @@ poolForms = lapply(specs, genForms, pool=TRUE)
 
 ###############################################################
 # run
-i=5
-pathResults=paste0(pathResults, '/fromec2/')
-# cl=makeCluster(24) ; registerDoParallel(cl)
-# shh=foreach(i = 1:length(poolForms), 
-#   .packages=c('brms')) %dopar% {
+cl=makeCluster(24) ; registerDoParallel(cl)
+shh=foreach(i = 1:length(poolForms), 
+  .packages=c('brms')) %dopar% {
   mod = brm(
     formula=poolForms[[i]], 
     data=frame,
@@ -74,8 +72,8 @@ pathResults=paste0(pathResults, '/fromec2/')
     )
   save(mod, 
     file=paste0(
-      pathResults, 'sobOpp_poolSpec',i,'.rda')
+      pathResults, '/fromec2/sobOpp_poolSpec',i,'.rda')
   )
-# }
-# stopCluster(cl)
+}
+stopCluster(cl)
 ###############################################################

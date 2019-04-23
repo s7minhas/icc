@@ -72,7 +72,7 @@ shh=foreach(i = 1:length(hierForms),
     )
   save(mod, 
     file=paste0(
-      pathResults, 'sobState_hierSpec',i,'.rda')
+      pathResults, '/fromec2/sobState_hierSpec',i,'.rda')
   )
 }
 stopCluster(cl)
