@@ -1,0 +1,109 @@
+---
+title: "iccSumm"
+author: "Shahryar Minhas"
+date: "4/23/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(brms)
+setwd('~/Dropbox/Research/icc/results/fromec2/')
+```
+
+## spec 1
+
+```{r, echo=FALSE}
+load('sobState_hierSpec1.rda')
+coef=summary(mod)$fixed
+coef=coef[,c(1:4)]
+round(coef,2)
+```
+
+```{r, echo=FALSE}
+load('sobOpp_hierSpec1.rda')
+coef=summary(mod)$fixed
+coef=coef[,c(1:4)]
+round(coef,2)
+```
+
+## spec 2
+
+```{r, echo=FALSE}
+load('sobState_hierSpec2.rda')
+coef=summary(mod)$fixed
+coef=coef[,c(1:4)]
+round(coef,2)
+```
+
+```{r, echo=FALSE}
+load('sobOpp_hierSpec2.rda')
+coef=summary(mod)$fixed
+coef=coef[,c(1:4)]
+round(coef,2)
+```
+
+## spec 3
+
+```{r, echo=FALSE}
+load('sobState_hierSpec3.rda')
+coef=summary(mod)$fixed
+coef=coef[,c(1:4)]
+round(coef,2)
+```
+
+```{r, echo=FALSE}
+load('sobOpp_hierSpec3.rda')
+coef=summary(mod)$fixed
+coef=coef[,c(1:4)]
+round(coef,2)
+```
+
+
+## spec 4
+
+```{r, echo=FALSE}
+load('sobState_hierSpec4.rda')
+coef=summary(mod)$fixed
+coef=coef[,c(1:4)]
+round(coef,2)
+```
+
+```{r, echo=FALSE}
+load('sobOpp_hierSpec4.rda')
+coef=summary(mod)$fixed
+coef=coef[,c(1:4)]
+round(coef,2)
+```
+
+
+## spec 5
+
+```{r, echo=FALSE}
+load('sobState_hierSpec5.rda')
+coef=summary(mod)$fixed
+coef=coef[,c(1:4)]
+round(coef,2)
+```
+
+```{r, echo=FALSE}
+load('sobOpp_hierSpec5.rda')
+coef=summary(mod)$fixed
+coef=coef[,c(1:4)]
+round(coef,2)
+```
+
+## spec 6
+
+```{r, echo=FALSE}
+load('sobState_hierSpec6.rda')
+coef=summary(mod)$fixed
+coef=coef[,c(1:4)]
+round(coef,2)
+```
+
+```{r, echo=FALSE}
+load('sobOpp_hierSpec6.rda')
+coef=summary(mod)$fixed
+coef=coef[,c(1:4)]
+round(coef,2)
+```

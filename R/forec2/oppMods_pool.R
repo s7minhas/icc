@@ -46,7 +46,7 @@ stratVars = list(
   c('lag1_p5_absidealdiffMax'),
   c('lag1_p5_latAngleMin'),
   c('lag1_p5_defAllyMax'),
-  c('lag1_p5_gov_clean'),
+  c('lag1_p5_reb_clean'),
   c(
     'lag1_p5_absidealdiffMin',
     'lag1_p5_defAllyMax',
@@ -61,9 +61,11 @@ poolForms = lapply(specs, genForms, pool=TRUE)
 
 ###############################################################
 # run
-cl=makeCluster(24) ; registerDoParallel(cl)
-shh=foreach(i = 1:length(poolForms), 
-  .packages=c('brms')) %dopar% {
+i=5
+pathResults=paste0(pathResults, '/fromec2/')
+# cl=makeCluster(24) ; registerDoParallel(cl)
+# shh=foreach(i = 1:length(poolForms), 
+#   .packages=c('brms')) %dopar% {
   mod = brm(
     formula=poolForms[[i]], 
     data=frame,
@@ -74,6 +76,6 @@ shh=foreach(i = 1:length(poolForms),
     file=paste0(
       pathResults, 'sobOpp_poolSpec',i,'.rda')
   )
-}
-stopCluster(cl)
+# }
+# stopCluster(cl)
 ###############################################################
