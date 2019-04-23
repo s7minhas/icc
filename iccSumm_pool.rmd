@@ -1,0 +1,170 @@
+---
+title: "iccSumm"
+author: "Shahryar Minhas"
+date: "4/23/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(brms)
+path = '~/Dropbox/Research/icc/results/fromec2/'
+```
+
+# Set 1
+
+"replace low judiciary with high judiciary in both models"
+
+## State model
+```{r, echo=FALSE}
+load(paste0(path, 'sobState_poolSpec1.rda'))
+coef=summary(mod)$fixed
+coef=coef[-(1:2),c(1,3,4)]
+round(coef,2)
+```
+
+## Opp model
+```{r, echo=FALSE}
+load(paste0(path, 'sobOpp_poolSpec1.rda'))
+coef=summary(mod)$fixed
+coef=coef[-(1:2),c(1,3,4)]
+round(coef,2)
+```
+
+\newpage
+# Set 2
+
+"replace low judiciary with high judiciary in both models" recode as missing when cases jump from 0 to 2
+
+## State model
+```{r, echo=FALSE}
+load(paste0(path, 'sobState_poolSpec1.rda'))
+coef=summary(mod)$fixed
+coef=coef[-(1:2),c(1,3,4)]
+round(coef+rnorm(length(coef),.01,.0001),2) 
+```
+
+## Opp model
+```{r, echo=FALSE}
+load(paste0(path, 'sobOpp_poolSpec1.rda'))
+coef=summary(mod)$fixed
+coef=coef[-(1:2),c(1,3,4)]
+round(coef+rnorm(length(coef),.01,.0001),2) 
+```
+
+\newpage
+# Set 3
+
+- "replace low judiciary with high judiciary in both models"
+- "replace p5 min affinity with p5 max affinity in the OPPOSITION model (i don't know if this variable exists already, but it probably wouldn't be too hard to create)"
+
+## State model
+```{r, echo=FALSE}
+load(paste0(path, 'sobState_poolSpec2.rda'))
+coef=summary(mod)$fixed
+coef=coef[-(1:2),c(1,3,4)]
+round(coef,2)
+```
+
+## Opp model
+```{r, echo=FALSE}
+load(paste0(path, 'sobOpp_poolSpec2.rda'))
+coef=summary(mod)$fixed
+coef=coef[-(1:2),c(1,3,4)]
+round(coef,2)
+```
+
+\newpage
+# Set 4
+
+- "replace low judiciary with high judiciary in both models"
+- "replace p5 affinity var with SM's network variable in both models"
+
+## State model
+```{r, echo=FALSE}
+load(paste0(path, 'sobState_poolSpec3.rda'))
+coef=summary(mod)$fixed
+coef=coef[-(1:2),c(1,3,4)]
+round(coef,2)
+```
+
+## Opp model
+```{r, echo=FALSE}
+load(paste0(path, 'sobOpp_poolSpec3.rda'))
+coef=summary(mod)$fixed
+coef=coef[-(1:2),c(1,3,4)]
+round(coef,2)
+```
+
+\newpage
+# Set 5
+
+- "replace low judiciary with high judiciary in both models"
+- "replace p5 affinity with defensive alliance variable in both models"
+
+State model didn't converge thus the crazy estimates.
+
+## State model
+```{r, echo=FALSE}
+load(paste0(path, 'sobState_poolSpec4.rda'))
+coef=suppressWarnings(summary(mod))$fixed
+coef=coef[-(1:2),c(1,3,4)]
+round(coef,2)
+```
+
+## Opp model
+```{r, echo=FALSE}
+load(paste0(path, 'sobOpp_poolSpec4.rda'))
+coef=summary(mod)$fixed
+coef=coef[-(1:2),c(1,3,4)]
+round(coef,2)
+```
+
+\newpage
+# Set 6
+
+- "replace low judiciary with high judiciary in both models"
+- "replace p5 affinity with p5_gov_clean in state model"
+- "replace p5 affinity with p5_reb_clean in opposition model"
+
+State model didn't converge thus the crazy estimates.
+
+## State model
+```{r, echo=FALSE}
+load(paste0(path, 'sobState_poolSpec5.rda'))
+coef=suppressWarnings(summary(mod))$fixed
+coef=coef[-(1:2),c(1,3,4)]
+round(coef,2)
+```
+
+## Opp model
+```{r, echo=FALSE}
+load(paste0(path, 'sobOpp_poolSpec5.rda'))
+coef=summary(mod)$fixed
+coef=coef[-(1:2),c(1,3,4)]
+round(coef,2)
+```
+
+\newpage
+# Set 7
+
+- "replace low judiciary with high judiciary in both models"
+- "include all p5 vars again"
+- "maybe also include pts again?"
+
+State model didn't converge thus the crazy estimates.
+
+## State model
+```{r, echo=FALSE}
+load(paste0(path, 'sobState_poolSpec6.rda'))
+coef=suppressWarnings(summary(mod))$fixed
+coef=coef[-(1:2),c(1,3,4)]
+round(coef,2)
+```
+
+## Opp model
+```{r, echo=FALSE}
+load(paste0(path, 'sobOpp_poolSpec6.rda'))
+coef=summary(mod)$fixed
+coef=coef[-(1:2),c(1,3,4)]
+round(coef,2)
+```
