@@ -20,7 +20,7 @@ load(paste0(pathData, 'stateFrame.rda'))
 ## gen formula
 genForms = function(
   vars, 
-  dv='icclevel_state_3', csVarsID=5:length(vars),
+  dv='icclevel_state_3', csVarsID=4:length(vars),
   pool=FALSE
   ){
   vars[csVarsID] = paste0('cs(',vars[csVarsID],')')  
@@ -37,7 +37,8 @@ genForms = function(
 # variables
 baseVars = c(
   'icc_rat', 'lag1_civilwar', 
-  # 'lag1_polity2', 'lag1_gdpCapLog',
+  # 'lag1_polity2', 
+  'lag1_gdpCapLog',
   'africa', 'lag1_v2juhcind',
   'lag1_osv_state_cumul' )
 
@@ -56,23 +57,23 @@ stratVars = list(
 
 specs = lapply(stratVars,
   function(x){ c(baseVars, x)})
-hierForms = lapply(specs, genForms, pool=FALSE)
+poolForms = lapply(specs, genForms, pool=TRUE)
 ###############################################################
 
 ###############################################################
 # run
 cl=makeCluster(24) ; registerDoParallel(cl)
-shh=foreach(i = 1:length(hierForms), 
+shh=foreach(i = 1:length(poolForms), 
   .packages=c('brms')) %dopar% {
   mod = brm(
-    formula=hierForms[[i]], 
+    formula=poolForms[[i]], 
     data=frame,
     family=cratio(link='logit'), 
     cores=4
     )
   save(mod, 
     file=paste0(
-      pathResults, '/fromec2/sobState_hierSpec',i,'_v2.rda')
+      pathResults, '/fromec2/sobState_poolSpec',i,'_v3.rda')
   )
 }
 stopCluster(cl)

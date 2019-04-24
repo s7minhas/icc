@@ -20,7 +20,7 @@ load(paste0(pathData, 'oppFrame.rda'))
 ## gen formula
 genForms = function(
   vars, 
-  dv='icclevel_opp_3', csVarsID=5:length(vars),
+  dv='icclevel_opp_3', csVarsID=3:length(vars),
   pool=FALSE
   ){
   vars[csVarsID] = paste0('cs(',vars[csVarsID],')')  
@@ -56,23 +56,23 @@ stratVars = list(
 
 specs = lapply(stratVars,
   function(x){ c(baseVars, x)})
-poolForms = lapply(specs, genForms, pool=TRUE)
+hierForms = lapply(specs, genForms, pool=FALSE)
 ###############################################################
 
 ###############################################################
 # run
 cl=makeCluster(24) ; registerDoParallel(cl)
-shh=foreach(i = 1:length(poolForms), 
+shh=foreach(i = 1:length(hierForms), 
   .packages=c('brms')) %dopar% {
   mod = brm(
-    formula=poolForms[[i]], 
+    formula=hierForms[[i]], 
     data=frame,
     family=cratio(link='logit'), 
     cores=4
     )
   save(mod, 
     file=paste0(
-      pathResults, '/fromec2/sobOpp_poolSpec',i,'_v2.rda')
+      pathResults, '/fromec2/sobOpp_hierSpec',i,'_v2.rda')
   )
 }
 stopCluster(cl)

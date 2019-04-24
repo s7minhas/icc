@@ -13,14 +13,14 @@ library(doParallel)
 
 ###############################################################
 # load data
-load(paste0(pathData, 'oppFrame.rda'))
+load(paste0(pathData, 'stateFrame.rda'))
 ###############################################################
 
 ###############################################################
 ## gen formula
 genForms = function(
   vars, 
-  dv='icclevel_opp_3', csVarsID=5:length(vars),
+  dv='icclevel_state_3', csVarsID=3:length(vars),
   pool=FALSE
   ){
   vars[csVarsID] = paste0('cs(',vars[csVarsID],')')  
@@ -39,40 +39,40 @@ baseVars = c(
   'icc_rat', 'lag1_civilwar', 
   # 'lag1_polity2', 'lag1_gdpCapLog',
   'africa', 'lag1_v2juhcind',
-  'lag1_osv_rebel_cumul' )
+  'lag1_osv_state_cumul' )
 
 stratVars = list(
   c('lag1_p5_absidealdiffMin'),
-  c('lag1_p5_absidealdiffMax'),
+  # c('lag1_p5_absidealdiffMax'),
   c('lag1_p5_latAngleMin'),
   c('lag1_p5_defAllyMax'),
-  c('lag1_p5_reb_clean'),
+  c('lag1_p5_gov_clean'),
   c(
     'lag1_p5_absidealdiffMin',
     'lag1_p5_defAllyMax',
-    'lag1_p5_reb_clean'
+    'lag1_p5_gov_clean'    
     )
   )
 
 specs = lapply(stratVars,
   function(x){ c(baseVars, x)})
-hierForms = lapply(specs, genForms, pool=FALSE)
+poolForms = lapply(specs, genForms, pool=TRUE)
 ###############################################################
 
 ###############################################################
 # run
 cl=makeCluster(24) ; registerDoParallel(cl)
-shh=foreach(i = 1:length(hierForms), 
+shh=foreach(i = 1:length(poolForms), 
   .packages=c('brms')) %dopar% {
   mod = brm(
-    formula=hierForms[[i]], 
+    formula=poolForms[[i]], 
     data=frame,
     family=cratio(link='logit'), 
     cores=4
     )
   save(mod, 
     file=paste0(
-      pathResults, '/fromec2/sobOpp_hierSpec',i,'_v2.rda')
+      pathResults, '/fromec2/sobState_poolSpec',i,'_v2.rda')
   )
 }
 stopCluster(cl)
