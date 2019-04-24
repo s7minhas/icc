@@ -37,13 +37,13 @@ genForms = function(
 # variables
 baseVars = c(
   'icc_rat', 'lag1_civilwar', 
-  'lag1_polity2', 'lag1_gdpCapLog',
+  # 'lag1_polity2', 'lag1_gdpCapLog',
   'africa', 'lag1_v2juhcind',
   'lag1_osv_state_cumul' )
 
 stratVars = list(
   c('lag1_p5_absidealdiffMin'),
-  c('lag1_p5_absidealdiffMax'),
+  # c('lag1_p5_absidealdiffMax'),
   c('lag1_p5_latAngleMin'),
   c('lag1_p5_defAllyMax'),
   c('lag1_p5_gov_clean'),
@@ -72,7 +72,7 @@ shh=foreach(i = 1:length(poolForms),
     )
   save(mod, 
     file=paste0(
-      pathResults, '/fromec2/sobState_poolSpec',i,'.rda')
+      pathResults, '/fromec2/sobState_poolSpec',i,'_v2.rda')
   )
 }
 stopCluster(cl)

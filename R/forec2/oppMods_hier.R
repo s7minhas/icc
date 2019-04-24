@@ -37,7 +37,7 @@ genForms = function(
 # variables
 baseVars = c(
   'icc_rat', 'lag1_civilwar', 
-  'lag1_polity2', 'lag1_gdpCapLog',
+  # 'lag1_polity2', 'lag1_gdpCapLog',
   'africa', 'lag1_v2juhcind',
   'lag1_osv_rebel_cumul' )
 
@@ -72,7 +72,7 @@ shh=foreach(i = 1:length(hierForms),
     )
   save(mod, 
     file=paste0(
-      pathResults, '/fromec2/sobOpp_hierSpec',i,'.rda')
+      pathResults, '/fromec2/sobOpp_hierSpec',i,'_v2.rda')
   )
 }
 stopCluster(cl)
