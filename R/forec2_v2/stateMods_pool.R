@@ -23,7 +23,7 @@ genForms = function(
   dv='icclevel_state_3', csVarsID=3:length(vars),
   pool=FALSE
   ){
-  vars[csVarsID] = paste0('cs(',vars[csVarsID],')')  
+  # vars[csVarsID] = paste0('cs(',vars[csVarsID],')')  
   form = formula(
     paste0(dv, ' ~ ', 
       paste(vars, collapse = ' + ') ) )
@@ -37,7 +37,7 @@ genForms = function(
 # variables
 baseVars = c(
   'icc_rat', 'lag1_civilwar', 
-  # 'lag1_polity2', 'lag1_gdpCapLog',
+  'lag1_polity2', 'lag1_gdpCapLog',
   'africa', 'lag1_v2juhcind',
   'lag1_osv_state_cumul' )
 
