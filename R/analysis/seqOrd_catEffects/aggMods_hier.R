@@ -27,16 +27,18 @@ frame = frame[,-1]
 ## gen formula
 genForms = function(
   vars, 
-  dv='icclevel_3', csVarsID=5:length(vars),
+  dv='icclevel_3',
   pool=FALSE
-  ){
+){
+  csStart=which((grepl('africa',vars)))
+  csVarsID=csStart:length(vars)
   vars[csVarsID] = paste0('cs(',vars[csVarsID],')')  
   form = formula(
     paste0(dv, ' ~ ', 
-      paste(vars, collapse = ' + ') ) )
+           paste(vars, collapse = ' + ') ) )
   formHier = formula(
     paste0(dv, ' ~ ', 
-      paste(vars, collapse = ' + '), '+(1|id)' ) )
+           paste(vars, collapse = ' + '), '+(1|id)' ) )
   if(pool){
     return(form)
   } else { return(formHier) } }
