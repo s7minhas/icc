@@ -14,12 +14,15 @@ load(paste0(pathData, 'mergedData_mnthly_ongoing.rda.rda'))
 # var transformations
 data$lag1_osv_state_cumul = log(data$lag1_osv_state_cumul+1)
 data$lag1_osv_state_cumul[is.na(data$lag1_osv_state_cumul)] = 0
+
+data$lag1_osv_rebel_cumul = log(data$lag1_osv_state_cumul+1)
+data$lag1_osv_rebel_cumul[is.na(data$lag1_osv_state_cumul)] = 0
 ###############################################################
 
 ###############################################################
 # all vars
 allVars = c(
-	'lag1_v2juncind', 
+	'lag1_v2juncind', 'lag1_v2juhcind', 
 	"lag1_p5_absidealdiffMax", "lag1_p5_absidealdiffMin",
 	"lag1_p5_latAngleMin", "lag1_p5_defAllyMax",
 	"lag1_p5_gov_clean", "lag1_p5_reb_clean",
@@ -43,13 +46,13 @@ if(!file.exists(paste0(pathData, 'sobStateOpp_all.rda'))){
 # pick a few from the posterior
 set.seed(6886)
 frame = data.frame(impData$Y.pmean)
-frame = cbind(yData[,c('ccode','year','icclevel_state_3')], frame)
-frame$icclevel_state_3 = as.integer(frame$icclevel_state_3 + 1)
+frame = cbind(yData[,c('ccode','year','icclevel_3')], frame)
+frame$icclevel_3 = as.integer(frame$icclevel_3 + 1)
 frame$ccode = as.integer(frame$ccode)
 frame$ccodeYear = with(frame, paste(ccode, year, sep='_'))
 
 yrlyVars = c(
-	"lag1_v2juhcind", 
+	"lag1_v2juncind", 'lag1_v2juhcind', 
 	"lag1_p5_absidealdiffMax", "lag1_p5_absidealdiffMin",
 	"lag1_p5_latAngleMin", "lag1_p5_defAllyMax",
 	"lag1_p5_gov_clean", "lag1_p5_reb_clean",
@@ -62,12 +65,12 @@ for(v in yrlyVars){
 
 data = data[,c(
   'ccode','cname','year','date',
-  'icclevel_state_3',
+  'icclevel_3',
   allVars
 )]
 
 frame = data
-frame$icclevel_state_3 = as.integer(frame$icclevel_state_3 + 1)
+frame$icclevel_3 = as.integer(frame$icclevel_3 + 1)
 frame$ccode = as.integer(frame$ccode)
 ###############################################################
 
@@ -82,11 +85,11 @@ frame$lag1_p5_absidealdiffMin = frame$p5*frame$lag1_p5_absidealdiffMin
 
 ###############################################################
 # remove jumping cases based on AP rule
-x = frame[,c('cname','date','icclevel_state_3')]
+x = frame[,c('cname','date','icclevel_3')]
 cntries = sort(unique(x$cname))
 for(cntry in cntries){	
 	s=x[x$cname==cntry,]
-	delta = diff(s$icclevel_state_3)
+	delta = diff(s$icclevel_3)
 	delta = which(delta>=2)
 	if(any(delta >= 2)){
 	d00=delta-2;d0=delta-1;d1=delta+1;d2=delta+2
@@ -95,16 +98,6 @@ for(cntry in cntries){
 	print(s[ids,])
 	}
 }
-
-# fixes to drc congo
-frame$icclevel_state_3[
-	frame$cname=='CONGO, THE DEMOCRATIC REPUBLIC OF' &
-	frame$date == as.Date('2004-11-01')
-	] = 2
-frame$icclevel_state_3[
-	frame$cname=='CONGO, THE DEMOCRATIC REPUBLIC OF' &
-	frame$date == as.Date('2006-09-01')
-	] = 2	
 ###############################################################
 
 ###############################################################
@@ -112,11 +105,11 @@ frame$icclevel_state_3[
 cntries = unique(frame$ccode)
 id = 1
 newFrame = NULL
-cntries = cntries[-c(90,136)]
+cntries = cntries[-which(cntries==666)]
 for(ctry in cntries){
   slice = frame[frame$ccode == ctry,]
   slice = slice[order(slice$date),]
-  iccChange = diff(slice$icclevel_state_3)
+  iccChange = diff(slice$icclevel_3)
   slice$id = id
   if(length(which(iccChange<0))>=1){
     id = id + 1
@@ -129,20 +122,11 @@ for(ctry in cntries){
 }
 
 # fix congo drc
-slice = frame[frame$ccode %in% c(490,666),]
-slice = frame[frame$ccode == 490,]
+slice = frame[frame$ccode == 666,]
 slice$id = 200
 slice = slice[order(slice$date),]
-slice$id[slice$date > as.Date('2005-02-01')] = 201
-slice$id[slice$date > as.Date('2012-12-01')] = 202
-newFrame = rbind(newFrame, slice)
-
-# fix israel
-slice = frame[frame$ccode == 666,]
-slice$id = 203
-slice = slice[order(slice$date),]
-slice$id[slice$date > as.Date('2012-04-01')] = 204
-slice$id[slice$date > as.Date('2014-11-01')] = 205
+slice$id[slice$date > as.Date('2012-04-01')] = 201
+slice$id[slice$date > as.Date('2014-11-01')] = 202
 newFrame = rbind(newFrame, slice)
 
 frame = newFrame
@@ -151,7 +135,8 @@ frame$id = factor(frame$id)
 
 ###############################################################
 # save
-frame$icclevel_state_3 = factor(
-	frame$icclevel_state_3, ordered=TRUE)
-save(frame, file=paste0(pathData, 'stateFrame.rda'))
+frame$icclevel_3 = factor(
+	frame$icclevel_3, ordered=TRUE)
+save(frame, file=paste0(pathData, 'stateOppFrame.rda'))
+write.csv(frame, file=paste0(pathData, 'stateOppFrame.csv'))
 ###############################################################
