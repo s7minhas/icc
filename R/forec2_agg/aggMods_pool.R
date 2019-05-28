@@ -3,7 +3,7 @@ if(Sys.info()['user'] %in% c('s7m', 'janus829')){
   source('~/Research/icc/R/setup.R') }
 
 if(Sys.info()['user'] %in% c('minhas')){
-  pathResults=pathData='~/forec2/' }
+  pathResults=pathData='~/forec2_agg/' }
 
 # install.packages(c('foreach','doParallel','devtools), repos='https://cloud.r-project.org')
 # library(devtools)
@@ -47,40 +47,40 @@ specs = list(
     'icc_rat', 'lag1_civilwar', 
     'lag1_polity2', 'lag1_gdpCapLog',
     'africa', 'lag1_v2juhcind',
-    'lag1_osv_rebel_cumul', 
+    'lag1_osv_state_cumul', 'lag1_osv_rebel_cumul', 
     'lag1_p5_absidealdiffMin'
     ),
     c(
     'icc_rat', 'lag1_civilwar', 
     'lag1_polity2', 'lag1_gdpCapLog',
     'africa', 'lag1_v2juncind',
-    'lag1_osv_rebel_cumul', 
+    'lag1_osv_state_cumul', 'lag1_osv_rebel_cumul', 
     'lag1_p5_absidealdiffMin'
     ),
   c(
     'icc_rat', 'lag1_civilwar', 
     'africa', 'lag1_v2juhcind',
-    'lag1_osv_rebel_cumul', 
+    'lag1_osv_state_cumul', 'lag1_osv_rebel_cumul', 
     'lag1_p5_absidealdiffMin'
     ),
   c(
     'icc_rat', 'lag1_civilwar', 
     'africa', 'lag1_v2juncind',
-    'lag1_osv_rebel_cumul', 
+    'lag1_osv_state_cumul', 'lag1_osv_rebel_cumul', 
     'lag1_p5_absidealdiffMin'
     ),
   c(
     'icc_rat', 'lag1_civilwar', 
     'lag1_gdpCapLog',
     'africa', 'lag1_v2juhcind',
-    'lag1_osv_rebel_cumul', 
+    'lag1_osv_state_cumul', 'lag1_osv_rebel_cumul', 
     'lag1_p5_absidealdiffMin'
     ),
     c(
     'icc_rat', 'lag1_civilwar', 
     'lag1_gdpCapLog',
     'africa', 'lag1_v2juncind',
-    'lag1_osv_rebel_cumul', 
+    'lag1_osv_state_cumul', 'lag1_osv_rebel_cumul', 
     'lag1_p5_absidealdiffMin'
     )  
   )
@@ -90,7 +90,7 @@ poolForms = lapply(specs, genForms, pool=TRUE)
 
 ###############################################################
 # run
-cl=makeCluster(24) ; registerDoParallel(cl)
+cl=makeCluster(length(poolForms)) ; registerDoParallel(cl)
 shh=foreach(i = 1:length(poolForms), 
   .packages=c('brms')) %dopar% {
   mod = brm(
