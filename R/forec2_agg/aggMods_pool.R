@@ -5,7 +5,7 @@ if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 if(Sys.info()['user'] %in% c('minhas')){
   pathResults=pathData='~/forec2_agg/' }
 
-# install.packages(c('foreach','doParallel','devtools), repos='https://cloud.r-project.org')
+# install.packages(c('foreach','doParallel','devtools'), repos='https://cloud.r-project.org')
 # library(devtools)
 # install_version("mvtnorm", version = "1.0-8", repos = "http://cran.us.r-project.org")
 # install_version("brms", version = "2.8.0", repos = "http://cran.us.r-project.org")
@@ -92,7 +92,7 @@ poolForms = lapply(specs, genForms, pool=TRUE)
 
 ###############################################################
 # run
-cl=makeCluster(length(poolForms)) ; registerDoParallel(cl)
+cl=makeCluster(16) ; registerDoParallel(cl)
 shh=foreach(i = 1:length(poolForms), 
   .packages=c('brms')) %dopar% {
   mod = brm(
