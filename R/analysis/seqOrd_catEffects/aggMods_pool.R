@@ -101,7 +101,7 @@ shh=foreach(i = 1:length(poolForms),
     )
   save(mod, 
     file=paste0(
-      pathResults, 'sobAgg_poolSpec',f,'.rda')
+      pathResults, 'sobAgg_poolSpec',i,'.rda')
   )
 }
 stopCluster(cl)

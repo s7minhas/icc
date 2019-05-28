@@ -5,6 +5,11 @@ if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 if(Sys.info()['user'] %in% c('minhas')){
   pathResults=pathData='~/forec2/' }
 
+# install.packages(c('foreach','doParallel','devtools), repos='https://cloud.r-project.org')
+# library(devtools)
+# install_version("mvtnorm", version = "1.0-8", repos = "http://cran.us.r-project.org")
+# install_version("brms", version = "2.8.0", repos = "http://cran.us.r-project.org")
+
 #
 library(brms)
 library(foreach)
@@ -13,7 +18,9 @@ library(doParallel)
 
 ###############################################################
 # load data
-load(paste0(pathData, 'stateOppFrame.rda'))
+# load(paste0(pathData, 'stateOppFrame.rda'))
+frame = read.csv(paste0(pathData, 'stateOppFrame.csv'))
+frame = frame[,-1]
 ###############################################################
 
 ###############################################################
@@ -94,7 +101,7 @@ shh=foreach(i = 1:length(poolForms),
     )
   save(mod, 
     file=paste0(
-      pathResults, 'sobAgg_poolSpec',f,'.rda')
+      pathResults, 'sobAgg_poolSpec',i,'.rda')
   )
 }
 stopCluster(cl)
