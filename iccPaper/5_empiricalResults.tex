@@ -1,7 +1,60 @@
 \section*{Modeling sequential variable}
 
-% sm: check to make sure we have adequately distinguished what constitutes start of prelim and start of formal
-To model \emph{State- and Opposition-Focused ICC Transition} we need to account for the sequential way in which states and opposition actors transition through the ICC process (i.e., no ICC investigation, preliminary, and formal). Typically, scholars would use an ordinal regression framework to model such processes. In these models, the probability of interest is the cumulative probability  
+To model \emph{State- and Opposition-Focused ICC Transition} we need to account for the sequential way in which states and opposition actors transition through the ICC process (i.e., no ICC investigation, preliminary, and formal). Typically, scholars would use an ordinal regression framework to model such processes. In these models, the probability of interest is the cumulative probability, which is the probability at or below a given outcome category. For example, if income is grouped into four intervals -- 1 = $< \$25,000$; 2 = $\$25,000 to <\$50,000$; 3 = $\$50,000 to <\$75,000$; 4 = $>=\$75,000$ -- the cumulative probability for category 2 is the probability that a respondent is located in one of the two bottom income categories. For an outcome with ($y$) with four categories (1-4), $y$ is linked to the binary outcomes in the cutpoint equations ($y_{1} - y_{3}$) by the measurement equations: 
+
+\begin{eqnarray}
+	y_{1} = 
+	\begin{cases}
+	1 \text{ if } y = 1 \nonumber \\
+	0 \text{ if } y = 2-4 \nonumber \\
+\end{cases}
+	y_{2} = 
+	\begin{cases}
+	1 \text{ if } y = 1-2 \nonumber \\
+	0 \text{ if } y = 3-4 \nonumber \\
+\end{cases}
+	y_{3} = 
+	\begin{cases}
+	1 \text{ if } y = 1-3 \nonumber \\
+	0 \text{ if } y = 4 \nonumber \\
+\end{cases}
+\end{eqnarray}
+
+The sample size does not change across the cutpoint equations, which is a feature of cumulative models. 
+
+The probability of interest in stage models is the conditional probability ($Pr[ y = m | y >= m]$), which is the probability for a particular category, $m$, given the respondent is in that category or a higher one. As a result, respondents in lower categories are excluded. For example, if the dependent variable is a four-category measure of educational attainment -- 1 = less than high school; 2 = high school; 3 = some college; and 4 = college or more -- the conditional probability for category 2 is the probability that a respondent has a high school degree given that he or she has a high school degree or more. We use Fullerton's (2009) terminology in referring to this as the "stage" approach because the cutpoint equations represent a series of stages. In order to reach a particular category, respondents must pass through each of the previous categories.\footnote{Stage models are also referred to as "continuation ratio" models (Feinberg 1980; Long 1997; Agresti 2010; Tutz 2012) because the focus is on the sequential process of continuing from one stage to the next. }
+
+For stage models there must be a logical starting point, respondents must pass through earlier stages to reach a later stage, and the stages must be irreversible (Tutz 1991). 
+
+For an outcome ($y$) with four categories (1-4), $y$ is linked to the binary variables in the cutpoint equations ($y_{1} - y_{3}$) by the measurement equations:
+
+\begin{eqnarray}
+	y_{1} = 
+	\begin{cases}
+	1 \text{ if } y = 1 \nonumber \\
+	0 \text{ if } y = 2-4 \nonumber \\
+\end{cases}
+	y_{2} = 
+	\begin{cases}
+	1 \text{ if } y = 2 | y >= 2 \nonumber \\
+	0 \text{ if } y = 3-4 | y >= 2 \nonumber \\
+\end{cases}
+	y_{3} = 
+	\begin{cases}
+	1 \text{ if } y = 3 | y >= 3 \nonumber \\
+	0 \text{ if } y = 4 | y >= 3 \nonumber \\
+\end{cases}
+\end{eqnarray}
+
+The outcomes in the first cutpoint euqations ($y_{1}$) is the same in the cumulative and staghe models. However, the remaining cutpoint equations are different. In addition, the sample size becomes progressively smaller in later stages. 
+
+The parallel continuation ratio model treats the ordinal outcome as a series of stages with effects that are constrained to remain constant across stages. In other words, the parallel regression assumption is imposed for every variable. One important difference between cumulativel and stage models is that in stage models higher categories of $y$ may only be reached after successfully proceeding through the lower categories. Scholars do not typically use stage models to analyze variables such as self-rated healath because there is no natural starting point, and one does not need to experience poor or fair health before good or excellent health. 
+
+The key assumption in all stage models is that the errors are independent across stages or cutpoint equations (Maddala, 1983). For a three-category outcome with two equations, 1 versus 2-3 and 2 versus 3, we must assume that there is no correlation between the errors in the first and second equations. In other words, the smaller sample in the second equation is a random subset of the larger sample in the first equation. Unfortunately, this may not be a realistic assumption for some ordinal outcomes, such as educational attainment. If the subsamples in later stages are systematically different with respect to unobserved or omitted variables, then the coefficients in later stages may be biased. For instance, the finding of weakening family background effects on educational attainment in later stages is due in part to this type of sample selection bias. The group that successfully makes several transitions to the later educational stages is much more homogeneous than the initial group of respondents. 
+
+Coefficients may also vary across cutpoint equations in stage models due to heteroscedasticity of the conditional variances of the latent dependent variables (Cameron and Heckman 1998; Mare 2006). Partial models are ordered regression models that relax the parallel regression assumption for one subset of variables. Relaxing the parallel assumption allows the coefficients in this group to vary across the cutpoint equations. In other words, some variables will have coefficients that change depending on the level of the dependent variable. 
+
+Using MLE for ordered regression models is not immune to problems. Although McCullagh (1980) and Pratt (1981) show that the log-likelihood function in ordered regression models has global concavity under general conditions, the numerical estimation of these models can occasionally be problematic in practice. When the overall sample size is small, for example, the estimation of ordered regressional models could fail to reach convergence (McCullagh 1980) or to produce parameter estimates with less-than-optimal properties that are largely unknown. Long (1997) 
 
 Specifically, both transition variables can only face a formal investigation after a preliminary has begun.
 
