@@ -4,7 +4,6 @@ if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 
 if(Sys.info()['user'] %in% c('minhas')){
   pathResults=pathData='~/forec2_agg/' }
-
 # install.packages(c('foreach','doParallel','devtools'), repos='https://cloud.r-project.org')
 # library(devtools)
 # install_version("mvtnorm", version = "1.0-8", repos = "http://cran.us.r-project.org")
