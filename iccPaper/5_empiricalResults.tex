@@ -1,6 +1,10 @@
 \section*{Modeling sequential variable}
 
+For many ordinal variables, the assumption of a single underlying continuous variable may not be appropriate. If the response can be understood as being the result of a sequential process, such that a higher response category is possibly only after all lower categories are achieved, the sequential model as proposed by Tutz (1990) is usually appropriate. 
 
+The sequential model assumes that for every category k -- stage of investigation at ICC -- there is a latent continuous variable $\tilde{Y_{k}}$ that determines the transition between the $k^{th}$ and the $k+1^{th}$ category. In our case, $\tilde{Y_{k}}$ represents all the factors contributing to the probability of a country proceeding beyond a given ICC investigation stage, $k$. Informally, we could call $\tilde{Y_{k}}$ ``suspicious level'' in the ongoing example. The categories are separated by thresholds $\tau_{k}$ -- perhaps thought of as the combination of all factors working against the country proceeding in ICC investigative stages. If $\tilde{Y_{k}}$ is greater than the threshold $\tau_{k}$, the sequential process continues; otherwise it stops at category $k$. 
+
+Since the thresholds $\tau_{k}$ refer to different latent variables, they don't need to be ordered. That is, we may as well have $\tau_{k+1} < \tau_{k}$. Similar to standard cumulative ordinal models, we need to assume a certain distribution for $\tilde{Y_{k}}$ with cumulative distribution function $F$. Let's suppose we want to model the probability of a country facing a formal investigation. This means that 
 
 The basic idea is to cast the model in terms of conditional transition probabilities $Pr(y_{i} = j | y_{i} >= j), j=1, \ldots, J-1$. In our application, this is the characteristic of the $i^{th}$ woman who has first birth in interval $j$, which occurs only after passing levels 1, 2, $\ldots$, $j-1$ and only bears at level $j$ or higher. The probability of having birth at interval $j$, conditional on the event that the $j$th interval is reached is given by:
 
