@@ -1,5 +1,7 @@
 \section*{Modeling sequential variable}
 
+
+
 The basic idea is to cast the model in terms of conditional transition probabilities $Pr(y_{i} = j | y_{i} >= j), j=1, \ldots, J-1$. In our application, this is the characteristic of the $i^{th}$ woman who has first birth in interval $j$, which occurs only after passing levels 1, 2, $\ldots$, $j-1$ and only bears at level $j$ or higher. The probability of having birth at interval $j$, conditional on the event that the $j$th interval is reached is given by:
 
 \begin{align}
