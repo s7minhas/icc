@@ -151,6 +151,18 @@ Sample from the joint posterior of $(\{z_{ij}\},\beta)$ by ??? sampling of ???:
 	\hat{\Sigma} = (\Sigma_{0}^{-1} + \sum_{i=1}^{n} x_{i}^{'}x_{i})^{-1} \nonumber
 \end{eqnarray}
 
+% random effects
+% kazembe
+Modeling of heterogeneity and spatially structured variation may be obtained by introducing random effects. Similarly, nonlinear effects are introduced in the model through smoothing functions. The predictor (3) is expanded to include all possible explanatory variables like fixed, nonlinear and spatial covariates, giving a semi-parametric predictor (Tutz 2003): 
+
+\begin{align*}
+	\eta_{ij} &= \theta_{j} - w_{i}'\alpha + \sum_{k=1}^{q} f_{k}(x_{ik}) + f_{s}(s_{i}),
+\end{align*}
+
+where $\alpha$ are fixed effects corresponding to $w_{i} = (w_{i1},\ldots,w_{ip})'$, $f_{k}$, $k=1,\ldots,q$ are unknown smooth functions of continuous covariates
+
+
+
 \section*{Empirical Results}
 
 \begin{figure}
@@ -169,6 +181,7 @@ Sample from the joint posterior of $(\{z_{ij}\},\beta)$ by ??? sampling of ???:
 
 % what variables are mostly impactful
 % everything from africa down
+
 
 \subsection*{Onset Models}
 
