@@ -15,7 +15,7 @@ The basic idea is to cast the model in terms of conditional transition probabili
 
 \begin{align}
 	Pr(y_{i} = j | y_{i} >= j, w_{i})= F(\theta_{j} - w_{i};'\alpha), j=1, \ldots, J-1,
-\end{align}}
+\end{align}
 
 where $\theta = (\theta_{1}, \ldots, \theta_{J-1})$ are the cutpoints, one of which is normalized to 0 to ensure identifiability. $F$ is a strictly monotone function, $w_{i}'\alpha$ is the effect of covariates associated with the response. If $F$ is chosen to be a logistic distribution function we obtain a sequential logit (Tutz 2003; Liu and Agresti 2005),
 
