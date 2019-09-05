@@ -9,174 +9,43 @@
 % likelihood and model layout
 % fit via hamiltonian monte carlo in stan
 
-\section*{Modeling sequential variable}
+\section*{Modeling sequential processes}
 
-For many ordinal variables, the assumption of a single underlying continuous variable may not be appropriate. If the response can be understood as being the result of a sequential process, such that a higher response category is possibly only after all lower categories are achieved, the sequential model as proposed by Tutz (1990) is usually appropriate. 
+To model \emph{State- and Opposition-Focused ICC Transition} we need to account for the sequential way in which states and opposition actors transition through the ICC process (i.e., no ICC investigation, preliminary, and formal). Typically, scholars would use an ordinal regression framework to model such processes. In the case, the probability of interest is the cumulative probability, which is the probability at or below a given outcome category. For example, our dependent variables for state and opposition actors are grouped into three intervals -- 1 = no involvement; 2 = preliminary investigation; and 3 = formal investigation -- where the cumulative probability for category 2 is the probability that an actor is either in the no or preliminary investigation stage.\footnote{Stage models are also referred to as "continuation ratio" models (Feinberg 1980; Long 1997; Agresti 2010; Tutz 2012) because the focus is on the sequential process of continuing from one stage to the next.} For an outcome with ($y$) with three categories (1-3), $y$ is linked to the binary outcomes in the cutpoint equations ($y_{1} - y_{2}$) by the measurement equations:
+
+\begin{eqnarray}
+	y_{1} =
+	\begin{cases}
+		1 \text{ if } y = 1 \nonumber \\
+		0 \text{ if } y = 2-3 \nonumber \\
+	\end{cases}
+	y_{2} =
+	\begin{cases}
+		1 \text{ if } y = 1-2 \nonumber \\
+		0 \text{ if } y = 3 \nonumber \\
+	\end{cases}
+\end{eqnarray}
+
+The sample size does not change across the cutpoint equations, which is a feature of cumulative models. For example, in the cutpoint equations above, every respondent is coded as 0 or 1 for the dependent variable in all of the cutpoint equations. Even though the respondent's value for $y$ will vary across the cutpoint equations, the important fact to keep in mind is that every respondent is included in each equation within the cumulative ordinal framework. As a result, the binary equations are not independent, which can have important implications for model estimation.\footnote{In the appendix, we show that a typical ordinal framework produces results that our not only different than our sequential approach, but also are less accurate in terms of reflecting the data generating process underlying ICC investigations.} 
+
+Now the probability of interest in stage models is the conditional probability ($Pr[ y = k | y >= k]$), which is the probability for a particular category, $k$, given the respondent is in that category or a higher one. As a result, respondents in lower categories are excluded. The measurement equations in this case can be expressed as: 
+
+\begin{eqnarray}
+	y_{1} =
+	\begin{cases}
+		1 \text{ if } y = 1 \nonumber \\
+		0 \text{ if } y = 2-3 \nonumber \\
+	\end{cases}
+	y_{2} =
+	\begin{cases}
+		1 \text{ if } y = 2 | y >= 2 \nonumber \\
+		0 \text{ if } y = 3 | y >= 2 \nonumber \\
+	\end{cases}
+\end{eqnarray}
+
+The outcomes in the first cutpoint equation ($y_{1}$) is the same in the cumulative and stage models. However, the remaining cutpoint equations are different. In addition, the sample size becomes progressively smaller in later stages.
 
 The sequential model assumes that for every category k -- stage of investigation at ICC -- there is a latent continuous variable $\tilde{Y_{k}}$ that determines the transition between the $k^{th}$ and the $k+1^{th}$ category. In our case, $\tilde{Y_{k}}$ represents all the factors contributing to the probability of a country proceeding beyond a given ICC investigation stage, $k$. Informally, we could call $\tilde{Y_{k}}$ ``suspicious level'' in the ongoing example. The categories are separated by thresholds $\tau_{k}$ -- perhaps thought of as the combination of all factors working against the country proceeding in ICC investigative stages. If $\tilde{Y_{k}}$ is greater than the threshold $\tau_{k}$, the sequential process continues; otherwise it stops at category $k$. 
-
-% Since the thresholds $\tau_{k}$ refer to different latent variables, they don't need to be ordered. That is, we may as well have $\tau_{k+1} < \tau_{k}$. Similar to standard cumulative ordinal models, we need to assume a certain distribution for $\tilde{Y_{k}}$ with cumulative distribution function $F$. Let's suppose we want to model the probability of a country facing a formal investigation. This means that 
-
-To make the sequential model, we set up a linear regression for each latent variable via $\tilde{Y_{k}} = \eta + \epsilon_{k}$ with a category specific error term, $\epsilon_{k}$. By default, all $\tilde{Y_{k}}$ share the same linear predictor $\eta$, such that the effect of any potential predictor is constant across $k$. 
-
-The basic idea is to cast the model in terms of conditional transition probabilities $Pr(y_{i} = j | y_{i} >= j), j=1, \ldots, J-1$. In our application, this is the characteristic of the $i^{th}$ woman who has first birth in interval $j$, which occurs only after passing levels 1, 2, $\ldots$, $j-1$ and only bears at level $j$ or higher. The probability of having birth at interval $j$, conditional on the event that the $j$th interval is reached is given by:
-
-\begin{align}
-	Pr(y_{i} = j | y_{i} >= j, w_{i})= F(\theta_{j} - w_{i};'\alpha), j=1, \ldots, J-1,
-\end{align}
-
-where $\theta = (\theta_{1}, \ldots, \theta_{J-1})$ are the cutpoints, one of which is normalized to 0 to ensure identifiability. $F$ is a strictly monotone function, $w_{i}'\alpha$ is the effect of covariates associated with the response. If $F$ is chosen to be a logistic distribution function we obtain a sequential logit (Tutz 2003; Liu and Agresti 2005),
-
-\begin{align}
-	Pr(y_{i}=j | y_{i} >= j, w_{i}) = \frac{exp(\theta_{j} - w_{i}'\alpha)}{1+exp(\theta_{j} - w_{i}'\alpha)},
-\end{align}
-
-or equivalently in logit form
-
-\begin{align}
-	n_{ij} = log \frac{Pr(y_{i} = j |w_{i})}{Pr(y_{i}>j | w_{i})} = \theta_{j} - w_{i}'\alpha, j=1, \ldots, J-1
-\end{align}
-
-where $n_{ij}$ is a predictor.
-
-The above model can also be formulated in terms of latent variables expressing the propoensity of a women to reach category $j$ before bearing her first child. Corresponding to the $j$th category (of time to first birth), definte latent variable \{$z_ij$\}, where $z_{ij} = \theta_{j} - w_{i}'\alpha + \epsilon_{ij} = n_{ij} + \epsilon_{ij}$, where $\epsilon_{ij}$ is an error variable.
-
-We observe $y_{i} = 1$ if $z_{i1} <= \theta_{1}$, and we observe $y_{i}=2$ if the first latent variable $z_{i1} > \theta_{1}$ and the second latent variable $z_{i2} <= \theta_{2}$. In general we have:
-
-The latent variable representation can be simplified by incorporating cutpoints
-
-To model \emph{State- and Opposition-Focused ICC Transition} we need to account for the sequential way in which states and opposition actors transition through the ICC process (i.e., no ICC investigation, preliminary, and formal). Typically, scholars would use an ordinal regression framework to model such processes. In these models, the probability of interest is the cumulative probability, which is the probability at or below a given outcome category. For example, if income is grouped into four intervals -- 1 = $< \$25,000$; 2 = $\$25,000 to <\$50,000$; 3 = $\$50,000 to <\$75,000$; 4 = $>=\$75,000$ -- the cumulative probability for category 2 is the probability that a respondent is located in one of the two bottom income categories. For an outcome with ($y$) with four categories (1-4), $y$ is linked to the binary outcomes in the cutpoint equations ($y_{1} - y_{3}$) by the measurement equations:
-
-\begin{eqnarray}
-	y_{1} =
-	\begin{cases}
-	1 \text{ if } y = 1 \nonumber \\
-	0 \text{ if } y = 2-4 \nonumber \\
-\end{cases}
-	y_{2} =
-	\begin{cases}
-	1 \text{ if } y = 1-2 \nonumber \\
-	0 \text{ if } y = 3-4 \nonumber \\
-\end{cases}
-	y_{3} =
-	\begin{cases}
-	1 \text{ if } y = 1-3 \nonumber \\
-	0 \text{ if } y = 4 \nonumber \\
-\end{cases}
-\end{eqnarray}
-
-The sample size does not change across the cutpoint equations, which is a feature of cumulative models.
-
-The probability of interest in stage models is the conditional probability ($Pr[ y = m | y >= m]$), which is the probability for a particular category, $m$, given the respondent is in that category or a higher one. As a result, respondents in lower categories are excluded. For example, if the dependent variable is a four-category measure of educational attainment -- 1 = less than high school; 2 = high school; 3 = some college; and 4 = college or more -- the conditional probability for category 2 is the probability that a respondent has a high school degree given that he or she has a high school degree or more. We use Fullerton's (2009) terminology in referring to this as the "stage" approach because the cutpoint equations represent a series of stages. In order to reach a particular category, respondents must pass through each of the previous categories.\footnote{Stage models are also referred to as "continuation ratio" models (Feinberg 1980; Long 1997; Agresti 2010; Tutz 2012) because the focus is on the sequential process of continuing from one stage to the next. }
-
-For stage models there must be a logical starting point, respondents must pass through earlier stages to reach a later stage, and the stages must be irreversible (Tutz 1991).
-
-For an outcome ($y$) with four categories (1-4), $y$ is linked to the binary variables in the cutpoint equations ($y_{1} - y_{3}$) by the measurement equations:
-
-\begin{eqnarray}
-	y_{1} =
-	\begin{cases}
-	1 \text{ if } y = 1 \nonumber \\
-	0 \text{ if } y = 2-4 \nonumber \\
-\end{cases}
-	y_{2} =
-	\begin{cases}
-	1 \text{ if } y = 2 | y >= 2 \nonumber \\
-	0 \text{ if } y = 3-4 | y >= 2 \nonumber \\
-\end{cases}
-	y_{3} =
-	\begin{cases}
-	1 \text{ if } y = 3 | y >= 3 \nonumber \\
-	0 \text{ if } y = 4 | y >= 3 \nonumber \\
-\end{cases}
-\end{eqnarray}
-
-The outcomes in the first cutpoint euqations ($y_{1}$) is the same in the cumulative and staghe models. However, the remaining cutpoint equations are different. In addition, the sample size becomes progressively smaller in later stages.
-
-The parallel continuation ratio model treats the ordinal outcome as a series of stages with effects that are constrained to remain constant across stages. In other words, the parallel regression assumption is imposed for every variable. One important difference between cumulativel and stage models is that in stage models higher categories of $y$ may only be reached after successfully proceeding through the lower categories. Scholars do not typically use stage models to analyze variables such as self-rated healath because there is no natural starting point, and one does not need to experience poor or fair health before good or excellent health.
-
-The key assumption in all stage models is that the errors are independent across stages or cutpoint equations (Maddala, 1983). For a three-category outcome with two equations, 1 versus 2-3 and 2 versus 3, we must assume that there is no correlation between the errors in the first and second equations. In other words, the smaller sample in the second equation is a random subset of the larger sample in the first equation. Unfortunately, this may not be a realistic assumption for some ordinal outcomes, such as educational attainment. If the subsamples in later stages are systematically different with respect to unobserved or omitted variables, then the coefficients in later stages may be biased. For instance, the finding of weakening family background effects on educational attainment in later stages is due in part to this type of sample selection bias. The group that successfully makes several transitions to the later educational stages is much more homogeneous than the initial group of respondents.
-
-Coefficients may also vary across cutpoint equations in stage models due to heteroscedasticity of the conditional variances of the latent dependent variables (Cameron and Heckman 1998; Mare 2006). Partial models are ordered regression models that relax the parallel regression assumption for one subset of variables. Relaxing the parallel assumption allows the coefficients in this group to vary across the cutpoint equations. In other words, some variables will have coefficients that change depending on the level of the dependent variable.
-
-Using MLE for ordered regression models is not immune to problems. Although McCullagh (1980) and Pratt (1981) show that the log-likelihood function in ordered regression models has global concavity under general conditions, the numerical estimation of these models can occasionally be problematic in practice. When the overall sample size is small, for example, the estimation of ordered regressional models could fail to reach convergence (McCullagh 1980) or to produce parameter estimates with less-than-optimal properties that are largely unknown. Long (1997)
-
-Specifically, both transition variables can only face a formal investigation after a preliminary has begun.
-
-More formally, in order for actor $i$ to receive a value of $j$ for $Y_{i}$, the actor must pass through all levels less than $j$. The probability of then reaching $j$, conditional on the event that the $j^{th}$ level is reached, is given by:
-
-\begin{eqnarray}
-	Pr(y_{i}={j} | Y_{i} \geq {j}, \gamma, \beta) &=& F(\gamma_{j} - x_{i}^{'}\beta) \nonumber \\
-	Pr(Y_{i}={j}|\gamma_{1},\beta) &=& F(\gamma_{j} - x_{i}^{'}\beta)\text{ }\prod^{j-1}_{k=1}\text{ }\{1-F(\gamma_{k}-x_{i}^{'}\beta)\} \nonumber
-\end{eqnarray}
-
-$\gamma = (\gamma_{1},...,\gamma_{J-1})$
-
-\begin{eqnarray}
-	Pr(y_{i}=J|\beta_{1},\gamma) &=&\text{}\prod^{J-1}_{k=1}\text{ }\{1-F(\gamma_{k}-x_{i}^{'}\beta)\} \nonumber
-\end{eqnarray}
-
-Latent variable representation
-
-\begin{eqnarray}
-	w_{ij} &=& x_{i}^{'}\beta+\epsilon_{ij},\text{ }\epsilon_{ij} \sim iid \nonumber
-\end{eqnarray}
-
-Observe:
-
-\begin{eqnarray}
-	y_{i} = 1\text{ iff } w_{i1} \leq \gamma_{1} \nonumber \\
-	\nonumber \\
-	y_{i} = 2\text{ iff }
-	\begin{cases}
-	w_{i1} > \gamma_{1} \nonumber \\
-	w_{i2} \leq \gamma_{2} \nonumber \\
-\end{cases}
-\end{eqnarray}
-
-Likelihood function:
-
-\begin{eqnarray}
-	L(\gamma,\beta) = \prod_{i\colon y_{i}<J}\text{ }[ F(\gamma_{y_{i}} - x_{i}^{'}\beta)\text{ }\prod_{k=1}^{y_{i}=1}\text{ }\{1-F(\gamma_{R}-x_{i}^{'}\beta)\}] &\times \displaystyle \prod_{i\colon y_{i}=J}\text{ }[\prod_{k=1}^{J=1} \{1-F(\gamma_{2} - x_{i}^{'}\beta)\}] \nonumber \\
-	\nonumber \\
-	(\gamma,\beta) \sim \pi (\gamma,\beta) & \nonumber \\
-	\beta \sim N(\beta_{0},\Sigma_{0}) & \nonumber \\
-	\nonumber \\
-	z_{ij} = w_{ij} - \gamma_{j}, & \nonumber
-	\end{eqnarray}
-	So...
-	\begin{eqnarray}
-	y_{i} =
-	\begin{cases}
-	1\text{ if }z_{i} \leq 0 \nonumber \\
-	2\text{ if }z_{i1} > 0, z_{i2} \leq 0 \nonumber \\
-	\vdots \nonumber \\
-	J-1\text{ if }z_{i1} > 0,...,z_{i,j-2}>0,z_{i,j-1}\leq0 \nonumber \\
-	J\text{ if }z_{i1}>0,...,z_{i,j-1}>0
-\end{cases}
-\end{eqnarray}
-
-Sample from the joint posterior of $(\{z_{ij}\},\beta)$ by ??? sampling of ???:
-
-\begin{eqnarray}
-	(\{z_{ij}\} | y,\beta)\text{ and }(\beta,|\{z_{ij}\},y) \nonumber \\
-	(\{z_{ij}\} | y,\beta)\stackrel{iid}{\sim}TN_{(a,b)}(\beta,1) \nonumber \\
-	\nonumber \\
-	(\beta | \{z_{ij}\},y)\stackrel{iid}{\sim}N(\hat{\beta},\hat{\Sigma}) \nonumber \\
-	\nonumber \\
-	\hat{\beta} = (\Sigma_{0}^{-1}+\sum_{i=1}^{n} x_{i}^{'}x_{i})^{-1} \times (\Sigma_{0}^{-1}\beta_{0}+\sum_{i=1}^{n} x_{i}^{'}z_{i}) \nonumber \\
-	\hat{\Sigma} = (\Sigma_{0}^{-1} + \sum_{i=1}^{n} x_{i}^{'}x_{i})^{-1} \nonumber
-\end{eqnarray}
-
-% random effects
-% kazembe
-Modeling of heterogeneity and spatially structured variation may be obtained by introducing random effects. Similarly, nonlinear effects are introduced in the model through smoothing functions. The predictor (3) is expanded to include all possible explanatory variables like fixed, nonlinear and spatial covariates, giving a semi-parametric predictor (Tutz 2003): 
-
-\begin{align*}
-	\eta_{ij} &= \theta_{j} - w_{i}'\alpha + \sum_{k=1}^{q} f_{k}(x_{ik}) + f_{s}(s_{i}),
-\end{align*}
-
-where $\alpha$ are fixed effects corresponding to $w_{i} = (w_{i1},\ldots,w_{ip})'$, $f_{k}$, $k=1,\ldots,q$ are unknown smooth functions of continuous covariates
 
 
 
