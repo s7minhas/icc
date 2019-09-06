@@ -45,6 +45,19 @@ Now the probability of interest in stage models is the conditional probability (
 
 The outcomes in the first cutpoint equation ($y_{1}$) is the same in the cumulative and stage models. However, the remaining cutpoint equations are different. In addition, the sample size becomes progressively smaller in later stages. 
 
+To lay out the actual model, we follow Tutz (1991) and Agresti (2010) in utilizing a latent variable framework. For $y=1,\ldots,K$, there are $K-1$ latent variables. Each latent variable, $z_{m}$, corresponds to a particular cutpoint equation, for which the structural model can be expressed as:
+
+\begin{align}
+	z_{m} = x \beta + w\eta_{k}  + \epsilon_{k}	
+\end{align}
+
+$x$ represents a vector of independent variables that are assumed to have a consistent effect, $\beta$, across stages and $w$ represent a vector of independent variables whose effect, captured by $\eta_{k}$, can vary by stage. $\epsilon_{k}$ represents the error term for the $k$ stage. Using this formulation we can represent the cutpoint equation for each stage as: 
+
+\begin{align}
+	Pr(y = 1 | y >= 1, x, w) &= F(\tau_{1} - x\beta - w\eta_{1}) \\
+	Pr(y = 2 | y >= 2, x, w) &= F(\tau_{2} - x\beta - w\eta_{2})
+\end{align}
+
 The sequential model assumes that for every category k -- stage of investigation at ICC -- there is a latent continuous variable $\tilde{Y_{k}}$ that determines the transition between the $k^{th}$ and the $k+1^{th}$ category. In our case, $\tilde{Y_{k}}$ represents all the factors contributing to the probability of a country proceeding beyond a given ICC investigation stage, $k$. Informally, we could call $\tilde{Y_{k}}$ ``suspicious level'' in the ongoing example. The categories are separated by thresholds $\tau_{k}$ -- perhaps thought of as the combination of all factors working against the country proceeding in ICC investigative stages. If $\tilde{Y_{k}}$ is greater than the threshold $\tau_{k}$, the sequential process continues; otherwise it stops at category $k$. 
 
 in order for actor $i$ to receive a value of $j$ for $Y_{i}$, the actor must pass through all levels less than $j$. The probability of then reaching $j$, conditional on the event that the $j^{th}$ level is reached, is given by:
