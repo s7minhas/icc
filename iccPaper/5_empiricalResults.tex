@@ -43,9 +43,7 @@ Now the probability of interest in stage models is the conditional probability (
 	\end{cases}
 \end{eqnarray}
 
-The outcomes in the first cutpoint equation ($y_{1}$) is the same in the cumulative and stage models. However, the remaining cutpoint equations are different. In addition, the sample size becomes progressively smaller in later stages. 
-
-To lay out the actual model, we follow Tutz (1991) and Agresti (2010) in utilizing a latent variable framework. For $y=1,\ldots,K$, there are $K-1$ latent variables. Each latent variable, $z_{m}$, corresponds to a particular cutpoint equation, for which the structural model can be expressed as:
+The outcomes in the first cutpoint equation ($y_{1}$) is the same in the cumulative and stage models. However, the remaining cutpoint equations are different. In addition, the sample size becomes progressively smaller thus helping to ameliorate the issue of independence between the binary equations in later stages. To formalize the actual model, we follow Tutz (1991) and Agresti (2010) in utilizing a latent variable framework. For $y=1,\ldots,K$, there are $K-1$ latent variables. Each latent variable, $z_{m}$, corresponds to a particular cutpoint equation, for which the structural model can be expressed as:
 
 \begin{align}
 	z_{m} = x \beta + w\eta_{k}  + \epsilon_{k}	
@@ -113,7 +111,11 @@ Likelihood function:
 \end{cases}
 \end{eqnarray}
 
-Sample from the joint posterior of $(\{z_{ij}\},\beta)$ by ??? sampling of ???:
+Sample from the joint posterior of $(\{z_{ij}\},\beta)$
+
+Add note about how imputation process was embedded in the sampler
+
+brief note on incorporation of random effects to deal with country-case heterogeneity
 
 \begin{eqnarray}
 	(\{z_{ij}\} | y,\beta)\text{ and }(\beta,|\{z_{ij}\},y) \nonumber \\
@@ -124,6 +126,8 @@ Sample from the joint posterior of $(\{z_{ij}\},\beta)$ by ??? sampling of ???:
 	\hat{\beta} = (\Sigma_{0}^{-1}+\sum_{i=1}^{n} x_{i}^{'}x_{i})^{-1} \times (\Sigma_{0}^{-1}\beta_{0}+\sum_{i=1}^{n} x_{i}^{'}z_{i}) \nonumber \\
 	\hat{\Sigma} = (\Sigma_{0}^{-1} + \sum_{i=1}^{n} x_{i}^{'}x_{i})^{-1} \nonumber
 \end{eqnarray}
+
+
 
 \section*{Empirical Results}
 
