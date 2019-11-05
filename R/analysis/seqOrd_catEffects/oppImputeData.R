@@ -132,4 +132,5 @@ frame$id = factor(frame$id)
 frame$icclevel_opp_3 = factor(
 	frame$icclevel_opp_3, ordered=TRUE)
 save(frame, file=paste0(pathData, 'oppFrame.rda'))
+write.csv(frame, file='~/Desktop/oppFrame.csv')
 ###############################################################
