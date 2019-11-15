@@ -59,25 +59,26 @@ sobVars = sobVars[-c(5:7,16:17)]
 # sobVars = sobVars[-6]
 # sobVars[5] = 'africa'
 
-# fix for v3
-sobVars = sobVars[-6]
-sobVars[5] = 'africa'
-sobVars = sobVars[-13]
-sobVars[12] = 'lag1_v2juncind'
-sobVars = sobVars[c(1:5,12,6:11)]
+# # fix for v3
+# sobVars = sobVars[-6]
+# sobVars[5] = 'africa'
+# sobVars = sobVars[-13]
+# sobVars[12] = 'lag1_v2juncind'
+# sobVars = sobVars[c(1:5,12,6:11)]
 
 # table
 # clean table
 lazyCleanVars = gsub('_',' ',sobVars,fixed=TRUE)
 lazyCleanMods = c('state','rebel')
 lab='$^{**}$ and $^{*}$ indicate significance at $p< 0.05 $ and $p< 0.10 $, respectively.'
-# res=getTable(sobVars,lazyCleanVars,sobMods,lazyCleanMods)
-# print.xtable(xtable(res, align='llcc', caption=lab),
-# 	include.rownames=FALSE,
-# 	sanitize.text.function = identity,
-# 	hline.after=c(0,0,length(sobVars)*2,length(sobVars)*2),
-# 	size="footnotesize",	
-# 	file=paste0(pathResults, 'sob_model1a_1_newp5Var.tex'))
+res=getTable(sobVars,lazyCleanVars,sobMods,lazyCleanMods)
+print.xtable(xtable(res, align='llcc', caption=lab),
+	include.rownames=FALSE,
+	sanitize.text.function = identity,
+	hline.after=c(0,0,length(sobVars)*2,length(sobVars)*2),
+	size="footnotesize",	
+	# file=paste0(pathResults, 'sob_model1a_1_newp5Var.tex'))
+  file=paste0('~/Desktop/sob_model1a_1_newp5Var.tex'))
 ###############################################################
 
 ###############################################################
