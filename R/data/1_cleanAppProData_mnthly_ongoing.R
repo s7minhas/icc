@@ -124,7 +124,7 @@ for(v in vars){
 data = data[
 	which(
 		data$date > as.Date('2002-06-01', format='%Y-%m-%d') &
-		data$date < as.Date('2016-12-01', format='%Y-%m-%d')
+		data$date <= as.Date('2016-12-01', format='%Y-%m-%d')
 		)
 	,]
 ###############################################################	

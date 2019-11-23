@@ -36,7 +36,7 @@ addSomeColor = function(rawBeta, dataList){
 	return(dataList) }
 
 # prep data into format for coef dist plot
-prepData = function(gModBeta, stanModel, typeLab){
+prepData = function(gModBeta, stanModel, typeLab, justStdz=FALSE){
 
 	# remove category-specific labels
 	cleaner = function(x){gsub('\\.[0-9]\\.', '', x)}
@@ -54,6 +54,7 @@ prepData = function(gModBeta, stanModel, typeLab){
 			gModBeta[,v], 
 			stanModel$data[,cleaner(v)],
 			stanModel$data[,1]) }
+	if(justStdz){return(gModBeta)}
 
 	## prep data
 	data = mcmc_areas_data(
@@ -182,7 +183,7 @@ vizWrapper = function(model, gLab, l1Lab, l2Lab){
 	l2Vars = colnames(betaMatrix)[
 		grepl('.2.',colnames(betaMatrix), fixed=TRUE) ]
 
-	# viz
+	# viz prepData = function(gModBeta, stanModel, typeLab){
 	varLabs = varKey$clean
 	names(varLabs) = varKey$dirty
 	ggGlobal = mcmcViz(
@@ -194,6 +195,33 @@ vizWrapper = function(model, gLab, l1Lab, l2Lab){
 		theme(
 			axis.text.y = element_blank()
 			)
+
+	# arrange viz
+	## helper for arranging plot
+	return( list(g=ggGlobal,l1=ggLevel1,l2=ggLevel2) ) }
+
+# stdz table
+stdzTable = function(model, gLab, l1Lab, l2Lab){
+	# viz
+	betaMatrix = data.frame(
+		fixef(model, summary=FALSE),
+		stringsAsFactors = FALSE
+		)
+
+	# org vars
+	gVars = colnames(betaMatrix)[
+		!grepl('.',colnames(betaMatrix), fixed=TRUE) ]
+	l1Vars = colnames(betaMatrix)[
+		grepl('.1.',colnames(betaMatrix), fixed=TRUE) ]
+	l2Vars = colnames(betaMatrix)[
+		grepl('.2.',colnames(betaMatrix), fixed=TRUE) ]
+
+	# viz prepData = function(gModBeta, stanModel, typeLab){
+	varLabs = varKey$clean
+	names(varLabs) = varKey$dirty
+	ggGlobal = prepData(betaMatrix[,gVars], model, gLab, TRUE)
+	ggLevel1 = prepData(betaMatrix[,l1Vars[-1]], model, l1Lab, TRUE)
+	ggLevel2 = prepData(betaMatrix[,l2Vars[-1]], model, l2Lab, TRUE)
 
 	# arrange viz
 	## helper for arranging plot

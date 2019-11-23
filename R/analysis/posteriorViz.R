@@ -14,9 +14,9 @@ source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
 
 ###############################################################
 # summarize
-pathGraphics='~/Desktop/'
-pathResults='~/Desktop/'
-pathResults = '~/Dropbox/forec2/'
+# pathGraphics='~/Desktop/'
+# pathResults='~/Desktop/'
+# pathResults = '~/Dropbox/forec2/'
 load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var.rda'))
 oppMod = mod
 load(paste0(pathResults, 'sobState_model1a_1_newp5Var.rda'))
@@ -57,7 +57,7 @@ l1Lab = paste0('No ICC to Prelim Effects (',c('Opposition','State'),' Model)')
 l2Lab = paste0('ICC Prelim to Formal Effects (',c('Opposition','State'),' Model)')
 
 # generate pdfs
-ggB = ggplot()+geom_blank(aes(1,1)) + cowplot::theme_nothing()	   		
+ggB = ggplot()+geom_blank(aes(1,1)) + cowplot::theme_nothing()
 ## rebel model
 rebelSumm = vizWrapper(oppMod, gLab[1], l1Lab[1], l2Lab[1])
 rebelViz = arrangeGrob(
@@ -65,7 +65,8 @@ rebelViz = arrangeGrob(
 	arrangeGrob(rebelSumm$l1, rebelSumm$l2, ncol=2, widths=c(.55,.45)),	
 	nrow=2 )
 ggsave(rebelViz, 
-	file=paste0(pathGraphics, 'rebelCoefSumm.pdf'),
+	# file=paste0(pathGraphics, 'rebelCoefSumm.pdf'),
+	file=paste0('~/Desktop/rebelCoefSumm.pdf'),
 	width=8, height=6, device=cairo_pdf)
 
 ## state model
@@ -77,4 +78,14 @@ stateViz = arrangeGrob(
 ggsave(stateViz, 
 	file=paste0(pathGraphics, 'stateCoefSumm.pdf'),
 	width=8, height=6, device=cairo_pdf)
+###############################################################	
+
+###############################################################	
+# get out stdz tables
+oppTab=stdzTable(oppMod, gLab[1], l1Lab[1], l2Lab[1])
+oppRes = lapply(oppTab, function(tab){ apply(tab, 2, mean) })
+round(cbind(unlist(oppRes)), 2)
+stateTab=stdzTable(stateMod, gLab[2], l1Lab[2], l2Lab[2])
+stateRes = lapply(stateTab, function(tab){ apply(tab, 2, mean) })
+round(cbind(unlist(stateRes)), 2)
 ###############################################################	
