@@ -1,4 +1,12 @@
 rm(list=ls())
+
+if(Sys.info()['user'] %in% c('Owner')){
+  pathGit='C:/Users/Owner/Research/icc/'
+  pathDrop='C:/Users/Owner/Dropbox/Research/icc/'
+  pathData=paste0(pathDrop, 'data/')
+  pathResults=paste0(pathDrop,'results/')
+  pathGraphics=paste0(pathDrop,'graphics/') }
+
 if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	pathGit='~/Research/icc/'
 	# pathDrop='~/Dropbox/Research/icc/'

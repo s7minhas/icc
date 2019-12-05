@@ -2,6 +2,9 @@
 if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	source('~/Research/icc/R/setup.R') }
 
+if(Sys.info()['user'] %in% c('Owner')){
+	source('C:/Users/Owner/Research/icc/R/setup.R') }
+
 #
 loadPkg(
 	c(
@@ -42,7 +45,7 @@ varKey$clean = c(
 	'Africa',
 	'Judicial\n Independence$_{t-1}$',
 	'Cumulative\n Opp OSV$_{t-1}$',
-	'P5 Closeness$_{t-1}$',
+	'P5 Min. Ideal Pt.$_{t-1}$',
 	'Cumulative\n Govt OSV$_{t-1}$'
 	)
 addCats = function(x,toAdd){
@@ -57,7 +60,8 @@ l1Lab = paste0('No ICC to Prelim Effects (',c('Opposition','State'),' Model)')
 l2Lab = paste0('ICC Prelim to Formal Effects (',c('Opposition','State'),' Model)')
 
 # generate pdfs
-ggB = ggplot()+geom_blank(aes(1,1)) + cowplot::theme_nothing()
+ggB = ggplot()+geom_blank(aes(1,1
+                              )) + cowplot::theme_nothing()
 ## rebel model
 rebelSumm = vizWrapper(oppMod, gLab[1], l1Lab[1], l2Lab[1])
 rebelViz = arrangeGrob(
@@ -66,7 +70,8 @@ rebelViz = arrangeGrob(
 	nrow=2 )
 ggsave(rebelViz, 
 	# file=paste0(pathGraphics, 'rebelCoefSumm.pdf'),
-	file=paste0('~/Desktop/rebelCoefSumm.pdf'),
+	# file=paste0('~/Desktop/rebelCoefSumm.pdf'),
+	file=paste0('C:/Users/Owner/Desktop/rebelCoefSumm.pdf'),	
 	width=8, height=6, device=cairo_pdf)
 
 ## state model

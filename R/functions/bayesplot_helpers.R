@@ -94,6 +94,11 @@ coefp_colors = c(
     "Insignificant" = rgb(150, 150, 150, maxColorValue=255)
     )
 
+# bw for submission
+coefp_colors_orig = coefp_colors
+coefp_colors[1:2] = 'grey30'
+coefp_colors[3:4] = 'grey50'
+
 # revised fn for final viz
 mcmcViz = function(dataList, varLabels, colorsForCoef=coefp_colors){
 
