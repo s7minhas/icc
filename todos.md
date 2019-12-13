@@ -1,5 +1,4 @@
 graphic todos:
-    - greyscale
     - make sure syria footnote is in there
 
 appendix:

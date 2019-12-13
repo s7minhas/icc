@@ -69,9 +69,7 @@ rebelViz = arrangeGrob(
 	arrangeGrob(rebelSumm$l1, rebelSumm$l2, ncol=2, widths=c(.55,.45)),	
 	nrow=2 )
 ggsave(rebelViz, 
-	# file=paste0(pathGraphics, 'rebelCoefSumm.pdf'),
-	# file=paste0('~/Desktop/rebelCoefSumm.pdf'),
-	file=paste0('C:/Users/Owner/Desktop/rebelCoefSumm.pdf'),	
+	file=paste0(pathGraphics, 'rebelCoefSumm.pdf'),
 	width=8, height=6, device=cairo_pdf)
 
 ## state model
