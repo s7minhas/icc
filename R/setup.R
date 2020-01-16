@@ -7,6 +7,13 @@ if(Sys.info()['user'] %in% c('Owner')){
   pathResults=paste0(pathDrop,'results/')
   pathGraphics=paste0(pathDrop,'graphics/') }
 
+if(Sys.info()['user'] %in% c('herme')){
+  pathGit='C:/Users/herme/Research/icc/'
+  pathDrop='C:/Users/herme/Dropbox/Research/icc/'
+  pathData=paste0(pathDrop, 'data/')
+  pathResults=paste0(pathDrop,'results/')
+  pathGraphics=paste0(pathDrop,'graphics/') }
+
 if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	pathGit='~/Research/icc/'
 	# pathDrop='~/Dropbox/Research/icc/'
@@ -16,15 +23,15 @@ if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	pathGraphics=paste0(pathDrop,'graphics/') }
 
 #' function to install and/or load packages
-#' 
+#'
 #' @param toLoad character vector of packages to load
 #' @author Shahryar Minhas
 #' @return adds libraries to worksapce
 #' @export
-#' 
+#'
 loadPkg=function(toLoad){
 	for(lib in toLoad){
-	  if(!(lib %in% installed.packages()[,1])){ 
+	  if(!(lib %in% installed.packages()[,1])){
 	    install.packages(lib, repos='http://cran.rstudio.com/') }
 	  suppressMessages( library(lib, character.only=TRUE) )
 	}
@@ -54,22 +61,22 @@ cname = function(x) {countrycode(x,'country.name','country.name')}
 
 # helper to calculate p5 vars
 p5Vars = function(df, vars, baseLabel){
-	
+
 	# sum up
 	df$tmp = apply(df[,vars],1,sum,na.rm=TRUE)
 	names(df)[ncol(df)] = paste0('p5_',baseLabel)
 
 	# calc avg
 	df$tmp = apply(df[,vars], 1, mean, na.rm=TRUE)
-	names(df)[ncol(df)] = paste0('p5_',baseLabel,'Avg')	
+	names(df)[ncol(df)] = paste0('p5_',baseLabel,'Avg')
 
 	# calc min/max
 	df$tmp = apply(df[,vars],1, min,na.rm=TRUE)
-	names(df)[ncol(df)] = paste0('p5_',baseLabel,'Min')	
+	names(df)[ncol(df)] = paste0('p5_',baseLabel,'Min')
 	df$tmp = apply(df[,vars],1, max,na.rm=TRUE)
-	names(df)[ncol(df)] = paste0('p5_',baseLabel,'Max')		
+	names(df)[ncol(df)] = paste0('p5_',baseLabel,'Max')
 
-	# 
+	#
 	return(df) }
 
 # rubin coef
@@ -96,9 +103,9 @@ getTable = function(coefs, vnames, modelSumm, modelNames, digs=2){
     estims = round(as.numeric(as.character(estims)),digs)
     tvals = abs(temp[1:length(coefs),'z'])
     tvals = round(as.numeric(as.character(tvals)),digs)
-    estims = ifelse(tvals>=qnorm(0.95) & !is.na(tvals) & tvals<qnorm(0.975), 
+    estims = ifelse(tvals>=qnorm(0.95) & !is.na(tvals) & tvals<qnorm(0.975),
       paste('$', estims,'^{\\ast}$',sep=''), estims)
-    estims = ifelse(tvals>=qnorm(0.975) & !is.na(tvals), 
+    estims = ifelse(tvals>=qnorm(0.975) & !is.na(tvals),
       paste('$', estims,'^{\\ast\\ast}$',sep=''), estims)
     tableResults[1:length(coefs),ii] = estims
     serrors = temp[(length(coefs)+1):nrow(tableResults),'serror']

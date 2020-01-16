@@ -2,12 +2,15 @@
 if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	source('~/Research/icc/R/setup.R') }
 
+if(Sys.info()['user'] %in% c('herme')){
+	source('C:/Users/herme/Research/icc/R/setup.R') }
+
 #
 loadPkg(
 	c(
 		'brms', 'bayesplot',
 		'latex2exp', 'Cairo', 'gridExtra', 'cowplot'
-		) 
+		)
 	)
 source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
 ###############################################################
@@ -48,21 +51,21 @@ load(paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
 
 var = 'lag1_p5_absidealdiffMin'
 x = marginal_effects(
-	oppMod, 
+	oppMod,
 	effects=var, robust=TRUE,
 	probs=c(0.05,0.95),
 	method='fitted',
-	categorical=TRUE, 
+	categorical=TRUE,
 	plot=FALSE)[[1]]
 
 names(x)[1] = 'voi'
-ggplot(data=x, 
+ggplot(data=x,
 	aes(
-		x=voi, y=estimate__, 
+		x=voi, y=estimate__,
 		color=cats__, fill=cats__
-		)) + 
-	geom_line() + 
-	geom_ribbon(aes(ymin=lower__,ymax=upper__),alpha=.5) + 
+		)) +
+	geom_line() +
+	geom_ribbon(aes(ymin=lower__,ymax=upper__),alpha=.5) +
 	# geom_rug(data=data, aes(x=lag1_v2juncind,y=0),sides='b') +
 	facet_wrap(~cats__, scales='free_y')
-###############################################################	
+###############################################################
