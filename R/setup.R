@@ -1,15 +1,9 @@
 rm(list=ls())
 
-if(Sys.info()['user'] %in% c('Owner')){
-  pathGit='C:/Users/Owner/Research/icc/'
-  pathDrop='C:/Users/Owner/Dropbox/Research/icc/'
-  pathData=paste0(pathDrop, 'data/')
-  pathResults=paste0(pathDrop,'results/')
-  pathGraphics=paste0(pathDrop,'graphics/') }
-
-if(Sys.info()['user'] %in% c('herme')){
-  pathGit='C:/Users/herme/Research/icc/'
-  pathDrop='C:/Users/herme/Dropbox/Research/icc/'
+if(Sys.info()['user'] %in% c('herme','Owner')){
+  user = Sys.info()['user']
+  pathGit=paste0('C:/Users/',user,'/Research/icc/')
+  pathDrop=paste0('C:/Users/',user,'/Dropbox/Research/icc/')
   pathData=paste0(pathDrop, 'data/')
   pathResults=paste0(pathDrop,'results/')
   pathGraphics=paste0(pathDrop,'graphics/') }
