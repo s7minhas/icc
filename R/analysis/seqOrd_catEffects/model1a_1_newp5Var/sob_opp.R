@@ -2,6 +2,10 @@
 if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	source('~/Research/icc/R/setup.R') }
 
+if(Sys.info()['user'] %in% c('herme', 'Owner')){
+	user=Sys.info()['user']
+	source(paste0('C:/Users/',user,'/Research/icc/R/setup.R')) }
+
 #
 loadPkg(c('sbgcop','brms'))
 ###############################################################
@@ -16,8 +20,8 @@ sobOppVars = c(
 	'icc_rat','lag1_civilwar','lag1_polity2',
 	'lag1_gdpCapLog','africa',
 	'lag1_v2juncind',
-	'lag1_osv_rebel_cumul',	
-	# p5 vars: 
+	'lag1_osv_rebel_cumul',
+	# p5 vars:
 	'lag1_p5_absidealdiffMin'
 	)
 
@@ -53,7 +57,7 @@ frame$ccodeYear = with(frame, paste(ccode, year, sep='_'))
 
 #
 yrlyVars = c(
-	'lag1_polity2', 'lag1_gdpCapLog', 
+	'lag1_polity2', 'lag1_gdpCapLog',
 	'lag1_v2juncind', 'lag1_p5_absidealdiffMin'
 	)
 for(v in yrlyVars){
@@ -110,28 +114,30 @@ sobOppVars[c(5:8)] = paste0('cs(',sobOppVars[c(5:8)],')')
 
 # pool
 sobOppForm = formula(
-	paste0('icclevel_opp_3 ~ ', 
+	paste0('icclevel_opp_3 ~ ',
 		paste(sobOppVars, collapse = ' + ') ) )
 mod = brm(
-	formula=sobOppForm, 
-	data=frame,
-	family=cratio(link='logit'),
-	cores=4
-	)	
-# save(mod, file=paste0(pathResults, 'sobOpp_model1a_1_newp5Var.rda'))
-
-# hier
-frame$icclevel_opp_3 = factor(frame$icclevel_opp_3, ordered=TRUE)
-sobOppForm = formula(
-	paste0('icclevel_opp_3 ~ ', 
-		paste(sobOppVars, collapse = ' + '), '+(1|id)' ) )
-modHier = brm(
-	formula=sobOppForm, 
+	formula=sobOppForm,
 	data=frame,
 	family=cratio(link='logit'),
 	cores=4
 	)
-# save(modHier, 
+# save(mod, file=paste0(pathResults, 'sobOpp_model1a_1_newp5Var.rda'))
+
+summary(mod)
+
+# hier
+frame$icclevel_opp_3 = factor(frame$icclevel_opp_3, ordered=TRUE)
+sobOppForm = formula(
+	paste0('icclevel_opp_3 ~ ',
+		paste(sobOppVars, collapse = ' + '), '+(1|id)' ) )
+modHier = brm(
+	formula=sobOppForm,
+	data=frame,
+	family=cratio(link='logit'),
+	cores=4
+	)
+# save(modHier,
 # 	file=paste0(
 # 		pathResults, 'sobOpp_model1a_1_newp5Var_hier.rda'
 # 		))
