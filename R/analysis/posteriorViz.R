@@ -2,24 +2,22 @@
 if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	source('~/Research/icc/R/setup.R') }
 
-if(Sys.info()['user'] %in% c('Owner')){
-	source('C:/Users/Owner/Research/icc/R/setup.R') }
+if(Sys.info()['user'] %in% c('herme','Owner')){
+	source(paste0('C:/Users/',Sys.info()['user'],'/Research/icc/R/setup.R')) }
 
 #
 loadPkg(
 	c(
 		'brms', 'bayesplot',
 		'latex2exp', 'Cairo', 'gridExtra', 'cowplot'
-		) 
+		)
 	)
 source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
 ###############################################################
 
 ###############################################################
 # summarize
-# pathGraphics='~/Desktop/'
-# pathResults='~/Desktop/'
-# pathResults = '~/Dropbox/forec2/'
+# pathGraphics='~/Desktop/' # pathResults='~/Desktop/' # pathResults = '~/Dropbox/forec2/'
 load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var.rda'))
 oppMod = mod
 load(paste0(pathResults, 'sobState_model1a_1_newp5Var.rda'))
@@ -66,9 +64,9 @@ ggB = ggplot()+geom_blank(aes(1,1
 rebelSumm = vizWrapper(oppMod, gLab[1], l1Lab[1], l2Lab[1])
 rebelViz = arrangeGrob(
 	arrangeGrob(ggB,rebelSumm$g,ggB, widths=c(.15,.65,.2)),
-	arrangeGrob(rebelSumm$l1, rebelSumm$l2, ncol=2, widths=c(.55,.45)),	
+	arrangeGrob(rebelSumm$l1, rebelSumm$l2, ncol=2, widths=c(.55,.45)),
 	nrow=2 )
-ggsave(rebelViz, 
+ggsave(rebelViz,
 	file=paste0(pathGraphics, 'rebelCoefSumm.pdf'),
 	width=8, height=6, device=cairo_pdf)
 
@@ -76,14 +74,14 @@ ggsave(rebelViz,
 stateSumm = vizWrapper(stateMod, gLab[2], l1Lab[2], l2Lab[2])
 stateViz = arrangeGrob(
 	arrangeGrob(ggB,stateSumm$g,ggB, widths=c(.15,.65,.2)),
-	arrangeGrob(stateSumm$l1, stateSumm$l2, ncol=2, widths=c(.55,.45)),	
+	arrangeGrob(stateSumm$l1, stateSumm$l2, ncol=2, widths=c(.55,.45)),
 	nrow=2 )
-ggsave(stateViz, 
+ggsave(stateViz,
 	file=paste0(pathGraphics, 'stateCoefSumm.pdf'),
 	width=8, height=6, device=cairo_pdf)
-###############################################################	
+###############################################################
 
-###############################################################	
+###############################################################
 # get out stdz tables
 oppTab=stdzTable(oppMod, gLab[1], l1Lab[1], l2Lab[1])
 oppRes = lapply(oppTab, function(tab){ apply(tab, 2, mean) })
@@ -91,4 +89,4 @@ round(cbind(unlist(oppRes)), 2)
 stateTab=stdzTable(stateMod, gLab[2], l1Lab[2], l2Lab[2])
 stateRes = lapply(stateTab, function(tab){ apply(tab, 2, mean) })
 round(cbind(unlist(stateRes)), 2)
-###############################################################	
+###############################################################
