@@ -2,8 +2,9 @@ rm(list=ls())
 
 if(Sys.info()['user'] %in% c('herme','Owner')){
   user = Sys.info()['user']
-  pathGit=paste0('C:/Users/',user,'/Research/icc/')
-  pathDrop=paste0('C:/Users/',user,'/Dropbox/Research/icc/')
+	baseDir = paste0('C:/Users/',user,'/')
+  pathGit=paste0(baseDir, 'Research/icc/')
+  pathDrop=paste0(baseDir, 'Dropbox/Research/icc/')
   pathData=paste0(pathDrop, 'data/')
   pathResults=paste0(pathDrop,'results/')
   pathGraphics=paste0(pathDrop,'graphics/') }

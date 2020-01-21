@@ -51,7 +51,7 @@ prepData = function(gModBeta, stanModel, typeLab, justStdz=FALSE){
 	vars = vars[!grepl('Intercept',vars)]
 	for(v in vars){
 		gModBeta[,v] = stdzCoef(
-			gModBeta[,v], 
+			gModBeta[,v],
 			stanModel$data[,cleaner(v)],
 			stanModel$data[,1]) }
 	if(justStdz){return(gModBeta)}
@@ -62,13 +62,13 @@ prepData = function(gModBeta, stanModel, typeLab, justStdz=FALSE){
 	    pars = colnames(gModBeta),
 	    prob = 0.95, prob_outer=1,
 	    point_est = 'mean'
-	    ) 
+	    )
 	dataList <- split(data, data$interval)
 
-	# add one more inner dist 
+	# add one more inner dist
 	x = mcmc_areas_data(
 		    gModBeta, pars = colnames(gModBeta),
-		    prob = 0.9, prob_outer=1, 
+		    prob = 0.9, prob_outer=1,
 		    point_est = 'median'
 	    ) %>%
 		data.frame(.,stringsAsFactors = FALSE)
@@ -84,7 +84,7 @@ prepData = function(gModBeta, stanModel, typeLab, justStdz=FALSE){
 	#
 	return(dataList) }
 
-### modified version of bayesplot viz function	
+### modified version of bayesplot viz function
 # colors for sig
 coefp_colors = c(
     "Positive"=rgb(54, 144, 192, maxColorValue=255),
@@ -115,13 +115,13 @@ mcmcViz = function(dataList, varLabels, colorsForCoef=coefp_colors){
 
 	# args for layers
 	args_inner <- list(
-	    mapping = aes_(height = ~density, color=~sig, fill=~sig), 
+	    mapping = aes_(height = ~density, color=~sig, fill=~sig),
 	    alpha=.3, data = dataList$inner)
 	args_inner2 <- list(
-	    mapping = aes_(height = ~density, color=~sig, fill=~sig), 
+	    mapping = aes_(height = ~density, color=~sig, fill=~sig),
 	    alpha=.4, data = dataList$inner2)
 	args_point <- list(
-	    mapping = aes_(height = ~density, color=~sig, fill=~sig), 
+	    mapping = aes_(height = ~density, color=~sig, fill=~sig),
 	    data = dataList$point, color = NA)
 	args_outer <- list(
 	    mapping = aes_(height = ~density, color=~sig), alpha=.6, fill = NA)
@@ -133,26 +133,26 @@ mcmcViz = function(dataList, varLabels, colorsForCoef=coefp_colors){
 	layer_outer <- do.call(geom_area_ridges, args_outer)
 
 	# viz
-	gg = ggplot(dataList$outer) + 
-	    aes_(x = ~x, y = ~parameter, color=~sig, fill=~sig) + 
-	    layer_inner + 
-	    layer_inner2 + 
-	    layer_point + 
-	    layer_outer + 
+	gg = ggplot(dataList$outer) +
+	    aes_(x = ~x, y = ~parameter, color=~sig, fill=~sig) +
+	    layer_inner +
+	    layer_inner2 +
+	    layer_point +
+	    layer_outer +
 	    scale_color_manual(values=colorsForCoef, guide=FALSE) +
 	    scale_fill_manual(values=colorsForCoef, guide=FALSE) +
 	    scale_y_discrete(
-	        limits = unique(rev(dataList[[1]]$parameter)), 
+	        limits = unique(rev(dataList[[1]]$parameter)),
 	        expand = c(0.05, 0.6) ) +
 	    xlim(x_lim) +
-	    bayesplot_theme_get() + 
+	    bayesplot_theme_get() +
 	    legend_move("none") +
-	    yaxis_text(face = "bold") + 
+	    yaxis_text(face = "bold") +
 	    yaxis_title(FALSE) +
 	    yaxis_ticks(size = 1) +
 	    xaxis_title(FALSE) +
 	    geom_vline(
-	        aes(xintercept=0), 
+	        aes(xintercept=0),
 	        color='grey60', linetype='dashed'
 	        ) +
 	    scale_y_discrete('', labels=TeX(varLabels)) +
@@ -165,10 +165,10 @@ mcmcViz = function(dataList, varLabels, colorsForCoef=coefp_colors){
 			axis.text.x=element_text(family="Source Sans Pro Light"),
 			axis.text.y=element_text(family="Source Sans Pro Light", hjust=0),
 	        strip.text.x = element_text(size = 9, color='white',
-	            family="Source Sans Pro Semibold", 
+	            family="Source Sans Pro SemiBold", 
 	            angle=0, hjust=.05),
-	        strip.background = element_rect(fill = "#525252", color='#525252')        
-	        )	
+	        strip.background = element_rect(fill = "#525252", color='#525252')
+	        )
 	   #
 	   return(gg) }
 
