@@ -12,8 +12,11 @@ if(Sys.info()['user'] %in% c('herme','Owner')){
 #
 loadPkg(
 	c(
-		'brms', 'bayesplot', 'extrafont',
-		'latex2exp', 'Cairo', 'gridExtra', 'cowplot'
+		'brms', 'bayesplot', 'MASS',
+		# tadaa is a wrapper around ryourready
+		# https://github.com/cran/ryouready/blob/5d76b21f98737ac2778cd207b56309bcc78df9ed/R/association_measures.r
+		'tadaatoolbox',
+		'extrafont', 'latex2exp', 'Cairo', 'gridExtra', 'cowplot'
 		)
 	)
 source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
@@ -83,8 +86,35 @@ ggsave(stateViz,
 # get out stdz tables
 oppTab=stdzTable(oppMod, gLab[1], l1Lab[1], l2Lab[1])
 oppRes = lapply(oppTab, function(tab){ apply(tab, 2, mean) })
-round(cbind(unlist(oppRes)), 2)
+# round(cbind(unlist(oppRes)), 2)
 stateTab=stdzTable(stateMod, gLab[2], l1Lab[2], l2Lab[2])
 stateRes = lapply(stateTab, function(tab){ apply(tab, 2, mean) })
-round(cbind(unlist(stateRes)), 2)
+# round(cbind(unlist(stateRes)), 2)
+###############################################################
+
+###############################################################
+# perf analysis
+x = predict(oppMod)
+data = oppMod$data
+y = data$icclevel_opp_3
+predDF = data.frame(cbind(x, y), stringsAsFactors=FALSE)
+predDF$guess = apply(predDF[,1:3], 1, function(x){
+	which(x==max(x)) })
+
+# compare with polr
+dv = as.character(oppMod$formula$formula)[2]
+ivs = as.character(oppMod$formula$formula)[3]
+ivs = gsub(')','',gsub('cs(','',ivs,fixed=TRUE),fixed=TRUE)
+polrForm = formula( paste0(dv, '~', ivs) )
+data[,dv] = factor(
+	data[,dv],
+	ordered=TRUE,
+	levels=sort(unique(data[,dv]))
+)
+base = polr(polrForm, data=data, Hess=TRUE)
+predDF$polrPreds = predict(base)
+
+ord_somers_d(predDF$y, predDF$guess)
+ord_somers_d(predDF$y, predDF$polrPreds)
+tadaa_ord(predDF$y, predDF$guess)
 ###############################################################
