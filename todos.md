@@ -3,7 +3,7 @@ graphic todos:
 
 appendix:
     - mcmc sampler
-    - add in results for pts>3 andd icc ratif=1
+    - add in results for pts>3 andd icc ratif=1 ... done
     - add model perf comparison
 
 manuscript:
