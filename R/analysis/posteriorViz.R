@@ -95,8 +95,8 @@ stateRes <- lapply(stateTab, function(tab){ apply(tab, 2, mean) })
 
 ###############################################################
 # compare results with seq no cs and ordinal
-# mod = oppMod
-mod = stateMod
+mod = oppMod
+# mod = stateMod
 data <- mod$data
 
 ## compare with polr
@@ -201,7 +201,7 @@ tmp_bw=ggplot(coefData, aes(x=var, y=Estimate, group=model)) +
   geom_hline(aes(yintercept=0), linetype=2, color = "black") +
   geom_point(aes(shape=model), size=4, position=position_dodge(width = posDodge)) +
   geom_errorbar(aes(ymin=Q2.5,ymax=Q97.5),linetype = 1,size = .5,width = 0.1, position=position_dodge(width = posDodge)) +
-  scale_shape_manual(name = "", values = c(15, 16, 17)) +
+  scale_shape_manual(name = "", values = c(15, 18, 17)) +
   coord_flip() + labs(title = "", y="", x = "") +
 	facet_wrap(~model, scales='free_x') +
 	scale_x_discrete(labels=xlabels) +
@@ -222,8 +222,8 @@ tmp_bw=ggplot(coefData, aes(x=var, y=Estimate, group=model)) +
     strip.background = element_rect(fill = "#525252", color='#525252')
   	)
 ggsave(tmp_bw,
-	# file=paste0(pathGraphics, 'modCompare_opp.pdf'),
-	file=paste0(pathGraphics, 'modCompare_state.pdf'),
+	file=paste0(pathGraphics, 'modCompare_opp.pdf'),
+	# file=paste0(pathGraphics, 'modCompare_state.pdf'),
 	width = 12, height = 8)
 ###############################################################
 
