@@ -132,7 +132,7 @@ getPerfStats <- function(mod, lab){
 	# run sequential model with no cs terms
 	baseSeq <- vglm(
 		polrForm, data=data,
-		family = sratio (link="probit", parallel=TRUE))
+		family = sratio (link="logit", parallel=TRUE))
 	baseSeqPreds <- predict(baseSeq, type='res')
 	predDF$vglmPreds <- apply(baseSeqPreds[,1:3], 1,
 		function(x){
@@ -141,23 +141,32 @@ getPerfStats <- function(mod, lab){
 	# get out perf stats
 	out <- rbind(
 		cbind(
-			tadaa_ord(predDF$y, predDF$guess)$body[,c('value','col_name')],
+			tadaa_ord(
+				predDF$y, predDF$guess
+				)$body[,c('value','col_name')],
 			lab=lab, model='Sequential Model' ),
 		cbind(
-			tadaa_ord(predDF$y, predDF$vglmPreds)$body[,c('value','col_name')],
-			lab=lab, model='Sequential Model\nNo Category Specific' ),
+			tadaa_ord(
+				predDF$y, predDF$vglmPreds
+				)$body[,c('value','col_name')],
+			lab=lab, model='Ordinal Model' ),
 		cbind(
-			tadaa_ord(predDF$y, predDF$polrPreds)$body[,c('value','col_name')],
-			lab=lab, model='Ordinal Model' )
+			tadaa_ord(
+				predDF$y, predDF$polrPreds
+				)$body[,c('value','col_name')],
+			lab=lab, model='Sequential Model\nNo Category Specific' )
 	)
 
 	return(out) }
 
 # org
-perfData <- rbind(
-	getPerfStats(oppMod, lab='Opposition-Focused'),
-	getPerfStats(stateMod, lab='State-Focused')
-)
+if(!file.exists(paste0(pathResults, 'perfResults.rda'))){
+  perfData <- rbind(
+    getPerfStats(oppMod, lab='Opposition-Focused'),
+    getPerfStats(stateMod, lab='State-Focused')
+  )
+  save(perfData, file=paste0(pathResults, 'perfResults.rda'))
+} else { load(paste0(pathResults, 'perfResults.rda')) }
 
 # fix up some labels
 perfVarKey <- data.frame(dirty=unique(perfData$col_name))
@@ -176,19 +185,21 @@ perfData <- perfData[!is.na(perfData$varName),]
 perfData$lab <- factor(perfData$lab,
 	levels=c('State-Focused', 'Opposition-Focused'))
 perfData$model <- factor(perfData$model,
-		levels=c(
+		levels=rev(c(
 			'Sequential Model',
 			'Sequential Model\nNo Category Specific',
-			'Ordinal Model'))
+			'Ordinal Model')))
 perfData$value <- num(perfData$value)
 
 # plot
-cols <- brewer.pal(3, 'RdBu')[c(1,3)]
-x = perfData[perfData$col_name %in% c('somer_x','gamma'),]
-ggplot(x, aes(x=varName, y=value, color=model)) +
-	geom_point(position = position_dodge(width = 0.5)) +
-	geom_linerange(aes(ymin=0, ymax=value), position = position_dodge(width = 0.5)) +
-	scale_y_continuous(breaks=seq(0,1,.1)) +
+cols <- rev(brewer.pal(3, 'Set1'))
+perfData = perfData[perfData$col_name %in% c('somer_x','gamma'),]
+ggplot(perfData, aes(x=varName, y=value, color=model)) +
+	geom_point(position = position_dodge(width = 0.5), size=2) +
+	geom_linerange(
+		aes(ymin=0, ymax=value), size=1,
+		position = position_dodge(width = 0.5)) +
+	# scale_y_continuous(breaks=seq(0,1,.1)) +
 	scale_color_manual(values=rev(cols)) +
 	coord_flip() +
 	facet_wrap(~lab) +
@@ -200,4 +211,29 @@ ggplot(x, aes(x=varName, y=value, color=model)) +
 		legend.position='top',
 		panel.grid.minor=element_blank()
 	)
+
+# focus on somers d
+cols <- rev(brewer.pal(3, 'Set1'))
+perfData2 = perfData[perfData$col_name %in% c('somer_x'),]
+somerViz = ggplot(perfData2, aes(x=model, y=value)) +
+  geom_bar(stat='identity') +
+  scale_color_manual(values=rev(cols)) +
+  coord_flip() +
+  facet_wrap(~lab) +
+  labs(x='', y="") +
+  theme(
+    axis.ticks=element_blank(),
+    panel.border=element_blank(),
+    legend.title=element_blank(),
+    legend.position='top',
+    panel.grid.minor=element_blank(),
+    axis.text.x = element_text(family='Source Sans Pro Light'),
+    # axis.text.y = element_text(family='Source Sans Pro Light'),
+    strip.text.x = element_text(size = 9, color='white',
+                                family="Source Sans Pro SemiBold",
+                                angle=0, hjust=.05),
+    strip.background = element_rect(fill = "#525252", color='#525252')
+  )
+ggsave(somerViz, file=paste0(pathGraphics, 'somerViz.pdf'),
+       width=6, height=3)
 ###############################################################
