@@ -13,7 +13,7 @@ if(Sys.info()['user'] %in% c('herme','Owner')){
 set.seed(6886)
 loadPkg(
 	c(
-		'brms', 'bayesplot', 'MASS',
+		'brms', 'bayesplot', 'MASS', 'VGAM',
 		# tadaa is a wrapper around ryourready
 		# https://github.com/cran/ryouready/blob/5d76b21f98737ac2778cd207b56309bcc78df9ed/R/association_measures.r
 		'tadaatoolbox', 'reshape2', 'RColorBrewer',
@@ -103,8 +103,9 @@ getPerfStats <- function(mod, lab){
 	y <- data[,1]
 	predDF <- data.frame(cbind(x, y), stringsAsFactors=FALSE)
 	# pick outcome based on max prob assignment
-	predDF$guess <- apply(predDF[,1:3], 1, function(x){
-		which(x==max(x)) })
+	predDF$guess <- apply(predDF[,1:3], 1,
+		function(x){
+			which(x==max(x)) })
 
 	## compare with polr
 	# get form for polr from mod
@@ -122,17 +123,32 @@ getPerfStats <- function(mod, lab){
 
 	# run polr
 	base <- polr(polrForm, data=data, Hess=TRUE)
+	baseSeq <- vglm(
+		polrForm, data=data,
+		family = cumulative (link="probit", parallel=TRUE))
 	# extract preds
 	predDF$polrPreds = predict(base)
+
+	# run sequential model with no cs terms
+	baseSeq <- vglm(
+		polrForm, data=data,
+		family = sratio (link="probit", parallel=TRUE))
+	baseSeqPreds <- predict(baseSeq, type='res')
+	predDF$vglmPreds <- apply(baseSeqPreds[,1:3], 1,
+		function(x){
+			which(x==max(x)) })
 
 	# get out perf stats
 	out <- rbind(
 		cbind(
 			tadaa_ord(predDF$y, predDF$guess)$body[,c('value','col_name')],
 			lab=lab, model='Sequential Model' ),
-			cbind(
-				tadaa_ord(predDF$y, predDF$polrPreds)$body[,c('value','col_name')],
-				lab=lab, model='Ordinal Model' )
+		cbind(
+			tadaa_ord(predDF$y, predDF$vglmPreds)$body[,c('value','col_name')],
+			lab=lab, model='Sequential Model\nNo Category Specific' ),
+		cbind(
+			tadaa_ord(predDF$y, predDF$polrPreds)$body[,c('value','col_name')],
+			lab=lab, model='Ordinal Model' )
 	)
 
 	return(out) }
@@ -160,21 +176,28 @@ perfData <- perfData[!is.na(perfData$varName),]
 perfData$lab <- factor(perfData$lab,
 	levels=c('State-Focused', 'Opposition-Focused'))
 perfData$model <- factor(perfData$model,
-		levels=c('Sequential Model', 'Ordinal Model'))
+		levels=c(
+			'Sequential Model',
+			'Sequential Model\nNo Category Specific',
+			'Ordinal Model'))
+perfData$value <- num(perfData$value)
 
 # plot
 cols <- brewer.pal(3, 'RdBu')[c(1,3)]
-ggplot(perfData, aes(x=varName, y=value, color=model)) +
+x = perfData[perfData$col_name %in% c('somer_x','gamma'),]
+ggplot(x, aes(x=varName, y=value, color=model)) +
 	geom_point(position = position_dodge(width = 0.5)) +
 	geom_linerange(aes(ymin=0, ymax=value), position = position_dodge(width = 0.5)) +
+	scale_y_continuous(breaks=seq(0,1,.1)) +
 	scale_color_manual(values=rev(cols)) +
-	# coord_flip() +
+	coord_flip() +
 	facet_wrap(~lab) +
 	labs(x='', y='') +
 	theme(
 		axis.ticks=element_blank(),
 		panel.border=element_blank(),
 		legend.title=element_blank(),
-		legend.position='top'
+		legend.position='top',
+		panel.grid.minor=element_blank()
 	)
 ###############################################################
