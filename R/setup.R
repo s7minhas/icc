@@ -124,3 +124,18 @@ getTable = function(coefs, vnames, modelSumm, modelNames, digs=2){
 
 # helper dataset for matching country names
 load(paste0(pathData, 'panel.rda'))
+
+
+#
+coefp_colors = c(
+  "Positive"=rgb(54, 144, 192, maxColorValue=255),
+  "Negative"= rgb(222, 45, 38, maxColorValue=255),
+  "Positive at 90"=rgb(158, 202, 225, maxColorValue=255),
+  "Negative at 90"= rgb(252, 146, 114, maxColorValue=255),
+  "Insig" = rgb(150, 150, 150, maxColorValue=255)
+)
+
+#
+coefp_colors_grey = coefp_colors
+coefp_colors_grey[1:2] = 'grey30'
+coefp_colors_grey[3:4] = 'grey50'
