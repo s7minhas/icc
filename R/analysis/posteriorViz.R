@@ -94,6 +94,40 @@ stateRes <- lapply(stateTab, function(tab){ apply(tab, 2, mean) })
 ###############################################################
 
 ###############################################################
+# compare results with seq no cs and ordinal
+mod = oppMod
+data <- mod$data
+
+## compare with polr
+# get form for polr from mod
+dv <- as.character(mod$formula$formula)[2]
+ivs <- as.character(mod$formula$formula)[3]
+ivs <- gsub(')','',gsub('cs(','',ivs,fixed=TRUE),fixed=TRUE)
+polrForm <- formula( paste0(dv, '~', ivs) )
+
+# make sure dv is structured correctly
+data[,dv] = factor(
+	data[,dv],
+	ordered=TRUE,
+	levels=sort(unique(data[,dv]))
+)
+
+# run polr
+base <- polr(polrForm, data=data, Hess=TRUE)
+baseOrd <- vglm(
+	polrForm, data=data,
+	family = cumulative (link="probit", parallel=TRUE))
+
+# run sequential model with no cs terms
+baseSeq <- vglm(
+	polrForm, data=data,
+	family = sratio (link="logit", parallel=TRUE))
+
+summary(baseOrd)
+summary(baseSeq)
+###############################################################
+
+###############################################################
 # perf analysis
 getPerfStats <- function(mod, lab){
 
