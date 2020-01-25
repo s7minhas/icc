@@ -172,22 +172,19 @@ mcmcViz = function(dataList, varLabels, colorsForCoef=coefp_colors){
 	   #
 	   return(gg) }
 
-mcmcData = betaMatrix[,gVars]
-varKey
 
-# paramPlot2 <- function(mcmcData, varKey=NULL){
+tracePlot <- function(mcmcData, varKey=NULL){
 
-#   # libs
-#   suppressMessages(library(ggplot2))
-#   suppressMessages(library(plyr))
-#   suppressMessages(library(reshape2))
+  mcmcData = cbind(iter=1:nrow(betaMatrix), betaMatrix[,gVars])
 
-  colnames(mcmcData) <- names(data.frame(mcmcData))
-  mcmcMelt <- reshape2::melt(mcmcData)
+  mcmcMelt <- reshape2::melt(mcmcData, id='iter')
   mcmcMelt$Var2 <- as.character(mcmcMelt$variable)
   mcmcMelt$Var2 <- varKey$clean[match(mcmcMelt$Var2,varKey$dirty)]
   mcmcMelt$Var2 <- factor(mcmcMelt$Var2, levels=varKey$clean)
+
+  mcmcMelt = mcmcMelt[,c('iter','value','Var2')]
   names(mcmcMelt) <- c('Var1', 'value', 'Var2')
+
   mcmcMelt$mu <- with(mcmcMelt, ave(value, Var2, FUN=mean))
   mcmcMelt$median <- with(mcmcMelt, ave(value, Var2, FUN=median))
   qts <- c(lo95=0.025,lo90=0.05,hi90=0.95,hi95=0.975)
@@ -200,9 +197,10 @@ varKey
     geom_hline(aes(yintercept=mu), color='red') + 
     geom_ribbon(aes(ymin=lo90,ymax=hi90), alpha=.5, fill='grey40') +
     geom_ribbon(aes(ymin=lo95,ymax=hi95), alpha=.3, fill='grey40') +  
-    geom_line(lwd=.6) + 
-    xlab('Post-Burn Iteration') + 
-    ylab('Parameter Value') + 
+    geom_line(lwd=.01) + 
+    labs(
+    	x='', y='', title=gLab
+    	) + 
     facet_wrap(~Var2, ncol=1, scales='free_y') +  
     theme_bw() + 
     theme(
@@ -210,33 +208,14 @@ varKey
       axis.ticks=element_blank()
       )
 
-  ggMu <- plyr::ddply(mcmcMelt, .(Var2), summarise, mu=mean(value))
-  ggDens <- plyr::ddply(mcmcMelt,.(Var2),.fun = function(x){
-    tmp <- density(x$value) ; x1 <- tmp$x; y1 <- tmp$y
-    q90 <- x1 >= quantile(x$value,0.05) & x1 <= quantile(x$value,0.95)
-    q95 <- x1 >= quantile(x$value,0.025) & x1 <= quantile(x$value,0.975)
-    data.frame(x=x1,y=y1,q90=q90,q95=q95) })
-
-  ggDist <- ggplot2::ggplot(ggDens, aes(x=x)) +
-    facet_wrap(~ Var2, scales='free', ncol=1) +
-    geom_vline(data=ggMu, aes(xintercept=mu), linetype='solid', size=1, color='red') +
-    geom_line(aes(y=y), color='grey40') + ylab('') + 
-    xlab('Parameter Value') +
-    geom_ribbon(data=subset(ggDens, q90), aes(ymax=y),ymin=0, alpha=.7, fill='grey40') +   
-    geom_ribbon(data=subset(ggDens, q95), aes(ymax=y),ymin=0, alpha=.5, fill='grey40') + 
-    theme_bw() + 
-    theme(
-      panel.border=element_blank(),
-      axis.ticks=element_blank(),
-      axis.text.y=element_blank()
-    )
-
-  return( gridExtra::grid.arrange(ggTrace, ggDist, ncol=2) )
-
+  return( ggTrace )
 }
 
 # wrapper function around various stages necessary to process model
-vizWrapper = function(model, gLab, l1Lab, l2Lab){
+vizWrapper = function(
+	model, gLab, l1Lab, l2Lab, 
+	varKey=varKey, trace=FALSE
+	){
 	# viz
 	betaMatrix = data.frame(
 		fixef(model, summary=FALSE),
@@ -257,30 +236,33 @@ vizWrapper = function(model, gLab, l1Lab, l2Lab){
 	names(varLabs) = varKey$dirty
 
 	# trace plots
-	postDist = betaMatrix[,gVars]
-	postDist$iter = 1:nrow(postDist)
-	postDist = melt(postDist, id='iter')
-	ggplot(postDist, aes(x=iter, y=value)) +
-		geom_line() + 
-		facet_wrap(~variable, ncol=1, scales='free_y') +
-		labs(
-			x='', y='', title=gLab
-			) +
-		theme(
-			axis.ticks=element_blank(),
-			panel.border=element_blank()
+	if(trace){
+		ggGlobal = tracePlot(
+			betaMatrix[,gVars], 
+			varKey[match(gVars, varKey$dirty),]
 			)
+		ggLevel1 = tracePlot(
+			betaMatrix[,l1Vars[-1]],
+			varKey[match(l1Vars[-1], varKey$dirty),]
+			),
+		ggLevel2 = tracePlot(
+			betaMatrix[,l2Vars[-1]],
+			varKey[match(l2Vars[-1], varKey$dirty),]
+			)
+	}
 
 	# coef dist plots
-	ggGlobal = mcmcViz(
-		prepData(betaMatrix[,gVars], model, gLab), varLabs)
-	ggLevel1 = mcmcViz(
-		prepData(betaMatrix[,l1Vars[-1]], model, l1Lab), varLabs)
-	ggLevel2 = mcmcViz(
-		prepData(betaMatrix[,l2Vars[-1]], model, l2Lab), varLabs) +
-		theme(
-			axis.text.y = element_blank()
-			)
+	if(!trace){
+		ggGlobal = mcmcViz(
+			prepData(betaMatrix[,gVars], model, gLab), varLabs)
+		ggLevel1 = mcmcViz(
+			prepData(betaMatrix[,l1Vars[-1]], model, l1Lab), varLabs)
+		ggLevel2 = mcmcViz(
+			prepData(betaMatrix[,l2Vars[-1]], model, l2Lab), varLabs) +
+			theme(
+				axis.text.y = element_blank()
+				)
+	}
 
 	# arrange viz
 	## helper for arranging plot
