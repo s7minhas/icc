@@ -214,7 +214,7 @@ tracePlot <- function(mcmcData, varKey=NULL){
 # wrapper function around various stages necessary to process model
 vizWrapper = function(
 	model, gLab, l1Lab, l2Lab, 
-	varKey=varKey, trace=FALSE
+	vkey=varKey, trace=FALSE
 	){
 	# viz
 	betaMatrix = data.frame(
@@ -232,22 +232,22 @@ vizWrapper = function(
 
 
 	# viz prepData = function(gModBeta, stanModel, typeLab){
-	varLabs = varKey$clean
-	names(varLabs) = varKey$dirty
+	varLabs = vkey$clean
+	names(varLabs) = vkey$dirty
 
 	# trace plots
 	if(trace){
 		ggGlobal = tracePlot(
 			betaMatrix[,gVars], 
-			varKey[match(gVars, varKey$dirty),]
+			vkey[match(gVars, vkey$dirty),]
 			)
 		ggLevel1 = tracePlot(
 			betaMatrix[,l1Vars[-1]],
-			varKey[match(l1Vars[-1], varKey$dirty),]
-			),
+			vkey[match(l1Vars[-1], vkey$dirty),]
+			)
 		ggLevel2 = tracePlot(
 			betaMatrix[,l2Vars[-1]],
-			varKey[match(l2Vars[-1], varKey$dirty),]
+			vkey[match(l2Vars[-1], vkey$dirty),]
 			)
 	}
 

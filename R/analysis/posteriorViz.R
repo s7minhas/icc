@@ -59,6 +59,10 @@ gLab <- paste0('Global Effects (',c('Opposition','State'),' Model)')
 l1Lab <- paste0('No ICC to Prelim Effects (',c('Opposition','State'),' Model)')
 l2Lab <- paste0('ICC Prelim to Formal Effects (',c('Opposition','State'),' Model)')
 
+# trace plots
+rebelTrace <- vizWrapper(oppMod, gLab[1], l1Lab[1], l2Lab[1], trace=TRUE)
+stateTrace <- vizWrapper(stateMod, gLab[2], l1Lab[2], l2Lab[2], trace=TRUE)
+
 # generate pdfs
 ggB <- ggplot()+geom_blank(aes(1,1
                               )) + cowplot::theme_nothing()
