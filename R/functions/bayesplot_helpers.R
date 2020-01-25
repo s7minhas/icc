@@ -173,12 +173,14 @@ mcmcViz = function(dataList, varLabels, colorsForCoef=coefp_colors){
 	   return(gg) }
 
 
-tracePlot <- function(mcmcData, vLabs=NULL){
+tracePlot <- function(mcmcData, vLabs=NULL, pTitle){
 
   mcmcData = cbind(iter=1:nrow(mcmcData), mcmcData)
 
   mcmcMelt <- reshape2::melt(mcmcData, id='iter')
   mcmcMelt$Var2 <- as.character(mcmcMelt$variable)
+
+  vLabs$clean = gsub('\n', '', vLabs$clean, fixed=TRUE)
   mcmcMelt$Var2 <- vLabs$clean[match(mcmcMelt$Var2,vLabs$dirty)]
   mcmcMelt$Var2 <- factor(mcmcMelt$Var2, levels=vLabs$clean)
 
@@ -193,23 +195,33 @@ tracePlot <- function(mcmcData, vLabs=NULL){
     names(mcmcMelt)[ncol(mcmcMelt)] <- names(qts)[i]
   }
 
+  # clean up facet labels for math processing
+  levels(mcmcMelt$Var2) = TeX(levels(mcmcMelt$Var2))
+
+  # viz
   ggTrace <- ggplot2::ggplot(mcmcMelt, aes(x=Var1, y=value)) +
     geom_hline(aes(yintercept=mu), color='red') + 
     geom_ribbon(aes(ymin=lo90,ymax=hi90), alpha=.5, fill='grey40') +
     geom_ribbon(aes(ymin=lo95,ymax=hi95), alpha=.3, fill='grey40') +  
     geom_line(lwd=.01) + 
     labs(
-    	x='', y='', title=gLab
+    	x='', y='', title=pTitle
     	) + 
-    facet_wrap(~Var2, ncol=1, scales='free_y') +  
+    facet_wrap(~Var2, ncol=1, scales='free_y', 
+    	labeller = label_parsed) +  
     theme_bw() + 
     theme(
       panel.border=element_blank(),
-      axis.ticks=element_blank()
+      axis.ticks=element_blank(),
+      axis.text.x=element_text(size=7),
+      axis.text.y=element_text(size=7),
+	  strip.text = element_text(size = 9, color='white',
+	  	# family="Source Sans Pro Semibold", 
+	  	angle=0, hjust=.05),
+	  strip.background = element_rect(fill = "#525252", color='#525252')
       )
-
-  return( ggTrace )
-}
+    ggTrace
+  return( ggTrace ) }
 
 # wrapper function around various stages necessary to process model
 vizWrapper = function(
@@ -239,15 +251,18 @@ vizWrapper = function(
 	if(trace){
 		ggGlobal = tracePlot(
 			betaMatrix[,gVars], 
-			vkey[match(gVars, vkey$dirty),]
+			vkey[match(gVars, vkey$dirty),],
+			gLab
 			)
 		ggLevel1 = tracePlot(
 			betaMatrix[,l1Vars[-1]],
-			vkey[match(l1Vars[-1], vkey$dirty),]
+			vkey[match(l1Vars[-1], vkey$dirty),],
+			l1Lab
 			)
 		ggLevel2 = tracePlot(
 			betaMatrix[,l2Vars[-1]],
-			vkey[match(l2Vars[-1], vkey$dirty),]
+			vkey[match(l2Vars[-1], vkey$dirty),],
+			l2Lab
 			)
 	}
 

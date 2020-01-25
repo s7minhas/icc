@@ -59,14 +59,29 @@ gLab <- paste0('Global Effects (',c('Opposition','State'),' Model)')
 l1Lab <- paste0('No ICC to Prelim Effects (',c('Opposition','State'),' Model)')
 l2Lab <- paste0('ICC Prelim to Formal Effects (',c('Opposition','State'),' Model)')
 
+# helper for plotting
+ggB <- ggplot()+geom_blank(aes(1,1)) + cowplot::theme_nothing()
+
 # trace plots
 rebelTrace <- vizWrapper(oppMod, gLab[1], l1Lab[1], l2Lab[1], trace=TRUE)
-stateTrace <- vizWrapper(stateMod, gLab[2], l1Lab[2], l2Lab[2], trace=TRUE)
+rebelTraceViz <- arrangeGrob(
+	arrangeGrob(ggB,rebelTrace$g,ggB, widths=c(.15,.65,.2)),
+	arrangeGrob(rebelTrace$l1, rebelTrace$l2, ncol=2, widths=c(.5,.5)),
+	nrow=2 )
+ggsave(rebelTraceViz,
+	file=paste0(pathGraphics, 'rebelCoefTrace.pdf'),
+	width=12, height=10, device=cairo_pdf)
 
-# generate pdfs
-ggB <- ggplot()+geom_blank(aes(1,1
-                              )) + cowplot::theme_nothing()
-## rebel model
+stateTrace <- vizWrapper(stateMod, gLab[2], l1Lab[2], l2Lab[2], trace=TRUE)
+stateTraceViz <- arrangeGrob(
+	arrangeGrob(ggB,stateTrace$g,ggB, widths=c(.15,.65,.2)),
+	arrangeGrob(stateTrace$l1, stateTrace$l2, ncol=2, widths=c(.5,.5)),
+	nrow=2 )
+ggsave(stateTraceViz,
+	file=paste0(pathGraphics, 'stateCoefTrace.pdf'),
+	width=12, height=10, device=cairo_pdf)
+
+## rebel model coef plot
 rebelSumm <- vizWrapper(oppMod, gLab[1], l1Lab[1], l2Lab[1])
 rebelViz <- arrangeGrob(
 	arrangeGrob(ggB,rebelSumm$g,ggB, widths=c(.15,.65,.2)),
