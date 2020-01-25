@@ -173,14 +173,14 @@ mcmcViz = function(dataList, varLabels, colorsForCoef=coefp_colors){
 	   return(gg) }
 
 
-tracePlot <- function(mcmcData, varKey=NULL){
+tracePlot <- function(mcmcData, vLabs=NULL){
 
-  mcmcData = cbind(iter=1:nrow(betaMatrix), betaMatrix[,gVars])
+  mcmcData = cbind(iter=1:nrow(mcmcData), mcmcData)
 
   mcmcMelt <- reshape2::melt(mcmcData, id='iter')
   mcmcMelt$Var2 <- as.character(mcmcMelt$variable)
-  mcmcMelt$Var2 <- varKey$clean[match(mcmcMelt$Var2,varKey$dirty)]
-  mcmcMelt$Var2 <- factor(mcmcMelt$Var2, levels=varKey$clean)
+  mcmcMelt$Var2 <- vLabs$clean[match(mcmcMelt$Var2,vLabs$dirty)]
+  mcmcMelt$Var2 <- factor(mcmcMelt$Var2, levels=vLabs$clean)
 
   mcmcMelt = mcmcMelt[,c('iter','value','Var2')]
   names(mcmcMelt) <- c('Var1', 'value', 'Var2')
