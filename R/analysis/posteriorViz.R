@@ -70,7 +70,7 @@ rebelTraceViz <- arrangeGrob(
 	nrow=2 )
 ggsave(rebelTraceViz,
 	file=paste0(pathGraphics, 'rebelCoefTrace.pdf'),
-	width=12, height=10, device=cairo_pdf)
+	width=10, height=10, device=cairo_pdf)
 
 stateTrace <- vizWrapper(stateMod, gLab[2], l1Lab[2], l2Lab[2], trace=TRUE)
 stateTraceViz <- arrangeGrob(
@@ -79,7 +79,7 @@ stateTraceViz <- arrangeGrob(
 	nrow=2 )
 ggsave(stateTraceViz,
 	file=paste0(pathGraphics, 'stateCoefTrace.pdf'),
-	width=12, height=10, device=cairo_pdf)
+	width=10, height=10, device=cairo_pdf)
 
 ## rebel model coef plot
 rebelSumm <- vizWrapper(oppMod, gLab[1], l1Lab[1], l2Lab[1])
