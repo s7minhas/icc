@@ -11,24 +11,11 @@
 
 \section*{Modeling sequential processes}
 
-To model \emph{State- and Opposition-Focused ICC Transition} we need to account for the sequential way in which states and opposition actors transition through the ICC process (i.e., no ICC investigation, preliminary, and formal). Typically, scholars would use an ordinal regression framework to model such processes where what we are trying to model is the probability of falling at or below a given outcome category. Our dependent variables for state and opposition actors are grouped into three intervals -- 1 = no involvement; 2 = preliminary investigation; and 3 = formal investigation -- where the cumulative probability for category 2 is the probability that an actor is either in the no or preliminary investigation stage.\footnote{Stage models are also referred to as "continuation ratio" models \citep{fienberg:wasserman:1981, tutz1990sequential, agresti:2010} because the focus is on the sequential process of continuing from one stage to the next.} For an outcome with ($y$) with three categories (1-3), $y$ is linked to the binary outcomes in the cutpoint equations ($y_{1} - y_{2}$) by the measurement equations:
-
-\begin{eqnarray}
-	y_{1} =
-	\begin{cases}
-		1 \text{ if } y = 1 \nonumber \\
-		0 \text{ if } y = 2-3 \nonumber \\
-	\end{cases}
-	y_{2} =
-	\begin{cases}
-		1 \text{ if } y = 1-2 \nonumber \\
-		0 \text{ if } y = 3 \nonumber \\
-	\end{cases}
-\end{eqnarray}
+To model \emph{State- and Opposition-Focused ICC Transition} we need to account for the sequential way in which states and opposition actors transition through the ICC process (i.e., no ICC investigation, preliminary, and formal). Typically, scholars would use an ordinal regression framework to model such processes where what we are trying to model is the probability of falling at or below a given outcome category. Our dependent variables for state and opposition actors are grouped into three intervals -- 1 = no involvement; 2 = preliminary investigation; and 3 = formal investigation -- where the cumulative probability for category 2 is the probability that an actor is either in the no or preliminary investigation stage.
 
 In standard ordinal ordinal approaches, the sample size does not change across the cutpoint equations, specifically, every respondent is coded as 0 or 1 for the dependent variable in all of the cutpoint equations. The result of this is that the binary equations are no longer independent and thus can complicate our ability to draw inferences from statistical tests.\footnote{In the appendix, we compare the parameter estimates and performance of our approach with a standard ordinal framework. We show that not only do substantive results differ between the two approaches but that the ordinal framework is less accurate in terms of reflecting the data generating process underlying ICC investigations.}
 
-The probability of interest in stage models is the conditional probability ($Pr[ y = k | y >= k]$), which is the probability for a particular category, $k$, given the respondent is in that category or a higher one. As a result, respondents in lower categories are excluded. The measurement equations in this case can be expressed as:
+The probability of interest in stage models is the conditional probability ($Pr[ y = k | y >= k]$), which is the probability for a particular category, $k$, given the respondent is in that category or a higher one. As a result, respondents in lower categories are excluded. For an outcome with ($y$) with three categories (1-3), $y$ is linked to the binary outcomes in the cutpoint equations ($y_{1} - y_{2}$) by the measurement equations:
 
 \begin{eqnarray}
 	y_{1} =
@@ -43,7 +30,7 @@ The probability of interest in stage models is the conditional probability ($Pr[
 	\end{cases}
 \end{eqnarray}
 
-The outcomes in the first cutpoint equation ($y_{1}$) is the same in the cumulative and stage models. However, the remaining cutpoint equations are different. In addition, the sample size becomes progressively smaller thus helping to ameliorate the issue of independence between the binary equations in later stages. To formalize the actual model, we follow \citet{tutz1990sequential} and \citet{agresti:2010} in utilizing a latent variable framework. For $y=1,\ldots,K$, there are $K-1$ latent variables. Each latent variable, $z_{m}$, corresponds to a particular cutpoint equation, for which the structural model can be expressed as:
+In the cutpoint equations shown above, the sample size becomes progressively smaller thus helping to ameliorate the issue of independence between the binary equations in later stages. To formalize the actual model, we follow \citet{tutz1990sequential} and \citet{agresti:2010} in utilizing a latent variable framework. For $y=1,\ldots,K$, there are $K-1$ latent variables. Each latent variable, $z_{m}$, corresponds to a particular cutpoint equation, for which the structural model can be expressed as:
 
 \begin{align}
 	z_{m} = x \beta + w\eta_{k}  + \epsilon_{k}
