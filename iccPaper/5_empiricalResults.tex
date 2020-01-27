@@ -11,11 +11,19 @@
 
 \section*{Modeling sequential processes}
 
+Such a
+model form is useful when the ordered categories represent a progression through different stages, such
+as survival through various times. This particular model has the advantage of being a simple decomposition of a multinomial distribution as a succession of hierarchical binomial models. Agresti 2002
+
 To model \emph{State- and Opposition-Focused ICC Transition} we need to account for the sequential way in which states and opposition actors transition through the ICC process (i.e., no ICC investigation, preliminary, and formal). Typically, scholars would use an ordinal regression framework to model such processes where what we are trying to model is the probability of falling at or below a given outcome category. Our dependent variables for state and opposition actors are grouped into three intervals -- 1 = no involvement; 2 = preliminary investigation; and 3 = formal investigation -- where the cumulative probability for category 2 is the probability that an actor is either in the no or preliminary investigation stage.
 
-In standard ordinal ordinal approaches, the sample size does not change across the cutpoint equations, specifically, every respondent is coded as 0 or 1 for the dependent variable in all of the cutpoint equations. The result of this is that the binary equations are no longer independent and thus can complicate our ability to draw inferences from statistical tests.\footnote{In the appendix, we compare the parameter estimates and performance of our approach with a standard ordinal framework. We show that not only do substantive results differ between the two approaches but that the ordinal framework is less accurate in terms of reflecting the data generating process underlying ICC investigations.}
+. On the other hand, the CR
+model creates conditional splits to the data. The success probability in the CR models is defined as:
+P(Y > k|Y > k). Note that the ascending and descending options for the CR approach will not yield
+similar results, since successive response categories are essentially dropped from the representation
+at each split.
 
-The probability of interest in stage models is the conditional probability ($Pr[ y = k | y >= k]$), which is the probability for a particular category, $k$, given the respondent is in that category or a higher one. As a result, respondents in lower categories are excluded. For an outcome with ($y$) with three categories (1-3), $y$ is linked to the binary outcomes in the cutpoint equations ($y_{1} - y_{2}$) by the measurement equations:
+In standard ordinal ordinal approaches, the sample size does not change across cutpoint equations, specifically, every respondent is coded as 0 or 1 for the dependent variable in all of the cutpoint equations. The result of this is that the binary equations are no longer independent and thus can complicate our ability to draw inferences from statistical tests.\footnote{In the appendix, we compare the parameter estimates and performance of our approach with a standard ordinal framework. We show that not only do substantive results differ between the two approaches but that the ordinal framework is less accurate in terms of reflecting the data generating process underlying ICC investigations.} The probability of interest in stage models is the conditional probability ($Pr[ y = k | y >= k]$), which is the probability for a particular category, $k$, given the respondent is in that category or a higher one. As a result, respondents in lower categories are excluded. For an outcome with ($y$) with three categories (1-3), $y$ is linked to the binary outcomes in the cutpoint equations ($y_{1} - y_{2}$) by the measurement equations:
 
 \begin{eqnarray}
 	y_{1} =
@@ -25,8 +33,8 @@ The probability of interest in stage models is the conditional probability ($Pr[
 	\end{cases}
 	y_{2} =
 	\begin{cases}
-		1 \text{ if } y = 2 | y >= 2 \nonumber \\
-		0 \text{ if } y = 3 | y >= 2 \nonumber \\
+		1 \text{ if } y = 2 \; | \; y >= 2 \nonumber \\
+		0 \text{ if } y = 3 \; | \; y >= 2 \nonumber \\
 	\end{cases}
 \end{eqnarray}
 
@@ -99,6 +107,17 @@ Likelihood function:
 \end{eqnarray}
 
 Sample from the joint posterior of $(\{z_{ij}\},\beta)$
+
+- random effects
+
+When one have ordered replicated data, random effects can be incorporated into the linear predictor
+to account for uncontrolled experimental variation. An increasing number of papers are concerned
+with random effects models for ordered categorical responses (Ten Have and Uttal, 1994; Tutz and
+Hennevogl, 1996).
+
+We consider a continuationratio model and we include a random intercept into the linear predictor in order to analyse grouped
+toxicological data
+
 
 % Add note about how imputation process via semi parametric copula was embedded in the sampler:
 % impute data via hollenbach et al. 2018/9 using semi parametric copula approach
