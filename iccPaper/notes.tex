@@ -1,0 +1,105 @@
+% Martinez  hine
+Such a model form is useful when the ordered categories represent a progression through different stages, such as survival through various times. This particular model has the advantage of being a simple decomposition of a multinomial distribution as a succession of hierarchical binomial models. The property of conditional independence enables us to fit by adapting the methods available for binary response data. Agresti 2002
+
+When one has ordered replicated data, random effects can be incorporated into the linear predictor to account for uncontrolled experimental variation (this may be apparent through overdispersion of multinomial responses across replicates). (Stram et al 1988, Ten Have and Uttal 1994, Tutz and Hennevogl 1996).
+
+\section{Oconnel}
+
+With ordinal outcomes, there are several ways to characterize what is meant by success. For instance, a K-level ordinal variable can be partitioned into K-1 sequential subsets of the data: category 1 versus all above; categories 1 and 2 combined versus all above; categories 1 and 2 and 3 combined versus all above, etc.; the final cumulative split would distinguish responses in categories less than or equal to K-1 versus responses in category K. Thus, there is a series of cumulative comparisons for success, where success is defined as being in categories at or below the $k^{th}$ cutpoint (ascending option, where success is $P(Y \leq k)$). Alternatively, success could be defined as being in categories greater than or equal to the cutpoint (descending option, where sucess is defined as $P(Y \geq k)$). In either cumulative representation, all data is retained at each split and both options yield a similar interpretation of effects of predictors for the data.
+
+On the other hand, the CR model creates conditional splits to the data. The success probability in the CR models is defined as: $P(Y > k | Y \geq k)$. Note that the ascending and descending options for the CR approach will not yield similar results, since successive response categories are essentially dropped from the representation at each split.
+
+A third commonly used approach for ordinal data is adjaceny categories model, where the success probability is based on whether or not a response is in the higher or lower of two adjacent categories: $P(Y=k+1 | Y=k \text{ or } Y=k+1)$.
+
+Each representation discussed above imposes a restrictive assumption on the data, generally referred to as the assumption of proportional or identical odds. This assupmtion implies that the effect of any explanatory variable remains constant regardless of the particular split to the data being considered.
+
+\section{Fullterton}
+
+In the stage approach, the focus shifts to a series of stages in the progression from the lowest to the highest category in an outcome variable. To reach a later stage, one must pass through each of the previous stages, and the stages are treated as if they are irreversible. In this approach, the dependent variable is split up into M-1 logit equations corresponding to the different stages with progressively fewer respondents proceeding or surviving to the next stage.
+
+The stage approach is more restrictive than the cumulative or adjacent approaches because many ordinal variables do not proceed through an irreversible sequence of stages. Ordinal variables used as outcome in event history models provide good examples of stage variables (see Allison 1984).
+
+Feinberg (1980) proposed the continuation ratio model to examine outcomes with a natural ordering. In the case of sequential dependent variables, the conditional probability may be of more interest than the cumulative probability.
+
+When the clog-log link is applied, the continuation ratio model is equivalent to the proportional hazards model (Cox 1972). As in the proportional hazards model, one is interested in the effects of independent variables on survival to the next stage in the outcome. The equation for the continuation ratio model (Feinberg 1980:110, Long 1997:146) is:
+
+\begin{align*}
+Log \frac{P(y=m|x)}{P(y>m|x)} &= \tau_{m} - x\beta \qquad\qquad (1 \leq m < M)
+\end{align*}
+
+where $m$ is a category, $x$ is a vector of independent variables, $\tau$ is a cut point, and $\beta$ is a vector of logit coefficients. The equation for the probability of any given category ($m$) in the continuation ratio model is:
+
+\begin{equation*}
+P(y = m | x) =
+\begin{cases}
+F(\tau_{1} - x\beta) & m=1,\\
+\{ \prod_{m=1}^{m-1} [1-F(\tau_{m} - x\beta)] \} F(\tau_{m} - x\beta) & 1 < m \leq M - 1, \\
+\prod_{m=1}^{m-1} [1-F(\tau_{m} - x\beta)] & m=M,
+\end{cases}
+\end{equation*}
+
+where $F$ is the logistic CDF, $\tau$ is a cut point, $\beta$ is a vector of logit coefficients that do not vary across stages, $x$ is a vector of independent variables, and $m$ is the category and its corresponding logit equation. For an outcome with three categories, the continuation ratio model estimates three binary logit models simultaneously with the following marginal probabilities for each category:
+
+$P_{1} = P(y=1)$,
+
+$P_{2} = [1-P_{1}][P(y=2 | y>1)]$,
+
+$P_{3} = [1-P{1}][1-P(y=2|y>1)]$
+
+The partial continuation ratio model relaxes the proportional odds assumption for coefficients with significant variation across stages. Modifying equation above yields the following equation for the probability of any given category ($m$) in the partial continuation ratio model:
+
+
+\begin{equation*}
+P(y = m | x) =
+\begin{cases}
+F(\tau_{1} - x_{1}\beta_{1} - x_{2}\beta_{2}) & m=1,\\
+\{ \prod_{m=1}^{m-1} [1-F(\tau_{m} - x_{1}\beta_{1,m} - x_{2}\beta_{2})] \} F(\tau_{m} - x_{1}\beta_{1,m} - x_{2}\beta_{2}) & 1 < m \leq M - 1, \\
+\prod_{m=1}^{M-1} [1-F(\tau_{m} - x_{1}\beta_{1,m} - x_{2}\beta_{2})] & m=M,
+\end{cases}
+\end{equation*}
+
+where $F$ is the logistic CDF, $\tau$ is a cut point, $\beta_{1}$ is a vector of logistic coefficients that vary freely across stages, $\beta_{2}$ is a vector of logit coefficients that do not vary across stages, $x_{1}$ and $x_{2}$ are vectors of independent variables, and $m$ is the logit equation.
+
+
+\section{Burkner and Vuorre}
+
+For many ordinal variables, the assumption of a single underlying continuous variable may not be appropriate. If the response can be understood as being the result of a sequential process, such that a higher response category is possible only after all lower categories are achieved, teh sequential model as proposed by Tutz (1990) is usually appropriate.
+
+The sequential model assumes that for every category $k$ there is a latent continuous variable $\tilde Y_{k}$ that determines the transition between the $k^{th}$ and the $k+1^{th}$ category.
+
+The categories are separated by thresholds $\tau_{k}$. If $\tilde Y_{k}$ is greater than the threshold $\tau_{k}$, the sequential process continues, otherwise it stops at category $k$.
+
+Since the thresholds $\tau_{k}$ refer to different latent variables, they dont need to be ordered. That is, we may as well have $\tau_{k+1} < \tau_{k}$.
+
+To make the sequential model an actual regression model, we set up a linear regression for each latent variable via $\tilde Y_{k} = \eta + \epsilon_{k}$ with a category specific error term $\epsilon_{k}$. By default, all $\tilde Y_{k}$ share the same linear predictor $\eta$, such that the effect any potential predictor is constant across $k$. This implies the following probability for the category $k$ under the sequential model: $P(Y=k | \eta) = F(\tau_{k} - \eta) \prod_{j=1}^{k-1} ( 1 - F(\tau_{j} - \eta) )$.
+
+In other words, the probability that $Y$ falls in category $k$ is equal to teh probability that it did not fall in one of the former categories 1 to $k-1$, and -- when it comes to the decision whether to stop at $k$ or continue beyond it -- the process stopped.
+
+The notation 1 v group implies that the intercept varies over the levels of the grouping factor.
+
+The dependent variable $Y$ in this model results from a counting process and is truly ordinal in the sense that in order to achieve a category $k$, one has to first achieve all lower categories 1 to $k-1$. The sequential model in its generality proposed by Tutz (1990) explicitly incorporates the structure into its assumptions (Tutz 2000).
+
+For every category $k \in \{1, \ldots, K \}$ there is a latent continuous variable $\tilde Y_{k}$ determining the transition between the $k^{th}$ and $k+1^{th}$. The variables $\tilde Y_{k}$ may have different meanings depending on the research question. We assume that $\tilde Y_{k}$ depends on the predictor term $\eta$ and error $\epsilon_{k}$: $\tilde Y_{k} = \eta + \epsilon_{k}$.
+
+The sequential process itself is thought as follows:
+
+Beginning with category 1 it is checked whether $\tilde Y_{1}$ surpasses the first threshold $\tau_{1}$. If not, i.e., if $\tilde Y_{1} \leq \tau_{1}$, the process stops and the result if $Y=1$. If $\tilde Y_{1} > 1$, at least category 2 is achieved (i.e., $Y>1$) and the process continues.
+
+Then it is checked whether $\tilde Y_{2}$ surpasses threshold $\tau_{2}$. If not, the process stops with result $Y=2$. Else, the process continues with $Y>2$. Extrapolating this to all categories $k \in \{1, \ldots, K \}$, the process stops with result $Y=k$, when at least category $k$ is achieved, but $\tilde Y_{k}$ failts to surpass the $k^{th}$ threshold. This event can be written as: $Y = k|Y \geq k$.
+
+We can then write out the following probability model:
+
+\begin{align*}
+P(Y = k | Y>k, \eta) &= P(\tilde Y_{k} \leq \tau_{k} | \eta) \\
+&= P(\eta + \epsilon_{k} \leq \tau_{k}) \\
+&= P(\epsilon_{k} \leq \tau_{k} - \eta) \\
+&= F(\tau_{k} - \eta)
+\end{align*}
+
+We can equivalently express this as: $P(Y = k | \eta) = F(\tau_{k} - \eta) \prod_{j=1}^{k-1} (1-F(\tau_{j} - \eta))$.
+
+Because of its derivation, this model is sometimes also called the stopping model. A related sequential model was proposed by Verhelst, Glas and De Vries (1997) in IRT notation focusing on the logistic response function only. Instead of modeling the probability of the sequential process to stop at category $k$, they suggested to model the probability of the sequential process to continue beyond category $k$. In our notation, this can be written as:
+
+$P(Y \geq k | Y \geq k-1, \eta) = F(\eta - \tau_{k})$
+
+$P(Y=k | \eta) = (1-F(\eta-tau_{k})) \prod_{j=1}^{k-1} F(\eta-\tau_{j})$
