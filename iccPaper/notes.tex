@@ -1,30 +1,16 @@
-To model \emph{State- and Opposition-Focused ICC Transition} we need to account for the sequential way in which states and opposition actors transition through the ICC process (i.e., no ICC investigation, preliminary, and formal). Typically, scholars would use an ordinal regression framework to model such processes where what we are trying to model is the probability of falling at or below a given outcome category. Our dependent variables for state and opposition actors are grouped into three intervals -- 1 = no involvement; 2 = preliminary investigation; and 3 = formal investigation -- where the cumulative probability for category 2 is the probability that an actor is either in the no or preliminary investigation stage.
-
-In standard ordinal ordinal approaches, the sample size does not change across cutpoint equations, specifically, every respondent is coded as 0 or 1 for the dependent variable in all of the cutpoint equations. The result of this is that the binary equations are no longer independent and thus can complicate our ability to draw inferences from statistical tests.\footnote{In the appendix, we compare the parameter estimates and performance of our approach with a standard ordinal framework. We show that not only do substantive results differ between the two approaches but that the ordinal framework is less accurate in terms of reflecting the data generating process underlying ICC investigations.}
-
 \section{Martinez hinde}
 
 Such a model form is useful when the ordered categories represent a progression through different stages, such as survival through various times. This particular model has the advantage of being a simple decomposition of a multinomial distribution as a succession of hierarchical binomial models. The property of conditional independence enables us to fit by adapting the methods available for binary response data. Agresti 2002
 
 When one has ordered replicated data, random effects can be incorporated into the linear predictor to account for uncontrolled experimental variation (this may be apparent through overdispersion of multinomial responses across replicates). (Stram et al 1988, Ten Have and Uttal 1994, Tutz and Hennevogl 1996).
 
-\section{Oconnel}
-
-With ordinal outcomes, there are several ways to characterize what is meant by success. For instance, a K-level ordinal variable can be partitioned into K-1 sequential subsets of the data: category 1 versus all above; categories 1 and 2 combined versus all above; categories 1 and 2 and 3 combined versus all above, etc.; the final cumulative split would distinguish responses in categories less than or equal to K-1 versus responses in category K. Thus, there is a series of cumulative comparisons for success, where success is defined as being in categories at or below the $k^{th}$ cutpoint (ascending option, where success is $P(Y \leq k)$). Alternatively, success could be defined as being in categories greater than or equal to the cutpoint (descending option, where sucess is defined as $P(Y \geq k)$). In either cumulative representation, all data is retained at each split and both options yield a similar interpretation of effects of predictors for the data.
-
-On the other hand, the CR model creates conditional splits to the data. The success probability in the CR models is defined as: $P(Y > k | Y \geq k)$. Note that the ascending and descending options for the CR approach will not yield similar results, since successive response categories are essentially dropped from the representation at each split.
-
-A third commonly used approach for ordinal data is adjaceny categories model, where the success probability is based on whether or not a response is in the higher or lower of two adjacent categories: $P(Y=k+1 | Y=k \text{ or } Y=k+1)$.
-
-Each representation discussed above imposes a restrictive assumption on the data, generally referred to as the assumption of proportional or identical odds. This assupmtion implies that the effect of any explanatory variable remains constant regardless of the particular split to the data being considered.
-
 \section{Fullterton}
 
-In the stage approach, the focus shifts to a series of stages in the progression from the lowest to the highest category in an outcome variable. To reach a later stage, one must pass through each of the previous stages, and the stages are treated as if they are irreversible. In this approach, the dependent variable is split up into M-1 logit equations corresponding to the different stages with progressively fewer respondents proceeding or surviving to the next stage.
+% In the stage approach, the focus shifts to a series of stages in the progression from the lowest to the highest category in an outcome variable. To reach a later stage, one must pass through each of the previous stages, and the stages are treated as if they are irreversible. In this approach, the dependent variable is split up into M-1 logit equations corresponding to the different stages with progressively fewer respondents proceeding or surviving to the next stage.
 
-The stage approach is more restrictive than the cumulative or adjacent approaches because many ordinal variables do not proceed through an irreversible sequence of stages. Ordinal variables used as outcome in event history models provide good examples of stage variables (see Allison 1984).
+% The stage approach is more restrictive than the cumulative or adjacent approaches because many ordinal variables do not proceed through an irreversible sequence of stages. Ordinal variables used as outcome in event history models provide good examples of stage variables (see Allison 1984).
 
-Feinberg (1980) proposed the continuation ratio model to examine outcomes with a natural ordering. In the case of sequential dependent variables, the conditional probability may be of more interest than the cumulative probability.
+% Feinberg (1980) proposed the continuation ratio model to examine outcomes with a natural ordering. In the case of sequential dependent variables, the conditional probability may be of more interest than the cumulative probability.
 
 When the clog-log link is applied, the continuation ratio model is equivalent to the proportional hazards model (Cox 1972). As in the proportional hazards model, one is interested in the effects of independent variables on survival to the next stage in the outcome. The equation for the continuation ratio model (Feinberg 1980:110, Long 1997:146) is:
 
@@ -108,3 +94,18 @@ Because of its derivation, this model is sometimes also called the stopping mode
 $P(Y \geq k | Y \geq k-1, \eta) = F(\eta - \tau_{k})$
 
 $P(Y=k | \eta) = (1-F(\eta-tau_{k})) \prod_{j=1}^{k-1} F(\eta-\tau_{j})$
+
+
+% To model \emph{State- and Opposition-Focused ICC Transition} we need to account for the sequential way in which states and opposition actors transition through the ICC process (i.e., no ICC investigation, preliminary, and formal). Typically, scholars would use an ordinal regression framework to model such processes where what we are trying to model is the probability of falling at or below a given outcome category. Our dependent variables for state and opposition actors are grouped into three intervals -- 1 = no involvement; 2 = preliminary investigation; and 3 = formal investigation -- where the cumulative probability for category 2 is the probability that an actor is either in the no or preliminary investigation stage.
+%
+% In standard ordinal ordinal approaches, the sample size does not change across cutpoint equations, specifically, every respondent is coded as 0 or 1 for the dependent variable in all of the cutpoint equations. The result of this is that the binary equations are no longer independent and thus can complicate our ability to draw inferences from statistical tests.\footnote{In the appendix, we compare the parameter estimates and performance of our approach with a standard ordinal framework. We show that not only do substantive results differ between the two approaches but that the ordinal framework is less accurate in terms of reflecting the data generating process underlying ICC investigations.}
+
+% \section{Oconnel}
+
+% With ordinal outcomes, there are several ways to characterize what is meant by success. For instance, a K-level ordinal variable can be partitioned into K-1 sequential subsets of the data: category 1 versus all above; categories 1 and 2 combined versus all above; categories 1 and 2 and 3 combined versus all above, etc.; the final cumulative split would distinguish responses in categories less than or equal to K-1 versus responses in category K. Thus, there is a series of cumulative comparisons for success, where success is defined as being in categories at or below the $k^{th}$ cutpoint (ascending option, where success is $P(Y \leq k)$). Alternatively, success could be defined as being in categories greater than or equal to the cutpoint (descending option, where sucess is defined as $P(Y \geq k)$). In either cumulative representation, all data is retained at each split and both options yield a similar interpretation of effects of predictors for the data.
+
+% On the other hand, the CR model creates conditional splits to the data. The success probability in the CR models is defined as: $P(Y > k | Y \geq k)$. Note that the ascending and descending options for the CR approach will not yield similar results, since successive response categories are essentially dropped from the representation at each split.
+
+% A third commonly used approach for ordinal data is adjaceny categories model, where the success probability is based on whether or not a response is in the higher or lower of two adjacent categories: $P(Y=k+1 | Y=k \text{ or } Y=k+1)$.
+
+% Each representation discussed above imposes a restrictive assumption on the data, generally referred to as the assumption of proportional or identical odds. This assupmtion implies that the effect of any explanatory variable remains constant regardless of the particular split to the data being considered.
