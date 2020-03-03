@@ -1,3 +1,9 @@
+% next lay out the math
+% after that talk about adjustment for partial continuation ratio
+% then adjustment for repeated observations
+% and last adjustment for missing data
+
+
 % unconstrained partial continuation ratio model, with hierarch structure
 % likelihood and model layout
 % fit via hamiltonian monte carlo in stan
@@ -6,14 +12,7 @@
 
 Our two key dependent variables, \emph{State- and Opposition-Focused ICC Transition}, are both ordinal outcomes that can take values of: 1 = no involvement; 2 = preliminary investigation; and 3 = formal investigation. Typically, to study such an outcome we would partition into $K-1$ sequential subsets of the data such that we examine no involvement cases against all the above and no involvement and preliminary against formal. This set of cumulative comparisons would be operationalized via a set of binary, cutpoint equations, where a 1 is defined as being at or below the $k^{th}$ cutpoint and a 0 otherwise. Consequence of this set up is that all data is retained at each split of the data.
 
-In our set of ordinal outcomes, however, the ordered categories represent a progression through different stages and to reach a later stage, a country must pass through each of the previous stages. A cumulative ordinal approach here where the sample size does not change across the cutpoint equations poses an inferential issues as the set of binary equations are no longer independent.\footnote{In the appendix, we compare the parameter estimates and performance of our approach with a standard ordinal framework. We show that not only do substantive results differ between the two approaches but that the ordinal framework is less accurate in terms of reflecting the data generating process underlying ICC investigations.}
-
-% next lay out the math
-% after that talk about adjustment for partial continuation ratio
-% then adjustment for repeated observations
-% and last adjustment for missing data
-
-The probability of interest in stage models is the conditional probability ($Pr[ y = k | y >= k]$), which is the probability for a particular category, $k$, given the respondent is in that category or a higher one. As a result, respondents in lower categories are excluded. For an outcome with ($y$) with three categories (1-3), $y$ is linked to the binary outcomes in the cutpoint equations ($y_{1} - y_{2}$) by the measurement equations:
+In our set of ordinal outcomes, however, the ordered categories represent a progression through different stages and to reach a later stage, a country must pass through each of the previous stages. A cumulative ordinal approach here where the sample size does not change across the cutpoint equations poses an inferential issues as the set of binary equations are no longer independent.\footnote{In the appendix, we compare the parameter estimates and performance of our approach with a standard ordinal framework. We show that not only do substantive results differ between the two approaches but that the ordinal framework is less accurate in terms of reflecting the data generating process underlying ICC investigations.} Specifically, in the cumulative approach, we model the probability of falling into any given category as $P(Y \leq k)$, whereas in the approach we utilize here, referred to as a continuation rato model, conditional splits are created in the data such that the probability of falling into a given category is defined as $P(Y > k | Y \geq k)$. Within the continuation ratio framework, for outcomes such as ours with ($y$) with three categories (1-3), $y$ is linked to the binary outcomes in the cutpoint equations ($y_{1} - y_{2}$) by the measurement equations:
 
 \begin{eqnarray}
 	y_{1} =
