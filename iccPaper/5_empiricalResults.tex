@@ -103,6 +103,10 @@ to account for uncontrolled experimental variation. An increasing number of pape
 with random effects models for ordered categorical responses (Ten Have and Uttal, 1994; Tutz and
 Hennevogl, 1996).
 
+\citep{have:uttal:1994}
+
+\citep{tutz:hennevogl:1996}
+
 We consider a continuationratio model and we include a random intercept into the linear predictor in order to analyse grouped
 toxicological data
 
@@ -111,6 +115,10 @@ toxicological data
 % impute data via hollenbach et al. 2018/9 using semi parametric copula approach
 % generates posterior distribution over missing data
 %
+
+\citep{hoff:2007}
+\citep{hollenbach:etal:2018}
+
 % within the estimation process of teh sampler we pass in a randomly sampled missing dataset from posterior each time so that we can incorporate uncertainty from both missing data and estimation process
 
 	% Hoff (2015) details a Bayesian implementation of this model via Gibbs sampling using semi-conjugate prior distributions to simulate parameter values from the posterior. We modify the sampler with respect to its accommodation of missing data. Specifically, we embed a semiparametric copula imputation scheme within the sampler such that at each iteration of the MCMC sampler for the regression a randomly sampled imputed dataset is supplied. The imputation scheme is described in more detail in Hollenbach et al. (2018), but for our purposes the main reason for including it within the sampler is so that the resulting parameters from the regression MCMC take into account both uncertainty within the model and the imputation process itself.
