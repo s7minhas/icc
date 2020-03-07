@@ -27,14 +27,15 @@ In our set of ordinal outcomes, however, the ordered categories represent a prog
 	\end{cases}
 \end{eqnarray}
 
-In the continuation ratio framework, the dependent variable is split up into $K-1$ logit equations corresponding to, in our case, the different phases of ICC involvement.
+In the continuation ratio framework, the dependent variable is split up into $K-1$ logit equations corresponding to, in our case, the different phases of ICC involvement. More specifically, we follow \citet{tutz1990sequential} and \citet{agresti:2010} in utilizing a latent variable framework. For $y=1,\ldots,K$, there are $K-1$ latent variables.
 
+%% need to make sure i dont confuse notation for continuation vs stopping model, we are using a continuation here
+% in this section i've laid out basic motivation for sequential but now we want ot lay out the model (so figure out notation)
+% then make sure to discuss that you let coefficients vary acros sstages so you have hte partial CR model
+% then also make sure to discuss that we have repeated data so we add random effects, here is where want to make appeals to teh survival lit as ewll
+% end with missing data imputation and then just note that we estimated all this in stan
 
-
-To formalize this model, we follow \citet{tutz1990sequential} and \citet{agresti:2010} in utilizing a latent variable framework.
-
-
-For $y=1,\ldots,K$, there are $K-1$ latent variables. Each latent variable, $z_{m}$, corresponds to a particular cutpoint equation, for which the structural model can be expressed as:
+Each latent variable, $z_{m}$, corresponds to a particular cutpoint equation, for which the structural model can be expressed as:
 
 \begin{align}
 	z_{m} = x \beta + w\eta_{k}  + \epsilon_{k}
