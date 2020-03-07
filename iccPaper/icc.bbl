@@ -217,6 +217,11 @@ Feinberg, Stephen~E. 1980.
 \newblock ``The analysis of cross-classified data.'' {\em Massachusetts
   Institute of Technology Press. Cambridge} .
 
+\harvarditem{Fienberg}{2007}{fienberg2007analysis}
+Fienberg, Stephen~E. 2007.
+\newblock {\em The analysis of cross-classified categorical data}.
+\newblock Springer Science \& Business Media.
+
 \harvarditem{Finnemore}{2009}{finnemore2009legitimacy}
 Finnemore, Martha. 2009.
 \newblock ``Legitimacy, hypocrisy, and the social structure of unipolarity: Why
@@ -260,6 +265,12 @@ Haftel, Yoram~Z \harvardand\ Alexander Thompson. 2006.
 \newblock ``The independence of international organizations: Concept and
   applications.'' {\em Journal of Conflict Resolution} 50(2):253--275.
 
+\harvarditem{Have \harvardand\ Uttal}{1994}{have:uttal:1994}
+Have, Thomas R.~Ten \harvardand\ David~H. Uttal. 1994.
+\newblock ``Subject-specific and population-averaged continuation ratio logit
+  models for multiple discrete time survival profiles.'' {\em Journal of the
+  Royal Statistical Society: Series C (Applied Statistics)} 43(2):371--384.
+
 \harvarditem{Herz}{1982}{herz1982dictatorship}
 Herz, John~H. 1982.
 \newblock {\em From Dictatorship to Democracy: Coping with the Legacies of
@@ -276,9 +287,21 @@ Hillebrecht, Courtney. 2016.
 \newblock ``The deterrent effects of the International Criminal Court: evidence
   from Libya.'' {\em International interactions} 42(4):616--643.
 
+\harvarditem{Hoff}{2007}{hoff:2007}
+Hoff, Peter~D. 2007.
+\newblock ``{Extending the Rank Likelihood for Semiparametric {Copula}
+  Estimation}.'' {\em Annals of Applied Statistics} 1(1):265--283.
+
 \harvarditem{Hoile}{2014}{hoile2014justice}
 Hoile, David. 2014.
 \newblock ``Justice denied: the reality of the International Criminal Court.''.
+
+\harvarditem[Hollenbach et~al.]{Hollenbach, Bojinov, Minhas, Metternich, Ward
+  \harvardand\ Volfovsky}{2018}{hollenbach:etal:2018}
+Hollenbach, Florian~M., Iavor Bojinov, Shahryar Minhas, Nils~W. Metternich,
+  Michael~D. Ward \harvardand\ Alexander Volfovsky. 2018.
+\newblock ``Multiple Imputation Using Gaussian Copulas.'' {\em Sociological
+  Methods and Research} .
 
 \harvarditem{International}{2018}{amnesty18}
 International, Amnesty. 2018.
@@ -496,6 +519,11 @@ Themn{\'e}r, Lotta \harvardand\ Peter Wallensteen. 2012.
 Tutz, Gerhard. 1990.
 \newblock ``Sequential item response models with an ordered response.'' {\em
   British Journal of Mathematical and Statistical Psychology} 43(1):39--55.
+
+\harvarditem{Tutz \harvardand\ Hennevogl}{1996}{tutz:hennevogl:1996}
+Tutz, Gerhard \harvardand\ Wolfgang Hennevogl. 1996.
+\newblock ``Random effects in ordinal regression models.'' {\em Computational
+  Statistics \& Data Analysis} 22(5):537--557.
 
 \harvarditem{UNSC}{2011}{unsc1970}
 UNSC. 2011.
