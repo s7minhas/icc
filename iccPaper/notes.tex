@@ -109,3 +109,73 @@ $P(Y=k | \eta) = (1-F(\eta-tau_{k})) \prod_{j=1}^{k-1} F(\eta-\tau_{j})$
 % A third commonly used approach for ordinal data is adjaceny categories model, where the success probability is based on whether or not a response is in the higher or lower of two adjacent categories: $P(Y=k+1 | Y=k \text{ or } Y=k+1)$.
 
 % Each representation discussed above imposes a restrictive assumption on the data, generally referred to as the assumption of proportional or identical odds. This assupmtion implies that the effect of any explanatory variable remains constant regardless of the particular split to the data being considered.
+
+%% old stuff from the paper
+% structural model can be expressed as:
+%
+% Each latent variable, $z_{m}$, corresponds to a particular cutpoint equation, for which the
+% \begin{align}
+% 	z_{m} = x \beta + w\eta_{k}  + \epsilon_{k}
+% \end{align}
+%
+% $x$ represents a vector of independent variables that are assumed to have a consistent effect, $\beta$, across stages and $w$ represent a vector of independent variables whose effect, captured by $\eta_{k}$, can vary by stage. $\epsilon_{k}$ represents the error term for the $k$ stage. Using this formulation we can represent the cutpoint equation for each stage as:
+%
+% \begin{align}
+% 	Pr(y = 1 | y >= 1, x, w) &= F(\tau_{1} - x\beta - w\eta_{1}) \\
+% 	Pr(y = 2 | y >= 2, x, w) &= F(\tau_{2} - x\beta - w\eta_{2})
+% \end{align}
+%
+% in order for actor $i$ to receive a value of $j$ for $Y_{i}$, the actor must pass through all levels less than $j$. The probability of then reaching $j$, conditional on the event that the $j^{th}$ level is reached, is given by:
+%
+% \begin{eqnarray}
+% 	Pr(y_{i}={j} | Y_{i} \geq {j}, \gamma, \beta) &=& F(\gamma_{j} - x_{i}^{'}\beta) \nonumber \\
+% 	Pr(Y_{i}={j}|\gamma_{1},\beta) &=& F(\gamma_{j} - x_{i}^{'}\beta)\text{ }\prod^{j-1}_{k=1}\text{ }\{1-F(\gamma_{k}-x_{i}^{'}\beta)\} \nonumber
+% \end{eqnarray}
+%
+% $\gamma = (\gamma_{1},...,\gamma_{J-1})$
+%
+% \begin{eqnarray}
+% 	Pr(y_{i}=J|\beta_{1},\gamma) &=&\text{}\prod^{J-1}_{k=1}\text{ }\{1-F(\gamma_{k}-x_{i}^{'}\beta)\} \nonumber
+% \end{eqnarray}
+%
+% Latent variable representation
+%
+% \begin{eqnarray}
+% 	w_{ij} &=& x_{i}^{'}\beta+\epsilon_{ij},\text{ }\epsilon_{ij} \sim iid \nonumber
+% \end{eqnarray}
+%
+% Observe:
+%
+% \begin{eqnarray}
+% 	y_{i} = 1\text{ iff } w_{i1} \leq \gamma_{1} \nonumber \\
+% 	\nonumber \\
+% 	y_{i} = 2\text{ iff }
+% 	\begin{cases}
+% 	w_{i1} > \gamma_{1} \nonumber \\
+% 	w_{i2} \leq \gamma_{2} \nonumber \\
+% \end{cases}
+% \end{eqnarray}
+%
+% Likelihood function:
+%
+% \begin{eqnarray}
+% 	L(\gamma,\beta) = \prod_{i\colon y_{i}<J}\text{ }[ F(\gamma_{y_{i}} - x_{i}^{'}\beta)\text{ }\prod_{k=1}^{y_{i}=1}\text{ }\{1-F(\gamma_{R}-x_{i}^{'}\beta)\}] &\times \displaystyle \prod_{i\colon y_{i}=J}\text{ }[\prod_{k=1}^{J=1} \{1-F(\gamma_{2} - x_{i}^{'}\beta)\}] \nonumber \\
+% 	\nonumber \\
+% 	(\gamma,\beta) \sim \pi (\gamma,\beta) & \nonumber \\
+% 	\beta \sim N(\beta_{0},\Sigma_{0}) & \nonumber \\
+% 	\nonumber \\
+% 	z_{ij} = w_{ij} - \gamma_{j}, & \nonumber
+% 	\end{eqnarray}
+% 	So...
+% 	\begin{eqnarray}
+% 	y_{i} =
+% 	\begin{cases}
+% 	1\text{ if }z_{i} \leq 0 \nonumber \\
+% 	2\text{ if }z_{i1} > 0, z_{i2} \leq 0 \nonumber \\
+% 	\vdots \nonumber \\
+% 	J-1\text{ if }z_{i1} > 0,...,z_{i,j-2}>0,z_{i,j-1}\leq0 \nonumber \\
+% 	J\text{ if }z_{i1}>0,...,z_{i,j-1}>0
+% \end{cases}
+% \end{eqnarray}
+%
+% Sample from the joint posterior of $(\{z_{ij}\},\beta)$
