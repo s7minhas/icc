@@ -12,26 +12,9 @@
 
 Our two key dependent variables, \emph{State- and Opposition-Focused ICC Transition}, are both ordinal outcomes that can take values of: 1 = no involvement; 2 = preliminary investigation; and 3 = formal investigation. Typically, to model such an outcome we would partition into $K-1$ sequential subsets of the data such that we examine no involvement cases against all the above and no involvement and preliminary against formal.\footnote{$K$ here represents the total number of categories.} This set of cumulative comparisons would be operationalized via a set of binary, cutpoint equations, where a 1 is defined as being at or below the $k^{th}$ cutpoint and a 0 otherwise. %Consequence of this set up is that all data is retained at each split of the data.
 
-In our set of ordinal outcomes, however, the ordered categories represent a progression through different stages and to reach a later stage, a country must pass through each of the previous stages. A cumulative ordinal approach here where the sample size does not change across the cutpoint equations poses an inferential issue as the set of binary equations are no longer independent \citep{tutz1990sequential, have:uttal:1994, fienberg2007analysis, agresti:2010}.\footnote{In the appendix, we compare the parameter estimates and performance of our approach with a standard ordinal framework. We show that not only do substantive results differ between the two approaches but that the ordinal framework is less accurate in terms of reflecting the data generating process underlying ICC investigations.} Specifically, in the cumulative approach, we are modeling the probability of falling into any given category. Whereas in the approach we utilize here -- referred to as a continuation rato model -- conditional splits are created in the data such that the likelihood of falling into a given category is defined as probability of being in a category given that you have progressed to that stage. Within the continuation ratio framework, for outcomes such as ours with three categories (1-3), $Y$ is linked to the binary outcomes by the cutpoint equations ($y_{1} - y_{2}$):
+In our set of ordinal outcomes, however, the ordered categories represent a progression through different stages and to reach a later stage, a country must pass through each of the previous stages. A cumulative ordinal approach here where the sample size does not change across the cutpoint equations poses an inferential issue as the set of binary equations are no longer independent \citep{tutz1990sequential, have:uttal:1994, fienberg2007analysis, agresti:2010}.\footnote{In the appendix, we compare the parameter estimates and performance of our approach with a standard ordinal framework. We show that not only do substantive results differ between the two approaches but that the ordinal framework is less accurate in terms of reflecting the data generating process underlying ICC investigations.} Specifically, in the cumulative approach, we are modeling the probability of falling into any given category. Whereas in the approach we utilize here -- referred to as a continuation rato model -- conditional splits are created in the data such that the likelihood of falling into a given category is defined as probability of being in a category given that you have progressed to that stage.
 
-\begin{eqnarray}
-	y_{1} =
-	\begin{cases}
-		1 \text{ if } y = 1 \nonumber \\
-		0 \text{ if } y = 2-3 \nonumber \\
-	\end{cases}
-	y_{2} =
-	\begin{cases}
-		1 \text{ if } y = 2 \; | \; y >= 2 \nonumber \\
-		0 \text{ if } y = 3 \; | \; y >= 2 \nonumber \\
-	\end{cases}
-\end{eqnarray}
-
-% The sequential model assumes that for every category k -- stage of investigation at ICC -- there is a latent continuous variable $\tilde{Y_{k}}$ that determines the transition between the $k^{th}$ and the $k+1^{th}$ category. In our case, $\tilde{Y_{k}}$ represents all the factors contributing to the probability of a country proceeding beyond a given ICC investigation stage, $k$.
-
-% The categories are separated by thresholds $\tau_{k}$ -- perhaps thought of as the combination of all factors driving the country to proceed in ICC investigative stages. If $\tilde{Y_{k}}$ is greater than the threshold $\tau_{k}$, the sequential process continues; otherwise it stops at category $k$.
-
-This modeling framework assumes that $Y$ arises from a latent continuous variable $\widetilde{Y}$.\footnote{For our application $\widetilde{Y_{k}}$ represents all the factors contributing to the probability of a country proceeding beyond a given ICC investigation stage.} To model the categorization process we assume that there $K-1$ thresholds, $\tau_{k}$, that partition $\widetilde{Y}$ into observable ordered categories of $Y$. Setting up the problem in this way enables us to split up the dependent variable into a set of $K-1$ logit equations corresponding to, in our case, the different phases of ICC involvement \citet{tutz1990sequential,agresti:2010}. We formulate this in a regression context as follows:
+The continuation ratio modeling framework assumes that for every category there is a latent continuous variable $\widetilde{Y}$ that determines the transition between the $k^{th}$ and the $k+1^{th}$ category. In our case, $\tilde{Y_{k}}$ represents all the factors contributing to the probability of a country proceeding beyond a given ICC investigation stage, $k$. To model the categorization process we assume that there $K-1$ thresholds, $\tau_{k}$, that partition $\widetilde{Y}$ into observable ordered categories of $Y$. Setting up the problem in this way enables us to split up the dependent variable into a set of $K-1$ logit equations corresponding to, in our case, the different phases of ICC involvement \citet{tutz1990sequential,agresti:2010}. We formulate this in a regression context as follows:
 
 \begin{equation*}
 	P(y = k | x) =
@@ -42,15 +25,17 @@ This modeling framework assumes that $Y$ arises from a latent continuous variabl
 	\end{cases}
 \end{equation*}
 
-where $F$ denotes the logistic CDF and $\tau_{k}$ a threshold parameter. We incorporate predictor variables in two ways, first we include  a set of variables whose effect is consistent across the phases of ICC involvement. We denote these as $X$ and their effect is measured by a vector of logit coefficients $\beta$. Second, we include predictor variables, $W$, whose coefficients, $\eta_{k}$, are allowed to vary across stages.\footnote{The inclusion of category specific effects into this framework gives us the partial continuation ratio model.} Including this second set of category specific predictor variables allows for the possiblity that at different phases of the ICC process certain factors may matter more than others.\footnote{This is simply a relaxation of the proportional odds assumption. In the appendix we show that including category specific variables leads to substantively different results and better model performance.}
+where $F$ denotes the logistic CDF and $\tau_{k}$ a threshold parameter. We incorporate predictor variables in two ways, first we include  a set of variables whose effect is consistent across the phases of ICC involvement. We denote these as $X$ and their effect is measured by a vector of logit coefficients $\beta$. Second, we include predictor variables, $W$, whose coefficients, $\eta_{k}$, are allowed to vary across stages. The inclusion of category specific effects into this framework gives us the partial continuation ratio (PCR) model. Including this second set of category specific predictor variables allows for the possiblity that at different phases of the ICC process certain factors may matter more than others.\footnote{This is simply a relaxation of the proportional odds assumption. In the appendix we show that including category specific variables leads to substantively different results and better model performance.}
 
-For an outcome with three categories, the continuation ratio model estimates three binary logit models simultaneously with the following marginal probabilities for each category:
 
-$P_{1} = P(y=1)$,
 
-$P_{2} = [1-P_{1}][P(y=2 | y>1)]$,
 
-$P_{3} = [1-P{1}][1-P(y=2|y>1)]$
+Within our sample a number of countries have undergone multiple ICC cases, thus we fit our PCR model in a hierarchical context in which we incorporate random effects for every country-ICC case into the linear predictor \citep{have:uttal:1994, tutz:hennevogl:1996}.\footnote{The incorporation of random effects }
+
+
+% Although outside of the scope of this tutorial article, we wish to briefly discuss modeling strategies for data with multiple items per person. The extension is straightforward and can be achieved with hierarchical/multilevel modeling.
+% In the above example, we only had data for one item per person. However, in many studies the participants provide responses to multiple items. For data with multiple items per person, we can fit a multilevel ordinal model that takes the items and participants into account. This allows incorporating all information in teh data into the model, while controlling for dependencies between ratings from the same person and between ratings of teh same item. For this purpose, the data needs to be in long format, such that each row is an individual rating, with columns for the value of the rating, and identifiers for the participants and items. Suppose that we had measured opinions about funding stem cell research with multiple items and that we call the identifier columns person and item respectively. Then we could write the model formula as (1|person) + (1|item).
+% The notation [(1|person) + (1|item)] implies that the intercept varies over the levels of the grouping factor. In ordinla models, we have multiple intercepts (recall that they are called thresholds in ordinal models), and (1|group) allows these thresholds to vary by the same amount across level of group.
 
 % then also make sure to discuss that we have repeated data so we add random effects, here is where want to make appeals to teh survival lit as ewll
 % end with missing data imputation and then just note that we estimated all this in stan
@@ -81,18 +66,6 @@ toxicological data
 % within the estimation process of teh sampler we pass in a randomly sampled missing dataset from posterior each time so that we can incorporate uncertainty from both missing data and estimation process
 
 	% Hoff (2015) details a Bayesian implementation of this model via Gibbs sampling using semi-conjugate prior distributions to simulate parameter values from the posterior. We modify the sampler with respect to its accommodation of missing data. Specifically, we embed a semiparametric copula imputation scheme within the sampler such that at each iteration of the MCMC sampler for the regression a randomly sampled imputed dataset is supplied. The imputation scheme is described in more detail in Hollenbach et al. (2018), but for our purposes the main reason for including it within the sampler is so that the resulting parameters from the regression MCMC take into account both uncertainty within the model and the imputation process itself.
-
-brief note on incorporation of random effects to deal with country-case heterogeneity
-
-\begin{eqnarray}
-	(\{z_{ij}\} | y,\beta)\text{ and }(\beta,|\{z_{ij}\},y) \nonumber \\
-	(\{z_{ij}\} | y,\beta)\stackrel{iid}{\sim}TN_{(a,b)}(\beta,1) \nonumber \\
-	\nonumber \\
-	(\beta | \{z_{ij}\},y)\stackrel{iid}{\sim}N(\hat{\beta},\hat{\Sigma}) \nonumber \\
-	\nonumber \\
-	\hat{\beta} = (\Sigma_{0}^{-1}+\sum_{i=1}^{n} x_{i}^{'}x_{i})^{-1} \times (\Sigma_{0}^{-1}\beta_{0}+\sum_{i=1}^{n} x_{i}^{'}z_{i}) \nonumber \\
-	\hat{\Sigma} = (\Sigma_{0}^{-1} + \sum_{i=1}^{n} x_{i}^{'}x_{i})^{-1} \nonumber
-\end{eqnarray}
 
 
 \section*{Empirical Results}
