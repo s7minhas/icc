@@ -10,9 +10,9 @@
 
 \section*{Modeling sequential processes}
 
-Our two key dependent variables, \emph{State- and Opposition-Focused ICC Transition}, are both ordinal outcomes that can take values of: 1 = no involvement; 2 = preliminary investigation; and 3 = formal investigation. Typically, to model such an outcome we would partition into $K-1$ sequential subsets of the data such that we examine no involvement cases against all the above and no involvement and preliminary against formal. This set of cumulative comparisons would be operationalized via a set of binary, cutpoint equations, where a 1 is defined as being at or below the $k^{th}$ cutpoint and a 0 otherwise. %Consequence of this set up is that all data is retained at each split of the data.
+Our two key dependent variables, \emph{State- and Opposition-Focused ICC Transition}, are both ordinal outcomes that can take values of: 1 = no involvement; 2 = preliminary investigation; and 3 = formal investigation. Typically, to model such an outcome we would partition into $K-1$ sequential subsets of the data such that we examine no involvement cases against all the above and no involvement and preliminary against formal.\footnote{$K$ here represents the total number of categories.} This set of cumulative comparisons would be operationalized via a set of binary, cutpoint equations, where a 1 is defined as being at or below the $k^{th}$ cutpoint and a 0 otherwise. %Consequence of this set up is that all data is retained at each split of the data.
 
-In our set of ordinal outcomes, however, the ordered categories represent a progression through different stages and to reach a later stage, a country must pass through each of the previous stages. A cumulative ordinal approach here where the sample size does not change across the cutpoint equations poses an inferential issue as the set of binary equations are no longer independent \citep{tutz1990sequential, have:uttal:1994, fienberg2007analysis, agresti:2010}.\footnote{In the appendix, we compare the parameter estimates and performance of our approach with a standard ordinal framework. We show that not only do substantive results differ between the two approaches but that the ordinal framework is less accurate in terms of reflecting the data generating process underlying ICC investigations.} Specifically, in the cumulative approach, we are modeling the probability of falling into any given category as $P(Y \leq k)$, whereas in the approach we utilize here -- referred to as a continuation rato model -- conditional splits are created in the data such that the probability of falling into a given category is defined as $P(Y > k | Y \geq k)$. Within the continuation ratio framework, for outcomes such as ours with three categories (1-3), $Y$ is linked to the binary outcomes by the cutpoint equations ($y_{1} - y_{2}$):
+In our set of ordinal outcomes, however, the ordered categories represent a progression through different stages and to reach a later stage, a country must pass through each of the previous stages. A cumulative ordinal approach here where the sample size does not change across the cutpoint equations poses an inferential issue as the set of binary equations are no longer independent \citep{tutz1990sequential, have:uttal:1994, fienberg2007analysis, agresti:2010}.\footnote{In the appendix, we compare the parameter estimates and performance of our approach with a standard ordinal framework. We show that not only do substantive results differ between the two approaches but that the ordinal framework is less accurate in terms of reflecting the data generating process underlying ICC investigations.} Specifically, in the cumulative approach, we are modeling the probability of falling into any given category. Whereas in the approach we utilize here -- referred to as a continuation rato model -- conditional splits are created in the data such that the likelihood of falling into a given category is defined as probability of being in a category given that you have progressed to that stage. Within the continuation ratio framework, for outcomes such as ours with three categories (1-3), $Y$ is linked to the binary outcomes by the cutpoint equations ($y_{1} - y_{2}$):
 
 \begin{eqnarray}
 	y_{1} =
@@ -27,7 +27,30 @@ In our set of ordinal outcomes, however, the ordered categories represent a prog
 	\end{cases}
 \end{eqnarray}
 
-In the continuation ratio framework, the dependent variable is split up into $K-1$ logit equations corresponding to, in our case, the different phases of ICC involvement. More specifically, we follow \citet{tutz1990sequential} and \citet{agresti:2010} in utilizing a latent variable framework. For $y=1,\ldots,K$, there are $K-1$ latent variables.
+% The probability of interest is the probability of being in a category given that you have progressed to that stage. The cut point equations are estimated simultaneously, which result in a computational economy.
+
+This modeling framework assumes that $Y$ arises from a latent continuous variable $\widetilde{Y}$. To model the categorization process we assume that there $K$ thresholds, $\tau_{k}$, that partition $\widetilde{Y}$ into $K+1$ observable ordered categories of $Y$.  
+
+the dependent variable is split up into $K-1$ logit equations corresponding to, in our case, the different phases of ICC involvement. The equation for the probability of being in a certain phase of the ICC process given that a country has progressed to that stage is:
+
+\begin{equation*}
+	P(y = k | x) =
+	\begin{cases}
+		F(\tau_{1} - X \beta + w\eta_{k}) & k=1,\\
+		\{ \prod_{k=1}^{K-1} [1-F(\tau_{k} - X \beta + w\eta_{k})] \} F(\tau_{k} - X \beta + w\eta_{k}) & 1 < k \leq K - 1, \\
+		\prod_{k=1}^{K-1} [1-F(\tau_{k} - X \beta + w\eta_{k})] & k=K
+	\end{cases}
+\end{equation*}
+
+$F$ denotes the logistic CDF. $\tau_{k}$
+
+$\tau$ is a cut point
+
+$\beta$ is a vector of logit coefficents for a matrix of independent variables $X$
+
+In its most general form, as proposed by \citet{tutz1990sequential}, for every category $k \in \{1, \ldots, K\}$ there is a latent continuous variable, $\widetilde{Y_{k}}$, that sequentially determines the transition between categories. In our case, $\widetilde{Y_{k}}$ represents all the factors contributing to the probability of a country proceeding beyond a given ICC investigation stage.
+
+More specifically, we follow \citet{tutz1990sequential} and \citet{agresti:2010} in utilizing a latent variable framework. For $y=1,\ldots,K$, there are $K-1$ latent variables.
 
 %% need to make sure i dont confuse notation for continuation vs stopping model, we are using a continuation here
 % in this section i've laid out basic motivation for sequential but now we want ot lay out the model (so figure out notation)
