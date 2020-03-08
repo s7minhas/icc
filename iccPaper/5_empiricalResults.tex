@@ -1,9 +1,3 @@
-% next lay out the math
-% after that talk about adjustment for partial continuation ratio
-% then adjustment for repeated observations
-% and last adjustment for missing data
-
-
 % unconstrained partial continuation ratio model, with hierarch structure
 % likelihood and model layout
 % fit via hamiltonian monte carlo in stan
@@ -25,12 +19,15 @@ The continuation ratio modeling framework assumes that for every category there 
 	\end{cases}
 \end{equation*}
 
-where $F$ denotes the logistic CDF and $\tau_{k}$ a threshold parameter. We incorporate predictor variables in two ways, first we include  a set of variables whose effect is consistent across the phases of ICC involvement. We denote these as $X$ and their effect is measured by a vector of logit coefficients $\beta$. Second, we include predictor variables, $W$, whose coefficients, $\eta_{k}$, are allowed to vary across stages. The inclusion of category specific effects into this framework gives us the partial continuation ratio (PCR) model. Including this second set of category specific predictor variables allows for the possiblity that at different phases of the ICC process certain factors may matter more than others.\footnote{This is simply a relaxation of the proportional odds assumption. In the appendix we show that including category specific variables leads to substantively different results and better model performance.}
+where $F$ denotes the logistic CDF and $\tau_{k}$ a threshold parameter. We incorporate predictor variables in two ways, first we include  a set of variables whose effect is consistent across the phases of ICC involvement. We denote these as $X$ and their effect is measured by a vector of logit coefficients $\beta$. Second, we include predictor variables, $W$, whose coefficients, $\eta_{k}$, are allowed to vary across stages. The inclusion of category specific effects into this framework gives us the partial continuation ratio (PCR) model. Including this second set of category specific predictor variables allows for the possiblity that at different phases of the ICC process certain factors may matter more than others.\footnote{This is simply a relaxation of the proportional odds assumption \citep{peterson1990partial}. In the appendix we show that including category specific variables leads to substantively different results and better model performance.}
 
+Within our sample a number of countries have undergone multiple ICC cases, thus we fit our PCR model in a hierarchical context in which we incorporate random effects for every country-ICC case \citep{have:uttal:1994, tutz:hennevogl:1996}.\footnote{The incorporation of random effects }
 
+A country-case specific random effect induces correlation across all observations for the same country-case years.
 
+A patient-specific random effect ri induces correlation across all toxicity observations for the same
+patient. M
 
-Within our sample a number of countries have undergone multiple ICC cases, thus we fit our PCR model in a hierarchical context in which we incorporate random effects for every country-ICC case into the linear predictor \citep{have:uttal:1994, tutz:hennevogl:1996}.\footnote{The incorporation of random effects }
 
 
 % Although outside of the scope of this tutorial article, we wish to briefly discuss modeling strategies for data with multiple items per person. The extension is straightforward and can be achieved with hierarchical/multilevel modeling.
