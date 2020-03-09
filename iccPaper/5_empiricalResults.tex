@@ -19,10 +19,7 @@ The continuation ratio modeling framework assumes that for every category there 
 
 where $F$ denotes the logistic CDF and $\tau_{k}$ a threshold parameter. We incorporate predictor variables in two ways, first we include  a set of variables whose effect is consistent across the phases of ICC involvement. We denote these as $X$ and their effect is measured by a vector of logit coefficients $\beta$. Second, we include predictor variables, $W$, whose coefficients, $\eta_{k}$, are allowed to vary across stages. The inclusion of category specific effects into this framework gives us the partial continuation ratio (PCR) model. Including this second set of category specific predictor variables allows for the possiblity that at different phases of the ICC process certain factors may matter more than others.\footnote{This is simply a relaxation of the proportional odds assumption \citep{peterson1990partial}. In the appendix we show that including category specific variables leads to substantively different results and better model performance.}
 
-
 We also include country specific random effects into the linear predictor to account for potential clustering within country observations.\footnote{Incorporating random effects into the linear predictor of ordered categorical models has been discussed previously in \citet{have:uttal:1994, tutz:hennevogl:1996,dos2000continuation,hartzel2001multinomial}.}
-
-\citep{tutz:hennevogl:1996}
 
 Need for bayesian: Adding random effects to an ordinal response model will further complicate an already complex likelihood for the observations. As coefficients estimates and standard errors are calculated using max like methods, teh result is often difficulty in
 
