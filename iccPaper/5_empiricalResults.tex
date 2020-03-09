@@ -1,6 +1,4 @@
 % unconstrained partial continuation ratio model, with hierarch structure
-% likelihood and model layout
-% fit via hamiltonian monte carlo in stan
 
 \section*{Modeling sequential processes}
 
@@ -13,7 +11,7 @@ The continuation ratio modeling framework assumes that for every category there 
 \begin{equation*}
 	P(y = k | x) =
 	\begin{cases}
-		F(\tau_{1} - X \beta + W\eta_{k}) & k=1,\\
+		F(\tau_{k} - X \beta + W\eta_{k}) & k=1,\\
 		\{ \prod_{k=1}^{K-1} [1-F(\tau_{k} - X \beta + W\eta_{k})] \} F(\tau_{k} - X \beta + W\eta_{k}) & 1 < k \leq K - 1, \\
 		\prod_{k=1}^{K-1} [1-F(\tau_{k} - X \beta + W\eta_{k})] & k=K,
 	\end{cases}
@@ -21,17 +19,27 @@ The continuation ratio modeling framework assumes that for every category there 
 
 where $F$ denotes the logistic CDF and $\tau_{k}$ a threshold parameter. We incorporate predictor variables in two ways, first we include  a set of variables whose effect is consistent across the phases of ICC involvement. We denote these as $X$ and their effect is measured by a vector of logit coefficients $\beta$. Second, we include predictor variables, $W$, whose coefficients, $\eta_{k}$, are allowed to vary across stages. The inclusion of category specific effects into this framework gives us the partial continuation ratio (PCR) model. Including this second set of category specific predictor variables allows for the possiblity that at different phases of the ICC process certain factors may matter more than others.\footnote{This is simply a relaxation of the proportional odds assumption \citep{peterson1990partial}. In the appendix we show that including category specific variables leads to substantively different results and better model performance.}
 
-Within our sample a number of countries have undergone multiple ICC cases, thus we fit our PCR model in a hierarchical context in which we incorporate random effects for every country-ICC case \citep{have:uttal:1994, tutz:hennevogl:1996}.\footnote{The incorporation of random effects }
-
-A country-case specific random effect induces correlation across all observations for the same country-case years.
-
-A patient-specific random effect ri induces correlation across all toxicity observations for the same
-patient. M
 
 
+We also include country specific random effects into the linear predictor to account for potential clustering within country observations.\footnote{This generalization of the continuation ratio model was first considered by \citet{dos2000continuation} to investigate progression and remission of breast cancer.}
+
+Need for bayesian: Adding random effects to an ordinal response model will further complicate an already complex likelihood for the observations. As coefficients estimates and standard errors are calculated using max like methods, teh result is often difficulty in
+
+Elements of $\beta$ are assumed to have a multivariate non-informative prior distribution, which by definition does not provide information towards estimating the fixed effects parameters since the prior variances are assumed to go to infinity.
+
+The random effect parameters for the thresholds represent subject specific intercet and random effect terms which are independent of the $\beta$-parameters. The distribution of these parameters is multivariate normal with a mean of zero and some vcov. For the vcov a non-informative
+
+Model has the added assumption tha the random effects are Normally distributed and centered at zero. The random effect induces the correlation expected between observations in the same cluster and allows inferences to be mode to population form which the groups were sampled.
+
+
+% $\tau_{k} - X \beta + W\eta_{k} + \alpha_{i}$
+
+% Within our sample a number of countries have undergone multiple ICC cases, thus we fit our PCR model in a hierarchical context in which we incorporate random effects for every country-ICC case. Thus inducing correlation across all observations from a particular case.
+
+Ranodm-effects components can also control any possibly ommitted variables and overdispersion.
 
 % Although outside of the scope of this tutorial article, we wish to briefly discuss modeling strategies for data with multiple items per person. The extension is straightforward and can be achieved with hierarchical/multilevel modeling.
-% In the above example, we only had data for one item per person. However, in many studies the participants provide responses to multiple items. For data with multiple items per person, we can fit a multilevel ordinal model that takes the items and participants into account. This allows incorporating all information in teh data into the model, while controlling for dependencies between ratings from the same person and between ratings of teh same item. For this purpose, the data needs to be in long format, such that each row is an individual rating, with columns for the value of the rating, and identifiers for the participants and items. Suppose that we had measured opinions about funding stem cell research with multiple items and that we call the identifier columns person and item respectively. Then we could write the model formula as (1|person) + (1|item).
+
 % The notation [(1|person) + (1|item)] implies that the intercept varies over the levels of the grouping factor. In ordinla models, we have multiple intercepts (recall that they are called thresholds in ordinal models), and (1|group) allows these thresholds to vary by the same amount across level of group.
 
 % then also make sure to discuss that we have repeated data so we add random effects, here is where want to make appeals to teh survival lit as ewll
