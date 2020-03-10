@@ -6,10 +6,27 @@ Our dependent variables, \emph{State- and Opposition-Focused ICC Transition}, ar
 
 In our set of ordinal outcomes, however, the ordered categories represent a progression through different stages and to reach a later stage, a country must pass through each of the previous stages. A cumulative ordinal approach here where the sample does not change across the cutpoint equations poses an inferential issue as the set of binary equations are no longer independent \citep{tutz1990sequential, have:uttal:1994, fienberg2007analysis, agresti:2010}.\footnote{In the appendix, we compare the parameter estimates and performance of our approach with a standard ordinal framework. We show that not only do results substantively differ between the two approaches but that the ordinal framework is less accurate in terms of reflecting the data generating process underlying ICC investigations.} Specifically, in the cumulative approach, we are modeling the probability of falling into any given category. Whereas in the approach we utilize here -- referred to as a continuation ratio model -- conditional splits are created in the data such that the likelihood of falling into a given category is defined as probability of being in a category given that a country has progressed to that stage.
 
-Our framework assumes that for every category there is a latent continuous variable $\widetilde{Y}$ determining the transition between the $k^{th}$ and the $k+1^{st}$ category. $\tilde{Y_{k}}$ here represents all the factors contributing to the probability of a country proceeding beyond a given ICC investigation stage, $k$. To model the categorization process, we assume that there are $K-1$ thresholds, $\tau_{k}$, that partition $\widetilde{Y}$ into observable ordered categories of $Y$. Setting up the problem in this way enables us to split the dependent variable into a set of $K-1$ logit equations corresponding to, in our case, the different phases of ICC involvement \citet{tutz1990sequential,agresti:2010}.\footnote{If we were to apply a clog-log link, the structure here would be analogous to the discrete time version of the proportional hazard model; where the interest is in identifying the factors that predict survival to subsequent time intervals of the dependent variable.} We formulate this in a regression context as follows:
+Our framework assumes that for every category there is a latent continuous variable $\widetilde{Y}$ determining the transition between the $k^{th}$ and the $k+1^{st}$ category. $\tilde{Y_{k}}$ here represents all the factors contributing to the probability of a country proceeding beyond a given ICC investigation stage, $k$. To model the categorization process, we assume that there are $K-1$ thresholds, $\tau_{k}$, that partition $\widetilde{Y}$ into observable ordered categories of $Y$. Setting up the problem in this way enables us to split the dependent variable into a set of $K-1$ logit equations corresponding to, in our case, the different phases of ICC involvement \citet{tutz1990sequential,agresti:2010}.\footnote{If we were to apply a clog-log link, the structure here would be analogous to the discrete time version of the proportional hazard model; where the interest is in identifying the factors that predict survival to subsequent time intervals of the dependent variable.} We formulate this model as follows \citep{agresti:2002,fienberg2007analysis}:
+
+% \begin{equation*}
+% 	\begin{cases}
+% 		Log \left( \frac{ P(y_{it} = k | X, W, \alpha_{i}) }{ P(y_{it} > k | X, W, \alpha_{i}) } \right) = \tau_{k} - (X_{it} \beta + W_{it}\eta_{k} + \alpha_{i} ) & (1 \leq k < K),
+% 	\end{cases}
+% \end{equation*}
 
 \begin{equation*}
-	P(y_{it} = k | X_{it}, W_{it}) =
+	\begin{cases}
+		Log \left( \frac{ P(y_{it} = k | \omega_{it}) }{ P(y_{it} > k | \omega_{it}) } \right) = \tau_{k} - \omega_{it} & (1 \leq k < K),
+	\end{cases}
+\end{equation*}
+
+where the $i$ subscript denotes a particular country-ICC case observation, $t$ the year, and $k$ is a category. 
+
+% To make the SM an actual regression mode, we set up a linaer regression  for each latent variable via $\widetilde{Y_{itk}} = \X_{it}\beta + \W_{it}\eta_{k} + \alpha_{i} + \epsilon_{k}$ with a category specific error term $\epsilon_{k}$.
+
+\begin{equation*}
+	P(y_{it} = k | X_{it}, W_{it}) = \\
+	ln( \frac{} )
 	\begin{cases}
 		F(\tau_{k} - (X_{it} \beta + W_{it}\eta_{k} + \alpha_{i} ) ) & k=1,\\
 		\{ \prod\limits_{k=1}^{K-1} [1-F(\tau_{k} - (X_{it} \beta + W_{it}\eta_{k} + \alpha_{i} )  \} \times \\
