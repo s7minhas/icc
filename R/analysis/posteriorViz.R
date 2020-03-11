@@ -30,20 +30,22 @@ oppMod <- mod
 load(paste0(pathResults, 'sobState_model1a_1_newp5Var.rda'))
 stateMod <- mod
 
-cntsState=table(stateMod$data$icclevel_state_3)
-totState=sum(cntsState)
-propState = cntsState/totState
-
-cntsOpp=table(oppMod$data$icclevel_opp_3)
-totOpp=sum(cntsOpp)
-propOpp = cntsOpp/totOpp
-
-cntsState
-round(propState, 2)
-
-cntsOpp
-round(propOpp, 2)
-
+###########################
+## descriptive info for res design portion
+# cntsState=table(stateMod$data$icclevel_state_3)
+# totState=sum(cntsState)
+# propState = cntsState/totState
+#
+# cntsOpp=table(oppMod$data$icclevel_opp_3)
+# totOpp=sum(cntsOpp)
+# propOpp = cntsOpp/totOpp
+#
+# cntsState
+# round(propState, 2)
+#
+# cntsOpp
+# round(propOpp, 2)
+###########################
 
 # vars
 varsRaw <- unique(

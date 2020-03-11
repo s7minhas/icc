@@ -1,5 +1,10 @@
 \begin{thebibliography}{xx}
 
+\harvarditem{Agresti}{2002}{agresti:2002}
+Agresti, Alan. 2002.
+\newblock {\em Categorical Data Analysis}.
+\newblock 2nd ed. New York:  John Wiley \& Sons, Ltd.
+
 \harvarditem{Agresti}{2010}{agresti:2010}
 Agresti, Alan. 2010.
 \newblock {\em Analysis of ordinal categorical data}.
@@ -237,6 +242,11 @@ Finnemore, Martha. 2009.
 Forum, Global~Policy. 2010.
 \newblock ``Uganda: ICC to investigate allegations of army atrocities.''.
 \newline\harvardurl{https://www.globalpolicy.org/international-justice/the-international-criminal-court/icc-investigations/uganda/49170.html}
+
+\harvarditem{Fullerton}{2009}{fullerton:2009}
+Fullerton, Andrew~S. 2009.
+\newblock ``A Conceptual Framework for Ordered Logistic Regression Models.''
+  {\em Sociological Methods \& Research} 38(2):306--347.
 
 \harvarditem[Garrett, Kelemen \harvardand\ Schulz]{Garrett, Kelemen
   \harvardand\ Schulz}{1998}{garrett1998european}
