@@ -44,6 +44,7 @@ round(propState, 2)
 cntsOpp
 round(propOpp, 2)
 
+
 # vars
 varsRaw <- unique(
 	c( rownames(fixef(oppMod)), rownames(fixef(stateMod)) ) )

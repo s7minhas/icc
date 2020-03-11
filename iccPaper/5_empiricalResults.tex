@@ -6,7 +6,7 @@ Our dependent variables, \emph{State- and Opposition-Focused ICC Transition}, ar
 
 In our set of ordinal outcomes, however, the ordered categories represent a progression through different stages and to reach a later stage, a country must pass through each of the previous stages. A cumulative ordinal approach here where the sample does not change across the cutpoint equations poses an inferential issue as the set of binary equations are no longer independent \citep{tutz1990sequential, have:uttal:1994, fienberg2007analysis, agresti:2010}.\footnote{In the appendix, we compare the parameter estimates and performance of our approach with a standard ordinal framework. We show that not only do results substantively differ between the two approaches but that the ordinal framework is less accurate in terms of reflecting the data generating process underlying ICC investigations.} Specifically, in the cumulative approach, we are modeling the probability of falling into any given category. Whereas in the approach we utilize here -- referred to as a continuation ratio model -- conditional splits are created in the data such that the likelihood of falling into a given category is defined as probability of being in a category given that a country has progressed to that stage.
 
-Our framework assumes that for every category there is a latent continuous variable $\widetilde{Y}$ determining the transition between the $k^{th}$ and the $k+1^{st}$ category. $\tilde{Y_{k}}$ here represents all the factors contributing to the probability of a country proceeding beyond a given ICC investigation stage, $k$. To model the categorization process, we assume that there are $K-1$ thresholds, $\tau_{k}$, that partition $\widetilde{Y}$ into observable ordered categories of $Y$. Setting up the problem in this way enables us to split the dependent variable into a set of $K-1$ logit equations corresponding to, in our case, the different phases of ICC involvement \citet{tutz1990sequential,agresti:2010}.\footnote{If we were to apply a clog-log link, the structure here would be analogous to the discrete time version of the proportional hazard model; where the interest is in identifying the factors that predict survival to subsequent time intervals of the dependent variable.} We formulate this model as follows \citep{agresti:2002,fienberg2007analysis}:
+Our framework assumes that for every category there is a latent continuous variable $\widetilde{Y}$ determining the transition between the $k^{th}$ and the $k+1^{st}$ category. $\tilde{Y_{k}}$ here represents all the factors contributing to the probability of a country proceeding beyond a given ICC investigation stage, $k$. To model the categorization process, we assume that there are $K-1$ thresholds, $\tau_{k}$, that partition $\widetilde{Y}$ into observable ordered categories of $Y$. Setting up the problem in this way enables us to split the dependent variable into a set of $K-1$ logit equations corresponding to, in our case, the different phases of ICC involvement \citet{tutz1990sequential,agresti:2010}.\footnote{If we were to apply a clog-log link, the structure here would be analogous to the discrete time version of the proportional hazard model; where the interest is in identifying the factors that predict survival to subsequent time intervals of the dependent variable.} We formulate this model as follows \citep{agresti:2002,fienberg2007analysis,fullerton:2009}:
 
 % \begin{equation*}
 % 	\begin{cases}
@@ -20,12 +20,10 @@ Our framework assumes that for every category there is a latent continuous varia
 	\end{cases}
 \end{equation*}
 
-where the $i$ subscript denotes a particular country-ICC case observation, $t$ the year, and $k$ is a category. 
-
-% To make the SM an actual regression mode, we set up a linaer regression  for each latent variable via $\widetilde{Y_{itk}} = \X_{it}\beta + \W_{it}\eta_{k} + \alpha_{i} + \epsilon_{k}$ with a category specific error term $\epsilon_{k}$.
+where the $i$ subscript denotes a particular country-ICC case observation,\footnote{For every country-year, we determine the maximum of their ICC case status.} $t$ the year, $k$ is a category, $\tau_{k}$ a threshold parameter, and $\omega_{it}$ represents the set of parameters that go into the linear predictor of our model. In a model in which there are no parameters in $\omega_{it}$ (i.e., a null model), $\tau_{k}$ denotes the log odds of being in category $k$ or lower versus a higher catgory. The probability of an observation falling into a particular outcome category is:
 
 \begin{equation*}
-	P(y_{it} = k | X_{it}, W_{it}) = \\
+	P(y_{it} = k | X_{it}, W_{it}, \alpha_{i}) = \\
 	ln( \frac{} )
 	\begin{cases}
 		F(\tau_{k} - (X_{it} \beta + W_{it}\eta_{k} + \alpha_{i} ) ) & k=1,\\
@@ -35,30 +33,14 @@ where the $i$ subscript denotes a particular country-ICC case observation, $t$ t
 	\end{cases}
 \end{equation*}
 
-where $F$ denotes the logistic CDF and $\tau_{k}$ a threshold parameter. We incorporate predictor variables in two ways, first we include  a set of variables whose effect is consistent across the phases of ICC involvement. We denote these as $X$ and their effect is measured by a vector of logit coefficients $\beta$. Second, we include predictor variables, $W$, whose coefficients, $\eta_{k}$, are allowed to vary across stages. The inclusion of category specific effects into this framework gives us the partial continuation ratio (PCR) model. Including this second set of category specific predictor variables allows for the possiblity that at different phases of the ICC process certain factors may matter more than others.\footnote{This is simply a relaxation of the proportional odds assumption \citep{peterson1990partial}. In the appendix we show that including category specific variables leads to substantively different results and better model performance.}
 
-We also include country specific random intercepts into the linear predictor to account for potential clustering within country observations.\footnote{ Incorporating random effects into the linear predictor of ordered categorical models has been discussed previously in \citet{have:uttal:1994, tutz:hennevogl:1996,dos2000continuation,hartzel2001multinomial}.}
-
+where $F$ denotes the logistic CDF and $\omega_{it} = X_{it} \beta + W_{it}\eta_{k} + \alpha_{i}$. We incorporate predictor variables into $\omega_{it}$ in two ways, first we include a set of variables whose effect is consistent across the phases of ICC involvement. We denote these as $X$ and their effect is measured by a vector of logit coefficients $\beta$. Second, we include predictor variables, $W$, whose coefficients, $\eta_{k}$, are allowed to vary across stages. The inclusion of category specific effects into this framework gives us what is referred to as the partial continuation ratio (PCR) model. Including this second set of category specific predictor variables allows for the possiblity that at different phases of the ICC process certain factors may matter more than others.\footnote{This is simply a relaxation of the proportional odds assumption \citep{peterson1990partial}. In the appendix we show that including category specific variables leads to substantively different results and better model performance.} Last, we include a set of country specific random intercepts into the linear predictor, denoted by $\alpha_{i}$.\footnote{Incorporating random effects into the linear predictor of these types of models is often useful to account for a dependence between observations of a particular group. This issue has been discussed previously in \citet{have:uttal:1994, tutz:hennevogl:1996, dos2000continuation, hartzel2001multinomial}.}
 
 Elements of $\beta$ are assumed to have a multivariate non-informative prior distribution, which by definition does not provide information towards estimating the fixed effects parameters since the prior variances are assumed to go to infinity.
 
 The random effect parameters for the thresholds represent subject specific intercet and random effect terms which are independent of the $\beta$-parameters. The distribution of these parameters is multivariate normal with a mean of zero and some vcov. For the vcov a non-informative
 
 Model has the added assumption tha the random effects are Normally distributed and centered at zero. The random effect induces the correlation expected between observations in the same cluster and allows inferences to be mode to population form which the groups were sampled.
-
-
-% $\tau_{k} - X \beta + W\eta_{k} + \alpha_{i}$
-
-% Within our sample a number of countries have undergone multiple ICC cases, thus we fit our PCR model in a hierarchical context in which we incorporate random effects for every country-ICC case. Thus inducing correlation across all observations from a particular case.
-
-% Ranodm-effects components can also control any possibly ommitted variables and overdispersion.
-
-% Although outside of the scope of this tutorial article, we wish to briefly discuss modeling strategies for data with multiple items per person. The extension is straightforward and can be achieved with hierarchical/multilevel modeling.
-
-% The notation [(1|person) + (1|item)] implies that the intercept varies over the levels of the grouping factor. In ordinla models, we have multiple intercepts (recall that they are called thresholds in ordinal models), and (1|group) allows these thresholds to vary by the same amount across level of group.
-
-% then also make sure to discuss that we have repeated data so we add random effects, here is where want to make appeals to teh survival lit as ewll
-% end with missing data imputation and then just note that we estimated all this in stan
 
 % Add note about how imputation process via semi parametric copula was embedded in the sampler:
 % impute data via hollenbach et al. 2018/9 using semi parametric copula approach
