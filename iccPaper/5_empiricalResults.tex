@@ -14,7 +14,7 @@ Our framework assumes that for every category there is a latent continuous varia
 	\end{cases}
 \end{equation*}
 
-where the $i$ subscript denotes a particular country-ICC case observation,\footnote{For every country-year, we determine the maximum of their ICC case status.} $t$ the year, $k$ is a category, $\tau_{k}$ a threshold parameter, and $\omega_{it}$ represents the set of parameters that go into the linear predictor of our model. In a model in which there are no parameters in $\omega_{it}$ (i.e., a null model), $\tau_{k}$ denotes the log odds of being in category $k$ or lower versus a higher catgory. The probability of an observation falling into a particular outcome category is:
+where the $i$ subscript denotes a particular country-ICC case observation,\footnote{For every country-year, we determine the maximum of their ICC case status for the respective dependent variable -- State- or Opposition-Focused ICC Transition.} $t$ the year, $k$ is a category, $\tau_{k}$ a threshold parameter, and $\omega_{it}$ represents the set of parameters that go into the linear predictor of our model. In a model in which there are no parameters in $\omega_{it}$ (i.e., a null model), $\tau_{k}$ denotes the log odds of being in category $k$ or lower versus a higher catgory. The probability of an observation falling into a particular outcome category is:
 
 \begin{equation*}
 	P(y_{it} = k | X_{it}, W_{it}, \alpha_{i}) = \\
