@@ -2,7 +2,7 @@
 if(Sys.info()['user'] %in% c('s7m', 'janus829')){
 	source('~/Research/icc/R/setup.R') }
 
-if(Sys.info()['user'] %in% c('herme', 'Owner')){
+if(Sys.info()['user'] %in% c('herme', 'Owner', 'S7M')){
 	user=Sys.info()['user']
 	source(paste0('C:/Users/',user,'/Research/icc/R/setup.R')) }
 
@@ -142,3 +142,31 @@ modHier = brm(
 # 		pathResults, 'sobOpp_model1a_1_newp5Var_hier.rda'
 # 		))
 ###############################################################
+load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_hier.rda'))
+names(modHier)
+modHier$formula
+modHier$algorithm
+
+x = make_stancode(
+	formula=sobOppForm,
+	data=frame,
+	family=cratio(link='logit'),
+	cores=4,
+	save_model='C:/Users/herme/OneDrive/Desktop/tst.txt'
+)
+x
+
+get_prior(
+	formula=sobOppForm,
+	data=frame,
+	family=cratio(link='logit'),
+	cores=4
+)
+
+prior_summary(modHier)
+
+set_prior(
+	formula=sobOppForm,
+	data=frame,
+	family=cratio(link='logit')
+)

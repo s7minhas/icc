@@ -7,6 +7,36 @@
 
 \section*{Appendix}
 
+\subsection*{Model Layout}
+
+\begin{align*}
+  Y_{i} &\sim Continuation-Ratio(\mu_{i}, \tau_{k}) \\
+  \mu_{i} &= X_{i} \beta + W_{i}\eta_{k} + \alpha_{j}[i] \\
+  \beta_{p} &\sim T(0, 10, 3), \text{ for } p = 1, \ldots p \\
+  \eta_{qk} &\sim T(0, 10, 3), \text{ for } q = 1, \ldots Q \text{ and } k =1, \ldots, K-1 \\
+  \tau_{k} &\sim N(0, 1.5), \text{ for } k = 1, \ldots, K-1 \\
+  \alpha_{j} &\sim N(0, \sigma_{\alpha}) \\
+  \sigma_{\alpha} &\sim Exponential(2)
+\end{align*}
+
+To describe our model we use the convention in \citet{mcelreath2016statistical}. The frist two lines describe the likelihood and linear model and the remaining define the prior distribution for each parameter in the model. Let $Y_{i}$ be a particular country-year observation's score on our dependent variables. Both of our dependent variables take an integer value of $k=1, \ldots, K$. The framework we presented in our paper treats $Y_{i}$ as a fucntion of a normally-distributed latent variable with a mean of $\mu$ and a standard deviation of 1. The $k=1, \ldots, K-1$ threshold parameters, $\tau$, partition this distribution into $K$ sections. The area of each of these sections describe the probability of falling into each response category.
+
+To model changes in these probabilities, the models assume $\mu$ to be an additive combination of linear effects. We parameterize this model via first a set of variables, $X$ that are thought to effect the probability of falling into a particular category equally and the effect of these variables is captured by a $P$ length vector of coefficients, $\beta$. We also include $Q$ variables that have category specific effects and these are denoted by $W$ and their effect is measured by $\eta$. $\alpha$ represents a set of varying effects that account for country-ICC case specific unmeasured variation.
+
+For both the \emph{State- and Opposition-Focused ICC Transition} models we utilize the same set of prior distributions. For $\beta$ and $\eta$ we use Student's t priors with three degrees of freedom. For the threshold parameters, $\tau$, we use a Normal distribution with a mean of zero and standard deviation of 1.5. We also use normally distributed priors for $\alpha$ and set the mean to zero and standard deviation to $\sigma_{\alpha}$, which  has its own Exponential hyperprior with a rate of 2.
+
+% We add a varying intercept. $\alpha_{j}  \sim N(\alpha, \sigma_{\alpha})$ where we use the notation $\alpha_{j}$ to indate that each group $j$ (country icc case) is given a unique intercept, issued from a Gaussian distribution centered on $\alpha$, the grand intercept, meaning that there might different mean scores for each class.
+%
+% This is called a prior distribution: $\alpha_{j}  \sim N(\alpha, \sigma_{\alpha})$. Prior distribution describes the population of intercepts, thus modeling the dependency between the parameters.
+%
+% Independent flat priors were assigned to $\beta$, $\eta$, and $\tau$.
+%
+% Elements of $\beta$ are assumed to have a multivariate non-informative prior distribution, which by definition does not provide information towards estimating the fixed effects parameters since the prior variances are assumed to go to infinity.
+%
+% The random effect parameters for the thresholds represent subject specific intercet and random effect terms which are independent of the $\beta$-parameters. The distribution of these parameters is multivariate normal with a mean of zero and some vcov. For the vcov a non-informative
+%
+% Model has the added assumption tha the random effects are Normally distributed and centered at zero. The random effect induces the correlation expected between observations in the same cluster and allows inferences to be mode to population form which the groups were sampled.
+
 \subsection*{Convergence Check for Main Models}
 
 \begin{figure}

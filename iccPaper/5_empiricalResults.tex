@@ -10,47 +10,29 @@ Our framework assumes that for every category there is a latent continuous varia
 
 \begin{equation*}
 	\begin{cases}
-		Log \left( \frac{ P(y_{it} = k | \omega_{it}) }{ P(y_{it} > k | \omega_{it}) } \right) = \tau_{k} - \omega_{it} & (1 \leq k < K),
+		Log \left( \frac{ P(y_{jt} = k | \mu_{jt}) }{ P(y_{jt} > k | \mu_{jt}) } \right) = \tau_{k} - \mu_{jt} & (1 \leq k < K),
 	\end{cases}
 \end{equation*}
 
-where the $i$ subscript denotes a particular country-ICC case observation,\footnote{For every country-year, we determine the maximum of their ICC case status for the respective dependent variable -- State- or Opposition-Focused ICC Transition.} $t$ the year, $k$ is a category, $\tau_{k}$ a threshold parameter, and $\omega_{it}$ represents the set of parameters that go into the linear predictor of our model. In a model in which there are no parameters in $\omega_{it}$ (i.e., a null model), $\tau_{k}$ denotes the log odds of being in category $k$ or lower versus a higher catgory. The probability of an observation falling into a particular outcome category is:
+where the $j$ subscript denotes a particular country-ICC case observation,\footnote{For every country-year, we determine the maximum of their ICC case status for the respective dependent variable -- State- or Opposition-Focused ICC Transition.} $t$ the year, $k$ is a category, $\tau_{k}$ a threshold parameter, and $\mu_{jt}$ represents the set of parameters that go into the linear predictor of our model. In a model in which there are no parameters in $\mu_{jt}$ (i.e., a null model), $\tau_{k}$ denotes the log odds of being in category $k$ or lower versus a higher catgory. The probability of an observation falling into a particular outcome category is:
 
 \begin{equation*}
-	P(y_{it} = k | X_{it}, W_{it}, \alpha_{i}) = \\
-	ln( \frac{} )
+	P(y_{jt} = k | X_{jt}, W_{jt}, \alpha_{j}) = \\
 	\begin{cases}
-		F(\tau_{k} - (X_{it} \beta + W_{it}\eta_{k} + \alpha_{i} ) ) & k=1,\\
-		\{ \prod\limits_{k=1}^{K-1} [1-F(\tau_{k} - (X_{it} \beta + W_{it}\eta_{k} + \alpha_{i} )  \} \times \\
-		\qquad F(\tau_{k} - (X_{it} \beta + W_{it}\eta_{k} + \alpha_{i} ) ) & 1 < k \leq K - 1, \\
-		\prod\limits_{k=1}^{K-1} [1-F(\tau_{k} - (X_{it} \beta + W_{it}\eta_{k} + \alpha_{i} ) ] & k=K,
+		F(\tau_{k} - (X_{jt} \beta + W_{jt}\eta_{k} + \alpha_{j} ) ) & k=1,\\
+		\{ \prod\limits_{k=1}^{K-1} [1-F(\tau_{k} - (X_{jt} \beta + W_{jt}\eta_{k} + \alpha_{j} )  \} \times \\
+		\qquad F(\tau_{k} - (X_{jt} \beta + W_{jt}\eta_{k} + \alpha_{j} ) ) & 1 < k \leq K - 1, \\
+		\prod\limits_{k=1}^{K-1} [1-F(\tau_{k} - (X_{jt} \beta + W_{jt}\eta_{k} + \alpha_{j} ) ] & k=K,
 	\end{cases}
 \end{equation*}
 
-where $F$ denotes the logistic CDF and $\omega_{it} = X_{it} \beta + W_{it}\eta_{k} + \alpha_{i}$. We incorporate predictor variables into $\omega_{it}$ in two ways, first we include a set of variables whose effect is consistent across the phases of ICC involvement. We denote these as $X$ and their effect is measured by a vector of logit coefficients $\beta$. Second, we include predictor variables, $W$, whose coefficients, $\eta_{k}$, are allowed to vary across stages. The inclusion of category specific effects into this framework gives us what is referred to as the partial continuation ratio (PCR) model. Including this second set of category specific predictor variables allows for the possiblity that at different phases of the ICC process certain factors may matter more than others.\footnote{This is simply a relaxation of the proportional odds assumption \citep{peterson1990partial}. In the appendix we show that including category specific variables leads to substantively different results and better model performance.} Last, to account for dependence between particular country-ICC case observations, we include a set of random intercepts into the linear predictor, denoted by $\alpha_{i}$.\footnote{Incorporating random effects into the linear predictor of these types of models has been discussed previously in \citet{have:uttal:1994, tutz:hennevogl:1996, dos2000continuation, hartzel2001multinomial}.}
+where $F$ denotes the logistic CDF and $\mu_{jt} = X_{jt} \beta + W_{jt}\eta_{k} + \alpha_{j}$. We incorporate predictor variables into $\mu_{jt}$ in two ways, first we include a set of variables whose effect is consistent across the phases of ICC involvement. We denote these as $X$ and their effect is measured by a vector of logit coefficients $\beta$. Second, we include predictor variables, $W$, whose coefficients, $\eta_{k}$, are allowed to vary across stages. The inclusion of category specific effects into this framework gives us what is referred to as the partial continuation ratio (PCR) model. Including this second set of category specific predictor variables allows for the possiblity that at different phases of the ICC process certain factors may matter more than others.\footnote{This is simply a relaxation of the proportional odds assumption \citep{peterson1990partial}. In the appendix we show that including category specific variables leads to substantively different results and better model performance.} Last, to account for dependence between particular country-ICC case observations, we include a set of random intercepts into the linear predictor, denoted by $\alpha_{j}$.\footnote{Incorporating random effects into the linear predictor of these types of models has been discussed previously in \citet{have:uttal:1994, tutz:hennevogl:1996, dos2000continuation, hartzel2001multinomial}.}
 
-We fit our model using the \texttt{Stan} software package via the Hamiltonian Monte Carlo No-U-Turn Sampler \citep{carpenter2017stan}.
+We fit our model using the \texttt{Stan} software package via a Hamiltonian Monte Carlo No-U-Turn Sampler \citep{carpenter2017stan}. We set diffuse priors for each of the parameter and provide further details of their exact parameterization in the appendix. We run the sampler for each model for 8000 iterations and use the first half as burn-in thus leaving us with 4000 samples for both the \emph{State- and Opposition-Focused ICC Transition} models.\footnote{Trace plots showing that the model converges towards a posterior, even with this small number of iterations, are provided in the appendix. There was little evidence of autocorrelation so we did not thin the samples drawn from the sampler.}
 
-We run the sampler for each model for 8000 iterations and use the first half as burn-in.\footnote{Trace plots are provided in the appendix.}
-
-Elements of $\beta$ are assumed to have a multivariate non-informative prior distribution, which by definition does not provide information towards estimating the fixed effects parameters since the prior variances are assumed to go to infinity.
-
-The random effect parameters for the thresholds represent subject specific intercet and random effect terms which are independent of the $\beta$-parameters. The distribution of these parameters is multivariate normal with a mean of zero and some vcov. For the vcov a non-informative
-
-Model has the added assumption tha the random effects are Normally distributed and centered at zero. The random effect induces the correlation expected between observations in the same cluster and allows inferences to be mode to population form which the groups were sampled.
-
-% Add note about how imputation process via semi parametric copula was embedded in the sampler:
-% impute data via hollenbach et al. 2018/9 using semi parametric copula approach
-% generates posterior distribution over missing data
-%
-
-\citep{hoff:2007}
-\citep{hollenbach:etal:2018}
+Last, to deal with missing data, we employ a multiple imputation scheme. \citep{hoff:2007} details a Bayesian implementation of this model via Gibbs sampling using semi-conjugate prior distributions to simulate parameter values from the posterior. We modify the sampler with respect to its accommodation of missing data. Specifically, we embed a semiparametric copula imputation scheme within the sampler such that at each iteration of the MCMC sampler for the regression a randomly sampled imputed dataset is supplied. The imputation scheme is described in more detail in \citep{hollenbach:etal:2018}, but for our purposes the main reason for including it within the sampler is so that the resulting parameters from the regression MCMC take into account both uncertainty within the model and the imputation process itself.
 
 % within the estimation process of teh sampler we pass in a randomly sampled missing dataset from posterior each time so that we can incorporate uncertainty from both missing data and estimation process
-
-	% Hoff (2015) details a Bayesian implementation of this model via Gibbs sampling using semi-conjugate prior distributions to simulate parameter values from the posterior. We modify the sampler with respect to its accommodation of missing data. Specifically, we embed a semiparametric copula imputation scheme within the sampler such that at each iteration of the MCMC sampler for the regression a randomly sampled imputed dataset is supplied. The imputation scheme is described in more detail in Hollenbach et al. (2018), but for our purposes the main reason for including it within the sampler is so that the resulting parameters from the regression MCMC take into account both uncertainty within the model and the imputation process itself.
-
 
 \section*{Empirical Results}
 
