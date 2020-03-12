@@ -155,7 +155,7 @@ baseOrd <- vglm(
 	polrForm, data=data,
 	family = cumulative (link="probit", parallel=TRUE))
 
-# run sequential model with no cs terms
+# run Partial\nContinuation Ratio with no cs terms
 baseSeq <- vglm(
 	polrForm, data=data,
 	family = sratio (link="logit", parallel=TRUE))
@@ -176,7 +176,7 @@ cleanCoef = function(modFixef, modLab){
 
 coefData = rbind(
 	cleanCoef(coefOrd, 'Ordinal Model'),
-	cleanCoef(coefSeq, 'Sequential Model\nNo Category Specific')
+	cleanCoef(coefSeq, 'Continuation Ratio')
 )
 
 attach(coefData)
@@ -188,7 +188,7 @@ coefData = coefData[,c('var','model','Estimate','Q2.5','Q97.5')]
 coefSeq2$var = rownames(coefSeq2)
 coefSeq2$var = gsub('[','.',coefSeq2$var,fixed=TRUE)
 coefSeq2$var = gsub(']','.',coefSeq2$var,fixed=TRUE)
-coefSeq2$model = 'Sequential Model'
+coefSeq2$model = 'Partial\nContinuation Ratio'
 coefSeq2 = coefSeq2[,c('var','model','Estimate','Q2.5','Q97.5')]
 coefData = rbind(coefData, coefSeq2)
 
@@ -222,8 +222,8 @@ coefData$var = factor(coefData$var,
 	levels=rev(varKey2$dirty))
 coefData$model <- factor(coefData$model,
 		levels=rev(c(
-			'Sequential Model',
-			'Sequential Model\nNo Category Specific',
+			'Partial\nContinuation Ratio',
+			'Continuation Ratio',
 			'Ordinal Model')))
 
 posDodge = .85
@@ -236,7 +236,12 @@ xlabels=gsub('Cumulative', 'Cumul', xlabels)
 tmp_bw=ggplot(coefData, aes(x=var, y=Estimate, group=model)) +
   geom_hline(aes(yintercept=0), linetype=2, color = "black") +
   geom_point(aes(shape=model), size=4, position=position_dodge(width = posDodge)) +
-  geom_errorbar(aes(ymin=Q2.5,ymax=Q97.5),linetype = 1,size = .5,width = 0.1, position=position_dodge(width = posDodge)) +
+  geom_errorbar(
+		aes(ymin=Q2.5,ymax=Q97.5),
+		linetype = 1,
+		size = .5,
+		width = 0.1,
+		position=position_dodge(width = posDodge)) +
   scale_shape_manual(name = "", values = c(15, 18, 17)) +
   coord_flip() + labs(title = "", y="", x = "") +
 	facet_wrap(~model, scales='free_x') +
@@ -258,8 +263,8 @@ tmp_bw=ggplot(coefData, aes(x=var, y=Estimate, group=model)) +
     strip.background = element_rect(fill = "#525252", color='#525252')
   	)
 ggsave(tmp_bw,
-	# file=paste0(pathGraphics, 'modCompare_opp.pdf'),
-	file=paste0(pathGraphics, 'modCompare_state.pdf'),
+	file=paste0(pathGraphics, 'modCompare_opp.pdf'),
+	# file=paste0(pathGraphics, 'modCompare_state.pdf'),
 	width = 12, height = 8)
 ###############################################################
 
@@ -299,7 +304,7 @@ getPerfStats <- function(mod, lab){
 	# extract preds
 	predDF$polrPreds = predict(base)
 
-	# run sequential model with no cs terms
+	# run Partial\nContinuation Ratio with no cs terms
 	baseSeq <- vglm(
 		polrForm, data=data,
 		family = sratio (link="logit", parallel=TRUE))
@@ -314,7 +319,7 @@ getPerfStats <- function(mod, lab){
 			tadaa_ord(
 				predDF$y, predDF$guess
 				)$body[,c('value','col_name')],
-			lab=lab, model='Sequential Model' ),
+			lab=lab, model='Partial\nContinuation Ratio' ),
 		cbind(
 			tadaa_ord(
 				predDF$y, predDF$vglmPreds
@@ -324,7 +329,7 @@ getPerfStats <- function(mod, lab){
 			tadaa_ord(
 				predDF$y, predDF$polrPreds
 				)$body[,c('value','col_name')],
-			lab=lab, model='Sequential Model\nNo Category Specific' )
+			lab=lab, model='Continuation Ratio' )
 	)
 
 	return(out) }
@@ -332,8 +337,8 @@ getPerfStats <- function(mod, lab){
 # org
 if(!file.exists(paste0(pathResults, 'perfResults.rda'))){
   perfData <- rbind(
-    getPerfStats(oppMod, lab='Opposition-Focused'),
-    getPerfStats(stateMod, lab='State-Focused')
+    x=getPerfStats(oppMod, lab='Opposition-Focused'),
+    y=getPerfStats(stateMod, lab='State-Focused')
   )
   save(perfData, file=paste0(pathResults, 'perfResults.rda'))
 } else { load(paste0(pathResults, 'perfResults.rda')) }
@@ -356,8 +361,8 @@ perfData$lab <- factor(perfData$lab,
 	levels=c('State-Focused', 'Opposition-Focused'))
 perfData$model <- factor(perfData$model,
 		levels=rev(c(
-			'Sequential Model',
-			'Sequential Model\nNo Category Specific',
+			'Partial\nContinuation Ratio',
+			'Continuation Ratio',
 			'Ordinal Model')))
 perfData$value <- num(perfData$value)
 
