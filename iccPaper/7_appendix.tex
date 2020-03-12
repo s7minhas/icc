@@ -93,28 +93,23 @@ To make sure that our results are not being driven by our multiple imputation pr
 
 \subsection*{Comparison with ordinal logit}
 
-To show the utility of our approach we also compare it against
+To highlight the utility of our approach, the partial continuation ratio model, we compare it with two alternative frameworks. Specifically, a standard ordinal model and a vanilla continuation ratio model that does not have any category specific effects.  In the coefficent plots below, we show parameter estimates for each of the independent variables. As we can see the substantive resulted from our framework differ quite notably from either of the alternatives for both the \emph{State- and Opposition-Focused ICC Transition} models.
 
 \begin{figure}
     \centering
     \includegraphics[width=1\textwidth]{modCompare_state.pdf}
-    \caption{State model.}
+    \caption{Parameter estimates from State-Focused ICC Transition model when using ordinal (square), continuation ratio (diamond), and partial continuation ratio models (triangle). The horizontal lines indicate the 95\% credible interval around the average estimated effect.}
     \label{fig:stateCoefCompare}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=1\textwidth]{modCompare_opp.pdf}
-    \caption{Opposition model.}
+    \caption{Parameter estimates from Opposition-Focused ICC Transition model when using ordinal (square), continuation ratio (diamond), and partial continuation ratio models (triangle). The horizontal lines indicate the 95\% credible interval around the average estimated effect.}
     \label{fig:oppCoefCompare}
 \end{figure}
 
-For ordinal variables the choice of a fit statistic is not as obvious. We use Somer's $D$, a rank correlation coefficient  \citep{Somers1962}, as our discrepancy statistic for the ordinal logit models. Somer's $D$ is closely related to Goodman and Kruskal's $\gamma$ and Kendall's $\tau$, differing only in the denominator.\footnote{Somer's $D$ is similar to the commonly used $\tau_b$, which is equal to $\frac{P - Q}{(P+Q+X_0)(P+Q+Y_0)}$, where $Y_0$ is the number of ties in $Y$, and $\gamma$, which is equal to $\frac{P - Q}{P + Q}$.} Somer's $D$ makes a distinction between the independent and dependent variable in a bivariate distribution, correcting for ties within the independent variable. With $Y$ being treated as the independent variable it is denoted $D_{xy}$.
-
-Specifically:
-$$D_{xy} = \frac{P - Q}{P + Q + X_0}$$
-
-\noindent where $P$ is the number of concordant pairs, $Q$ is the number discordant pairs, and $X_0$ is the number of ties in $X$. This is simply a measure of association for ordinal variables, so our approach is essentially to calculate the correlation between predicted and observed values. Like all correlation coefficients, the $D$ statistic lies in the interval $[-1, 1]$, with values closer to $1$ indicating more rank agreement and values closer to $1$ indicated less rank agreement, so values closer to 0 indicate more prediction error.
+Additionally, we compare the performance of each of these models in a predictive exercise. To assess which model is performing better we use an ordinal fit statistic, specifically, Somer's $D$, a rank correlation coefficient \citep{Somers1962}. This is simply a measure of association for ordinal variables that works by essentially calculating the correlation between predicted and observed values.Similar to other correlation coefficients, Somer's $D$ ranges from $-1$ to $1$, where $1$ indicates more rank agreement values. Results are summarized in Figure~\ref{fig:somersD} below, and they show that our framework outperforms the alternatives for both models.
 
 \begin{figure}
     \centering
@@ -122,3 +117,10 @@ $$D_{xy} = \frac{P - Q}{P + Q + X_0}$$
     \caption{Performance comparison.}
     \label{fig:somersD}
 \end{figure}
+
+% For ordinal variables the choice of a fit statistic is not as obvious. We use Somer's $D$, a rank correlation coefficient  \citep{Somers1962}, as our discrepancy statistic for the ordinal logit models. Somer's $D$ is closely related to Goodman and Kruskal's $\gamma$ and Kendall's $\tau$, differing only in the denominator.\footnote{Somer's $D$ is similar to the commonly used $\tau_b$, which is equal to $\frac{P - Q}{(P+Q+X_0)(P+Q+Y_0)}$, where $Y_0$ is the number of ties in $Y$, and $\gamma$, which is equal to $\frac{P - Q}{P + Q}$.} Somer's $D$ makes a distinction between the independent and dependent variable in a bivariate distribution, correcting for ties within the independent variable. With $Y$ being treated as the independent variable it is denoted $D_{xy}$.
+
+% Specifically:
+% $D_{xy} = \frac{P - Q}{P + Q + X_0}$
+
+% \noindent where $P$ is the number of concordant pairs, $Q$ is the number discordant pairs, and $X_0$ is the number of ties in $X$. This is simply a measure of association for ordinal variables, so our approach is essentially to calculate the correlation between predicted and observed values. Like all correlation coefficients, the $D$ statistic lies in the interval $[-1, 1]$, with values closer to $1$ indicating more rank agreement and values closer to $1$ indicated less rank agreement, so values closer to 0 indicate more prediction error.
