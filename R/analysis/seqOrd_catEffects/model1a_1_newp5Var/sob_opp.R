@@ -12,8 +12,8 @@ loadPkg(c('sbgcop','brms'))
 
 ###############################################################
 load(paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
-yData = data
-load(paste0(pathData, 'mergedData_mnthly_ongoing.rda.rda'))
+# yData = data
+# load(paste0(pathData, 'mergedData_mnthly_ongoing.rda.rda'))
 
 ## prelim state
 sobOppVars = c(
@@ -30,6 +30,54 @@ data$lag1_osv_rebel_cumul = log(data$lag1_osv_rebel_cumul+1)
 # data$lag1_osv_rebel_cumul[data$cname=='UNITED STATES'] = 0
 data$lag1_osv_rebel_cumul[is.na(data$lag1_osv_rebel_cumul)] = 0
 ###############################################################
+
+###########################
+## descriptive info for res design portion
+cntsState=table(data$icclevel_state_3)
+totState=sum(cntsState)
+propState = cntsState/totState
+
+cntsOpp=table(data$icclevel_opp_3)
+totOpp=sum(cntsOpp)
+propOpp = cntsOpp/totOpp
+
+cntsState
+round(propState, 2)
+
+cntsOpp
+round(propOpp, 2)
+
+sobStateVars = c(
+  'icc_rat','lag1_civilwar','lag1_polity2',
+  'lag1_gdpCapLog','africa',
+  'lag1_v2juncind',
+  'lag1_osv_state_cumul',
+  # p5 vars:
+  'lag1_p5_absidealdiffMin'
+)
+
+ivs = unique(c(sobOppVars, sobStateVars))
+dvs = c('icclevel_state_3', 'icclevel_opp_3')
+vars = c(ivs, dvs)
+
+dim(data)
+data = na.omit(data[,vars])
+dim(data)
+
+cntsState=table(data$icclevel_state_3)
+totState=sum(cntsState)
+propState = cntsState/totState
+
+cntsOpp=table(data$icclevel_opp_3)
+totOpp=sum(cntsOpp)
+propOpp = cntsOpp/totOpp
+
+cntsState
+round(propState, 2)
+
+cntsOpp
+round(propOpp, 2)
+###########################
 
 ###############################################################
 # impute yearly level data
@@ -165,8 +213,6 @@ get_prior(
 
 prior_summary(modHier)
 
-set_prior(
-	formula=sobOppForm,
-	data=frame,
-	family=cratio(link='logit')
-)
+draws = rstudent_t(1000, 3, 0, 10)
+
+plot(density(draws))

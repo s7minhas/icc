@@ -136,6 +136,14 @@ Caldeira, Gregory~A, John~R Wright \harvardand\ Christopher~JW Zorn. 1999.
 \newblock ``Sophisticated voting and gate-keeping in the Supreme Court.'' {\em
   Journal of Law, Economics, and Organization} 15(3):549--572.
 
+\harvarditem[Carpenter et~al.]{Carpenter, Gelman, Hoffman, Lee, Goodrich,
+  Betancourt, Brubaker, Guo, Li \harvardand\ Riddell}{2017}{carpenter2017stan}
+Carpenter, Bob, Andrew Gelman, Matthew~D Hoffman, Daniel Lee, Ben Goodrich,
+  Michael Betancourt, Marcus Brubaker, Jiqiang Guo, Peter Li \harvardand\ Allen
+  Riddell. 2017.
+\newblock ``Stan: A probabilistic programming language.'' {\em Journal of
+  statistical software} 76(1).
+
 \harvarditem[Carrubba, Gabel \harvardand\ Hankla]{Carrubba, Gabel \harvardand\
   Hankla}{2008}{carrubba2008judicial}
 Carrubba, Clifford~J, Matthew Gabel \harvardand\ Charles Hankla. 2008.
@@ -381,6 +389,12 @@ Marshall, M \harvardand\ Keith Jaggers. 2018.
   p4v2004, Center for International Development and Conflict Management,
   University of Maryland, College Park, Maryland. www. systemicpeace.
   org/polityproject. html. Accessed} 29.
+
+\harvarditem{McElreath}{2016}{mcelreath2016statistical}
+McElreath, Richard. 2016.
+\newblock {\em Statistical rethinking: A Bayesian course with examples in R and
+  Stan}.
+\newblock Vol. 122 CRC press.
 
 \harvarditem{Meernik \harvardand\ Shairick}{2011}{meernik2011promoting}
 Meernik, James \harvardand\ Jamie Shairick. 2011.
