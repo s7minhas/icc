@@ -85,18 +85,18 @@ rebelTraceViz <- arrangeGrob(
 	arrangeGrob(ggB,rebelTrace$g,ggB, widths=c(.15,.65,.2)),
 	arrangeGrob(rebelTrace$l1, rebelTrace$l2, ncol=2, widths=c(.5,.5)),
 	nrow=2 )
-ggsave(rebelTraceViz,
-	file=paste0(pathGraphics, 'rebelCoefTrace.pdf'),
-	width=10, height=10, device=cairo_pdf)
+# ggsave(rebelTraceViz,
+# 	file=paste0(pathGraphics, 'rebelCoefTrace.pdf'),
+# 	width=10, height=10, device=cairo_pdf)
 
 stateTrace <- vizWrapper(stateMod, gLab[2], l1Lab[2], l2Lab[2], trace=TRUE)
 stateTraceViz <- arrangeGrob(
 	arrangeGrob(ggB,stateTrace$g,ggB, widths=c(.15,.65,.2)),
 	arrangeGrob(stateTrace$l1, stateTrace$l2, ncol=2, widths=c(.5,.5)),
 	nrow=2 )
-ggsave(stateTraceViz,
-	file=paste0(pathGraphics, 'stateCoefTrace.pdf'),
-	width=10, height=10, device=cairo_pdf)
+# ggsave(stateTraceViz,
+# 	file=paste0(pathGraphics, 'stateCoefTrace.pdf'),
+# 	width=10, height=10, device=cairo_pdf)
 
 ## rebel model coef plot
 rebelSumm <- vizWrapper(oppMod, gLab[1], l1Lab[1], l2Lab[1])
@@ -104,9 +104,9 @@ rebelViz <- arrangeGrob(
 	arrangeGrob(ggB,rebelSumm$g,ggB, widths=c(.15,.65,.2)),
 	arrangeGrob(rebelSumm$l1, rebelSumm$l2, ncol=2, widths=c(.55,.45)),
 	nrow=2 )
-ggsave(rebelViz,
-	file=paste0(pathGraphics, 'rebelCoefSumm.pdf'),
-	width=8, height=6, device=cairo_pdf)
+# ggsave(rebelViz,
+# 	file=paste0(pathGraphics, 'rebelCoefSumm.pdf'),
+# 	width=8, height=6, device=cairo_pdf)
 
 ## state model
 stateSumm <- vizWrapper(stateMod, gLab[2], l1Lab[2], l2Lab[2])
@@ -114,9 +114,9 @@ stateViz <- arrangeGrob(
 	arrangeGrob(ggB,stateSumm$g,ggB, widths=c(.15,.65,.2)),
 	arrangeGrob(stateSumm$l1, stateSumm$l2, ncol=2, widths=c(.55,.45)),
 	nrow=2 )
-ggsave(stateViz,
-	file=paste0(pathGraphics, 'stateCoefSumm.pdf'),
-	width=8, height=6, device=cairo_pdf)
+# ggsave(stateViz,
+# 	file=paste0(pathGraphics, 'stateCoefSumm.pdf'),
+# 	width=8, height=6, device=cairo_pdf)
 ###############################################################
 
 ###############################################################
