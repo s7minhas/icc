@@ -30,6 +30,27 @@ oppMod <- mod
 load(paste0(pathResults, 'sobState_model1a_1_newp5Var.rda'))
 stateMod <- mod
 
+# make a table of results
+loadPkg('xtable')
+print.xtable(
+	xtable(fixef(oppMod)),
+	file=paste0(pathGraphics, 'rawOppModResults.tex')
+)
+
+print.xtable(
+	xtable(fixef(stateMod)),
+	file=paste0(pathGraphics, 'rawStateModResults.tex')
+)
+
+# summary(oppMod)
+#
+# plot(
+# 	conditional_effects(
+# 		oppMod,
+# 		categorical=TRUE
+# 	),
+# 	points = TRUE)
+
 ###########################
 ## descriptive info for res design portion
 # cntsState=table(stateMod$data$icclevel_state_3)
@@ -121,6 +142,9 @@ stateViz <- arrangeGrob(
 
 ###############################################################
 # get out stdz tables
+stdzTable
+prepData
+
 oppTab<-stdzTable(oppMod, gLab[1], l1Lab[1], l2Lab[1])
 oppRes <- lapply(oppTab, function(tab){ apply(tab, 2, mean) })
 # round(cbind(unlist(oppRes)), 2)
