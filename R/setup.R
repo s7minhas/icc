@@ -1,6 +1,6 @@
 rm(list=ls())
 
-if(Sys.info()['user'] %in% c('herme','Owner')){
+if(Sys.info()['user'] %in% c('herme','Owner','S7M')){
   user = Sys.info()['user']
 	baseDir = paste0('C:/Users/',user,'/')
   pathGit=paste0(baseDir, 'Research/icc/')
