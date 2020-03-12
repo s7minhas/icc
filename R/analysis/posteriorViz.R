@@ -131,8 +131,8 @@ stateRes <- lapply(stateTab, function(tab){ apply(tab, 2, mean) })
 
 ###############################################################
 # compare results with seq no cs and ordinal
-mod = oppMod
-# mod = stateMod
+# mod = oppMod
+mod = stateMod
 data <- mod$data
 
 ## compare with polr
@@ -258,8 +258,8 @@ tmp_bw=ggplot(coefData, aes(x=var, y=Estimate, group=model)) +
     strip.background = element_rect(fill = "#525252", color='#525252')
   	)
 ggsave(tmp_bw,
-	file=paste0(pathGraphics, 'modCompare_opp.pdf'),
-	# file=paste0(pathGraphics, 'modCompare_state.pdf'),
+	# file=paste0(pathGraphics, 'modCompare_opp.pdf'),
+	file=paste0(pathGraphics, 'modCompare_state.pdf'),
 	width = 12, height = 8)
 ###############################################################
 
