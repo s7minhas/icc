@@ -53,7 +53,7 @@ Below we show trace plots, after a burn-in period of 4,000 iterations, for both 
 
 % pts greather than 3 andd icc ratif equals 1
 
-We examine the robustness of our results to a sample restriction. Specifically, we subset our sample to those cases where the PTS value is greater than three and only ICC ratifiers. Results are shown below and are broadly similar to what we report in the paper.
+We examine the robustness of our results to a sample restriction. Specifically, we subset our sample to those cases where the PTS value is greater than three and only includes ICC ratifiers. Results are shown below and are broadly similar to what we report in the paper.
 
 \begin{figure}
     \centering
@@ -71,7 +71,7 @@ We examine the robustness of our results to a sample restriction. Specifically, 
 
 \subsection*{Results without imputation}
 
-To make sure that our results are not being driven by our multiple imputation procedure we also run a version of our sampler in which we employ listwise deletion. The results are shown below and are broadly similar to those reported in the paper.
+To make sure that our results are not being driven by our multiple imputation procedure we also run a version of our sampler in which we employ listwise deletion. The results are shown below and are similar to those reported in the paper.
 
 % Results broadly the same ... p5min ideal point in no icc to prelim eff same direction but no longer sig, africa in no icc to prelim same direction but no longer sig ... everything else the same
 
@@ -93,7 +93,7 @@ To make sure that our results are not being driven by our multiple imputation pr
 
 \subsection*{Comparison with ordinal logit}
 
-To highlight the utility of our approach, the partial continuation ratio model, we compare it with two alternative frameworks. Specifically, a standard ordinal model and a vanilla continuation ratio model that does not have any category specific effects.  In the coefficent plots below, we show parameter estimates for each of the independent variables. As we can see the substantive resulted from our framework differ quite notably from either of the alternatives for both the \emph{State- and Opposition-Focused ICC Transition} models.
+To highlight the utility of our approach, the partial continuation ratio model, we compare it with two alternative frameworks. Specifically, a standard ordinal model and a continuation ratio model that does not have any category specific effects.  In the coefficent plots below, we show parameter estimates for each of the independent variables. As we can see the substantive results from our framework differ quite notably from either of the alternatives for both the \emph{State- and Opposition-Focused ICC Transition} models.
 
 \begin{figure}
     \centering
@@ -109,7 +109,7 @@ To highlight the utility of our approach, the partial continuation ratio model, 
     \label{fig:oppCoefCompare}
 \end{figure}
 
-Additionally, we compare the performance of each of these models in a predictive exercise. To assess which model is performing better we use an ordinal fit statistic, specifically, Somer's $D$, a rank correlation coefficient \citep{Somers1962}. This is simply a measure of association for ordinal variables that works by essentially calculating the correlation between predicted and observed values.Similar to other correlation coefficients, Somer's $D$ ranges from $-1$ to $1$, where $1$ indicates more rank agreement values. Results are summarized in Figure~\ref{fig:somersD} below, and they show that our framework outperforms the alternatives for both models.
+Additionally, we compare the performance of each of these models in a predictive exercise. To assess which model is performing better we use an ordinal fit statistic, specifically, Somer's $D$, a rank correlation coefficient \citep{Somers1962}. This is simply a measure of association for ordinal variables that works by essentially calculating the correlation between predicted and observed values. Similar to other correlation coefficients, Somer's $D$ ranges from $-1$ to $1$, where $1$ indicates more rank agreement values. Results are summarized in Figure~\ref{fig:somersD} below, and they show that our framework outperforms the alternatives for both models.
 
 \begin{figure}
     \centering
