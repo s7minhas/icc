@@ -1,4 +1,4 @@
-graphic todos:
+graphic todos check:
     - make sure syria footnote is in there
 
 appendix:
