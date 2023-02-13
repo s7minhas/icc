@@ -9,10 +9,10 @@ if(Sys.info()['user'] %in% c('herme','Owner','S7M')){
   pathResults=paste0(pathDrop,'results/')
   pathGraphics=paste0(pathDrop,'graphics/') }
 
-if(Sys.info()['user'] %in% c('s7m', 'janus829')){
+if(Sys.info()['user'] %in% c('s7m', 'janus829', 'sminhas')){
 	pathGit='~/Research/icc/'
-	# pathDrop='~/Dropbox/Research/icc/'
-  pathDrop='/Volumes/Samsung_X5/Dropbox/Research/icc/'
+	pathDrop='~/Dropbox/Research/icc/'
+  # pathDrop='/Volumes/Samsung_X5/Dropbox/Research/icc/'
 	pathData=paste0(pathDrop, 'data/')
 	pathResults=paste0(pathDrop,'results/')
 	pathGraphics=paste0(pathDrop,'graphics/') }

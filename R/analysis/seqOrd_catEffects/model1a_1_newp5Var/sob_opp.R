@@ -1,5 +1,5 @@
 ###############################################################
-if(Sys.info()['user'] %in% c('s7m', 'janus829')){
+if(Sys.info()['user'] %in% c('s7m', 'janus829', 'sminhas')){
 	source('~/Research/icc/R/setup.R') }
 
 if(Sys.info()['user'] %in% c('herme', 'Owner', 'S7M')){
@@ -56,9 +56,10 @@ sobStateVars = c(
   'lag1_p5_absidealdiffMin'
 )
 
+ids = c('ccode','cname','year')
 ivs = unique(c(sobOppVars, sobStateVars))
 dvs = c('icclevel_state_3', 'icclevel_opp_3')
-vars = c(ivs, dvs)
+vars = c(ids, ivs, dvs)
 
 # summary(data[,vars])
 #
@@ -184,47 +185,47 @@ mod = brm(
 	)
 save(mod, file=paste0(pathResults, 'sobOpp_model1a_1_newp5Var_noImp.rda'))
 
-summary(mod)
+# summary(mod)
 
-# hier
-frame$icclevel_opp_3 = factor(frame$icclevel_opp_3, ordered=TRUE)
-sobOppForm = formula(
-	paste0('icclevel_opp_3 ~ ',
-		paste(sobOppVars, collapse = ' + '), '+(1|id)' ) )
-modHier = brm(
-	formula=sobOppForm,
-	data=frame,
-	family=cratio(link='logit'),
-	cores=4
-	)
+# # hier
+# frame$icclevel_opp_3 = factor(frame$icclevel_opp_3, ordered=TRUE)
+# sobOppForm = formula(
+# 	paste0('icclevel_opp_3 ~ ',
+# 		paste(sobOppVars, collapse = ' + '), '+(1|id)' ) )
+# modHier = brm(
+# 	formula=sobOppForm,
+# 	data=frame,
+# 	family=cratio(link='logit'),
+# 	cores=4
+# 	)
 # save(modHier,
 # 	file=paste0(
 # 		pathResults, 'sobOpp_model1a_1_newp5Var_hier.rda'
 # 		))
 ###############################################################
-load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_hier.rda'))
-names(modHier)
-modHier$formula
-modHier$algorithm
+# load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_hier.rda'))
+# names(modHier)
+# modHier$formula
+# modHier$algorithm
 
-x = make_stancode(
-	formula=sobOppForm,
-	data=frame,
-	family=cratio(link='logit'),
-	cores=4,
-	save_model='C:/Users/herme/OneDrive/Desktop/tst.txt'
-)
-x
+# x = make_stancode(
+# 	formula=sobOppForm,
+# 	data=frame,
+# 	family=cratio(link='logit'),
+# 	cores=4,
+# 	save_model='C:/Users/herme/OneDrive/Desktop/tst.txt'
+# )
+# x
 
-get_prior(
-	formula=sobOppForm,
-	data=frame,
-	family=cratio(link='logit'),
-	cores=4
-)
+# get_prior(
+# 	formula=sobOppForm,
+# 	data=frame,
+# 	family=cratio(link='logit'),
+# 	cores=4
+# )
 
-prior_summary(modHier)
+# prior_summary(modHier)
 
-draws = rstudent_t(1000, 3, 0, 10)
+# draws = rstudent_t(1000, 3, 0, 10)
 
-plot(density(draws))
+# plot(density(draws))

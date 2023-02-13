@@ -1,5 +1,5 @@
 ###############################################################
-if(Sys.info()['user'] %in% c('s7m', 'janus829')){
+if(Sys.info()['user'] %in% c('s7m', 'janus829', 'sminhas')){
   source('~/Research/icc/R/setup.R') }
 
   if(Sys.info()['user'] %in% c('herme', 'Owner', 'S7M')){
@@ -214,18 +214,18 @@ mod = brm(
 save(mod, file=paste0(pathResults, 'sobState_model1a_1_newp5Var_noImp.rda'))
 summary(mod)
 
-# hier
-frame$icclevel_state_3 = factor(frame$icclevel_state_3, ordered=TRUE)
-sobStateForm = formula(
-	paste0('icclevel_state_3 ~ ',
-		paste(sobStateVars, collapse = ' + '), '+(1|id)' ) )
-modHier = brm(
-	formula=sobStateForm,
-	data=frame,
-	family=cratio(link='logit'),
-	cores=4
-	)
-summary(modHier)
+# # hier
+# frame$icclevel_state_3 = factor(frame$icclevel_state_3, ordered=TRUE)
+# sobStateForm = formula(
+# 	paste0('icclevel_state_3 ~ ',
+# 		paste(sobStateVars, collapse = ' + '), '+(1|id)' ) )
+# modHier = brm(
+# 	formula=sobStateForm,
+# 	data=frame,
+# 	family=cratio(link='logit'),
+# 	cores=4
+# 	)
+# summary(modHier)
 # save(modHier,
 # 	file=paste0(
 # 		pathResults, 'sobState_model1a_1_newp5Var_hier.rda'

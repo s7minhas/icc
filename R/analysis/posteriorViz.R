@@ -1,5 +1,5 @@
 ###############################################################
-if(Sys.info()['user'] %in% c('s7m', 'janus829')){
+if(Sys.info()['user'] %in% c('s7m', 'janus829', 'sminhas')){
 	source('~/Research/icc/R/setup.R') }
 
 if(Sys.info()['user'] %in% c('herme','Owner', 'S7M')){
