@@ -69,27 +69,3 @@ print.xtable(xtable(res, align='llcc', caption=lab),
 	size="footnotesize",	
 	file=paste0(pathResults, 'sob_model1a_1_newp5Var_ptsCivilWarOnly.tex'))
 ###############################################################
-
-###############################################################
-# summarize
-load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_ptsCivilWarOnly_hier.rda'))
-oppMod = modHier
-load(paste0(pathResults, 'sobState_model1a_1_newp5Var_ptsCivilWarOnly_hier.rda'))
-stateMod = modHier
-sobMods = lapply(list(stateMod, oppMod), function(x){
-	summ=data.frame(fixef(x)[,1:2])
-	names(summ) = c('beta','serror')
-	summ$z = summ$beta/summ$serror
-	return(summ) })
-names(sobMods) = c('state', 'opp')
-
-# table
-# clean table
-res=getTable(sobVars,lazyCleanVars,sobMods,lazyCleanMods)
-print.xtable(xtable(res, align='llcc', caption=lab),
-	include.rownames=FALSE,
-	sanitize.text.function = identity,
-	hline.after=c(0,0,length(sobVars)*2,length(sobVars)*2),
-	size="footnotesize",	
-	file=paste0(pathResults, 'sob_model1a_1_newp5Var_ptsCivilWarOnly_hier.tex'))
-###############################################################

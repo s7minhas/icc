@@ -82,17 +82,4 @@ mod = brm(
 save(mod, 
 	file=paste0(pathResults, 
 		'sobOpp_model1a_1_newp5Var_ptsCivilWarOnly.rda'))
-
-# hier
-sobOppForm = formula(
-	paste0('icclevel_opp_3 ~ ', 
-		paste(sobOppVars, collapse = ' + '), '+(1|ccode)' ) )
-modHier = brm(
-	formula=sobOppForm, 
-	data=frame,
-	family=cratio(link='logit')
-	)
-save(modHier, 
-	file=paste0(pathResults, 
-		'sobOpp_model1a_1_newp5Var_ptsCivilWarOnly_hier.rda'))
 ###############################################################
