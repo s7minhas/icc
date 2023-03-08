@@ -17,6 +17,14 @@ if(Sys.info()['user'] %in% c('s7m', 'janus829', 'sminhas')){
 	pathResults=paste0(pathDrop,'results/')
 	pathGraphics=paste0(pathDrop,'graphics/') }
 
+if(Sys.info()['sysname'] == 'Linux'){
+  uid = Sys.info()['user']
+  if(uid == 'sminhas'){
+    pathDrop = paste0('/media/',uid,'/localCloud/Dropbox/Research/icc/')
+    pathIn = paste0(pathDrop, 'data/')
+    pathOut = paste0(pathDrop, 'results/')
+    pathGraphics = paste0(pathDrop, 'graphics/') } }
+
 #' function to install and/or load packages
 #'
 #' @param toLoad character vector of packages to load
