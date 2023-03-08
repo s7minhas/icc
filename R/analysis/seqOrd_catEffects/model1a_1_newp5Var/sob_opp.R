@@ -1,12 +1,5 @@
 ###############################################################
-if(Sys.info()['user'] %in% c('s7m', 'janus829')){
-	source('~/Research/icc/R/setup.R') }
-
-if(Sys.info()['user'] %in% c('herme', 'Owner', 'S7M')){
-	user=Sys.info()['user']
-	source(paste0('C:/Users/',user,'/Research/icc/R/setup.R')) }
-
-#
+source('~/Research/icc/R/setup.R')
 loadPkg(c('sbgcop','brms'))
 ###############################################################
 

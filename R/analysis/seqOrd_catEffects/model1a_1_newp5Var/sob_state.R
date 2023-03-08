@@ -1,25 +1,19 @@
 ###############################################################
-if(Sys.info()['user'] %in% c('s7m', 'janus829')){
-  source('~/Research/icc/R/setup.R') }
-
-#
+source('~/Research/icc/R/setup.R')
 loadPkg(c('sbgcop','brms'))
 ###############################################################
 
 ###############################################################
 load(paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
-# yData = data
-# load(paste0(pathData, 'mergedData_mnthly_ongoing.rda.rda'))
 
 newVars = c(
-'lag1_v2juhcind',
-'lag1_p5_absidealdiffMax',
-'lag1_p5_latAngleMin',
-'lag1_p5_defAllyMax',
-'lag1_p5_gov_clean',
-'lag1_p5_reb_clean',
-'lag1_pts'  
-  )
+  'lag1_v2juhcind',
+  'lag1_p5_absidealdiffMax',
+  'lag1_p5_latAngleMin',
+  'lag1_p5_defAllyMax',
+  'lag1_p5_gov_clean',
+  'lag1_p5_reb_clean',
+  'lag1_pts' )
 
 ## prelim state
 sobStateVars = c(
@@ -28,65 +22,10 @@ sobStateVars = c(
   'lag1_v2juncind',
   'lag1_osv_state_cumul',	
   # p5 vars: 
-  'lag1_p5_absidealdiffMin'
-)
+  'lag1_p5_absidealdiffMin' )
 
+# vars for model spec
 spec1 = c(
-  'icclevel_state',
-  'icc_rat', 'lag1_civilwar', 
-  'lag1_polity2',
-  'lag1_gdpCapLog',
-  'africa',
-  'lag1_v2juhcind',
-  'lag1_osv_state_cumul',
-  'lag1_p5_absidealdiffMin'
-  )
-
-spec3 = c(
-  'icclevel_state',
-  'icc_rat', 'lag1_civilwar', 
-  'lag1_polity2',
-  'lag1_gdpCapLog',
-  'africa',
-  'lag1_v2juhcind',
-  'lag1_osv_state_cumul',
-  'lag1_p5_absidealdiffMax'
-  )
-
-spec4 = c(
-  'icclevel_state',
-  'icc_rat', 'lag1_civilwar', 
-  'lag1_polity2',
-  'lag1_gdpCapLog',
-  'africa',
-  'lag1_v2juhcind',
-  'lag1_osv_state_cumul',
-  'lag1_p5_latAngleMin'
-  )
-
-spec5 = c(
-  'icclevel_state',
-  'icc_rat', 'lag1_civilwar', 
-  'lag1_polity2',
-  'lag1_gdpCapLog',
-  'africa',
-  'lag1_v2juhcind',
-  'lag1_osv_state_cumul',
-  'lag1_p5_defAllyMax'
-  )
-
-spec6 = c(
-  'icclevel_state',
-  'icc_rat', 'lag1_civilwar', 
-  'lag1_polity2',
-  'lag1_gdpCapLog',
-  'africa',
-  'lag1_v2juhcind',
-  'lag1_osv_state_cumul',
-  'lag1_p5_gov_clean'
-  )
-
-spec7 = c(
   'icclevel_state',
   'icc_rat', 'lag1_civilwar', 
   'lag1_polity2',
@@ -96,9 +35,7 @@ spec7 = c(
   'lag1_osv_state_cumul',
   'lag1_p5_absidealdiffMin',
   'lag1_p5_defAllyMax',
-  'lag1_p5_gov_clean'
-  )
-spec1=spec7
+  'lag1_p5_gov_clean' )
 
 # var transformations
 data$lag1_osv_state_cumul = log(data$lag1_osv_state_cumul+1)
@@ -110,7 +47,7 @@ data$lag1_osv_state_cumul[is.na(data$lag1_osv_state_cumul)] = 0
 # if(!file.exists(paste0(pathData, 'sobState_imp.rda'))){
 toImp = data.matrix(data[,spec1])
 impData = sbgcop.mcmc(Y=toImp, seed=6886, verb=FALSE, nsamp=1000)
-save(impData, file=paste0(pathData, 'sobState_impv2.rda'))
+save(impData, file=paste0(pathData, 'sobState_imp.rda'))
 # } else { load(paste0(pathData, 'sobState_imp.rda')) }
 # load(paste0(pathData, 'sobState_imp.rda'))
 

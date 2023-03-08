@@ -1,29 +1,14 @@
+# clear objs
 rm(list=ls())
 
-if(Sys.info()['user'] %in% c('herme','Owner','S7M')){
-  user = Sys.info()['user']
-	baseDir = paste0('C:/Users/',user,'/')
-  pathGit=paste0(baseDir, 'Research/icc/')
-  pathDrop=paste0(baseDir, 'Dropbox/Research/icc/')
-  pathData=paste0(pathDrop, 'data/')
-  pathResults=paste0(pathDrop,'results/')
-  pathGraphics=paste0(pathDrop,'graphics/') }
+# get system information to set paths
+uid = Sys.info()['user']
 
-if(Sys.info()['user'] %in% c('s7m', 'janus829', 'sminhas')){
-	pathGit='~/Research/icc/'
-	pathDrop='~/Dropbox/Research/icc/'
-  # pathDrop='/Volumes/Samsung_X5/Dropbox/Research/icc/'
-	pathData=paste0(pathDrop, 'data/')
-	pathResults=paste0(pathDrop,'results/')
-	pathGraphics=paste0(pathDrop,'graphics/') }
-
-if(Sys.info()['sysname'] == 'Linux'){
-  uid = Sys.info()['user']
-  if(uid == 'sminhas'){
-    pathDrop = paste0('/media/',uid,'/localCloud/Dropbox/Research/icc/')
-    pathIn = paste0(pathDrop, 'data/')
-    pathOut = paste0(pathDrop, 'results/')
-    pathGraphics = paste0(pathDrop, 'graphics/') } }
+# set paths
+pathDrop = paste0('/media/',uid,'/localCloud/Dropbox/Research/icc/')
+pathIn = pathData = paste0(pathDrop, 'data/')
+pathOut = pathResults = paste0(pathDrop, 'results/')
+pathGraphics = paste0(pathDrop, 'graphics/')
 
 #' function to install and/or load packages
 #'
