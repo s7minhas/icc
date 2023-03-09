@@ -1,19 +1,10 @@
 ###############################################################
-if(Sys.info()['user'] %in% c('s7m', 'janus829', 'sminhas')){
-	source('~/Research/icc/R/setup.R') }
-
-if(Sys.info()['user'] %in% c('herme', 'Owner', 'S7M')){
-	user=Sys.info()['user']
-	source(paste0('C:/Users/',user,'/Research/icc/R/setup.R')) }
-
-#
+source('~/Research/icc/R/setup.R')
 loadPkg(c('sbgcop','brms'))
 ###############################################################
 
 ###############################################################
 load(paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
-# yData = data
-# load(paste0(pathData, 'mergedData_mnthly_ongoing.rda.rda'))
 
 ## prelim state
 sobOppVars = c(
@@ -22,116 +13,24 @@ sobOppVars = c(
 	'lag1_v2juncind',
 	'lag1_osv_rebel_cumul',
 	# p5 vars:
-	'lag1_p5_absidealdiffMin'
-	)
+	'lag1_p5_absidealdiffMin' )
 
 # var transformations
 data$lag1_osv_rebel_cumul = log(data$lag1_osv_rebel_cumul+1)
-# data$lag1_osv_rebel_cumul[data$cname=='UNITED STATES'] = 0
 data$lag1_osv_rebel_cumul[is.na(data$lag1_osv_rebel_cumul)] = 0
 ###############################################################
 
-###########################
-## descriptive info for res design portion
-cntsState=table(data$icclevel_state_3)
-totState=sum(cntsState)
-propState = cntsState/totState
-
-cntsOpp=table(data$icclevel_opp_3)
-totOpp=sum(cntsOpp)
-propOpp = cntsOpp/totOpp
-
-cntsState
-# round(propState, 2)
-
-cntsOpp
-# round(propOpp, 2)
-
-sobStateVars = c(
-  'icc_rat','lag1_civilwar','lag1_polity2',
-  'lag1_gdpCapLog','africa',
-  'lag1_v2juncind',
-  'lag1_osv_state_cumul',
-  # p5 vars:
-  'lag1_p5_absidealdiffMin'
-)
-
-ids = c('ccode','cname','year')
-ivs = unique(c(sobOppVars, sobStateVars))
-dvs = c('icclevel_state_3', 'icclevel_opp_3')
-vars = c(ids, ivs, dvs)
-
-# summary(data[,vars])
-#
-# apply(data[,vars], 2, function(x){
-# 	sum(is.na(x))/length(x)
-# }) %>% cbind() %>% round(., 2)
-#
-# dim(data)
-data = na.omit(data[,vars])
-# dim(data)
-# 2906-2336
-# 570/2906
-
-cntsState=table(data$icclevel_state_3)
-totState=sum(cntsState)
-propState = cntsState/totState
-
-cntsOpp=table(data$icclevel_opp_3)
-totOpp=sum(cntsOpp)
-propOpp = cntsOpp/totOpp
-
-print('listwise deletion')
-cntsState
-# round(propState, 2)
-
-cntsOpp
-# round(propOpp, 2)
-(90-77)/90
-(77-58)/77
-###########################
-
 ###############################################################
-# # impute yearly level data
-# # if(!file.exists(paste0(pathData, 'sobOpp_imp.rda'))){
-# 	# toImp = data.matrix(data[,c('icclevel_opp',sobOppVars)])
-# 	# impData = sbgcop.mcmc(Y=toImp, seed=6886, verb=FALSE, nsamp=1000)
-# 	# save(impData, file=paste0(pathData, 'sobOpp_imp.rda'))
-# # } else { load(paste0(pathData, 'sobOpp_imp.rda')) }
-# load(paste0(pathData, 'sobOpp_imp.rda'))
-#
-# # pick a few from the posterior
-# set.seed(6886)
-# frame = data.frame(impData$Y.pmean)
-# frame = cbind(yData[,c('ccode','year','icclevel_opp_3')], frame)
-# frame$icclevel_opp_3 = as.integer(frame$icclevel_opp_3 + 1)
-# frame$ccode = as.integer(frame$ccode)
-# frame$ccodeYear = with(frame, paste(ccode, year, sep='_'))
-# # impDFs = lapply(sample(500:1000, 10), function(i){
-# # 	x = data.frame(impData$Y.impute[,,i])
-# # 	x = cbind(data[,c('ccode','year','icclevel_opp_3')], x)
-# # 	names(x) = names(frame)
-# # 	x$icclevel_opp_3 = as.integer(x$icclevel_opp_3 + 1)
-# # 	x$ccode = as.integer(x$ccode)
-# # 	return(x) })
-#
-# #
-# yrlyVars = c(
-# 	'lag1_polity2', 'lag1_gdpCapLog',
-# 	'lag1_v2juncind', 'lag1_p5_absidealdiffMin'
-# 	)
-# for(v in yrlyVars){
-# 	data[,v] = frame[match(data$ccodeYear,frame$ccodeYear),v]
-# }
-
+# org data
 data = data[,c(
 	'ccode','cname','year',
-	# 'date',
 	'icclevel_opp_3',
-	sobOppVars
-	)]
+	sobOppVars )]
 
+# listwise deletion
 frame = na.omit(data)
+
+# formatting
 frame$icclevel_opp_3 = as.integer(frame$icclevel_opp_3 + 1)
 frame$ccode = as.integer(frame$ccode)
 ###############################################################
@@ -146,34 +45,10 @@ frame$lag1_p5_absidealdiffMin = frame$p5*frame$lag1_p5_absidealdiffMin
 ###############################################################
 
 ###############################################################
-# add random effect by case id
-# cntries = unique(frame$ccode)
-# id = 1
-# newFrame = NULL
-# for(ctry in cntries){
-# 	slice = frame[frame$ccode == ctry,]
-# 	slice = slice[order(slice$date),]
-# 	iccChange = diff(slice$icclevel_opp_3)
-# 	slice$id = id
-# 	if(length(which(iccChange<0))>=1){
-# 		id = id + 1
-# 		newCase = (which(iccChange<0)+1):nrow(slice)
-# 		if(length(which(iccChange<0))>1){ stop('hi') }
-# 		slice$id[newCase] = id
-# 	}
-# 	id = id + 1
-# 	newFrame = rbind(newFrame, slice)
-# }
-#
-# frame = newFrame
-# frame$id = factor(frame$id)
-###############################################################
-
-###############################################################
 # category specific effects
 sobOppVars[c(5:8)] = paste0('cs(',sobOppVars[c(5:8)],')')
 
-# pool
+# run model
 sobOppForm = formula(
 	paste0('icclevel_opp_3 ~ ',
 		paste(sobOppVars, collapse = ' + ') ) )
@@ -183,5 +58,7 @@ mod = brm(
 	family=cratio(link='logit'),
 	cores=4
 	)
-save(mod, file=paste0(pathResults, 'sobOpp_model1a_1_newp5Var_noImp.rda'))
+save(
+	mod, 
+	file=paste0(pathResults, 'sobOpp_model1a_1_newp5Var_noImp_fin.rda'))
 ###############################################################

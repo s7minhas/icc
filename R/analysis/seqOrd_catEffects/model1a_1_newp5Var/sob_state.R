@@ -15,19 +15,6 @@ sobStateVars = c(
   # p5 vars: 
   'lag1_p5_absidealdiffMin' )
 
-# vars for model spec
-spec1 = c(
-  'icclevel_state',
-  'icc_rat', 'lag1_civilwar', 
-  'lag1_polity2',
-  'lag1_gdpCapLog',
-  'africa',
-  'lag1_v2juncind',
-  'lag1_osv_state_cumul',
-  'lag1_p5_absidealdiffMin',
-  'lag1_p5_defAllyMax',
-  'lag1_p5_gov_clean' )
-
 # var transformations
 data$lag1_osv_state_cumul = log(data$lag1_osv_state_cumul+1)
 data$lag1_osv_state_cumul[is.na(data$lag1_osv_state_cumul)] = 0
@@ -36,7 +23,7 @@ data$lag1_osv_state_cumul[is.na(data$lag1_osv_state_cumul)] = 0
 ###############################################################
 # impute
 if(!file.exists(paste0(pathData, 'sobState_imp_fin.rda'))){
-  toImp = data.matrix(data[,spec1])
+  toImp = data.matrix(data[,sobStateVars])
   impData = sbgcop.mcmc(Y=toImp, seed=6886, verb=FALSE, nsamp=1000)
   save(impData, file=paste0(pathData, 'sobState_imp_fin.rda'))
 } else { load(paste0(pathData, 'sobState_imp_fin.rda')) }
@@ -95,7 +82,6 @@ impDFs = lapply(toPull, function(i){
 	return(x) })
 ###############################################################
 
-
 ###############################################################
 # add random effect by case id
 cntries = unique(frame$ccode)
@@ -124,7 +110,7 @@ frame$id = factor(frame$id)
 # category specific effects
 sobStateVars[c(5:8)] = paste0('cs(',sobStateVars[c(5:8)],')')
 
-# run
+# run model
 sobStateForm = formula(
 	paste0('icclevel_state_3 ~ ', 
 		paste(sobStateVars, collapse = ' + ') ) )
