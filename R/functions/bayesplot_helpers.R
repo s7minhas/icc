@@ -224,19 +224,6 @@ tracePlot <- function(mcmcData, vLabs=NULL, pTitle){
   return( ggTrace ) }
 
 # wrapper function around various stages necessary to process model
-# rebelTrace <- vizWrapper(oppMod, gLab[1], l1Lab[1], l2Lab[1], trace=TRUE)
-
-# model = oppMod
-# gLab = gLab[1]
-# l1Lab = l1Lab[1]
-# l2Lab = l2Lab[1]
-# vkey=varKey
-# trace=TRUE
-
-# mcmcData = betaMatrix[,gVars]
-# vLabs = vkey[match(gVars, vkey$dirty),]
-# pTitle = gLab
-
 vizWrapper = function(
 	model, gLab, l1Lab, l2Lab, 
 	vkey=varKey, trace=FALSE
