@@ -4,8 +4,14 @@ rm(list=ls())
 # get system information to set paths
 uid = Sys.info()['user']
 
-# set paths
+# set git paths
+pathGit = '~/Research/icc/'
+
+# set drop paths
 pathDrop = paste0('/media/',uid,'/localCloud/Dropbox/Research/icc/')
+pathDrop = '~/Library/CloudStorage/Dropbox/Research/icc/'
+
+# set paths to drop folders
 pathIn = pathData = paste0(pathDrop, 'data/')
 pathOut = pathResults = paste0(pathDrop, 'results/')
 pathGraphics = paste0(pathDrop, 'graphics/')

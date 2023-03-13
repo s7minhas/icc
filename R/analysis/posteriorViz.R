@@ -1,13 +1,5 @@
 ###############################################################
-if(Sys.info()['user'] %in% c('s7m', 'janus829', 'sminhas')){
-	source('~/Research/icc/R/setup.R') }
-
-if(Sys.info()['user'] %in% c('herme','Owner', 'S7M')){
-	user <- Sys.info()['user']
-	baseDir <- paste0('C:/Users/',Sys.info()['user'],'/')
-	source( paste0(baseDir,'Research/icc/R/setup.R') )
-	pathGraphics = paste0(baseDir, 'Research/icc/iccPaper/')
-}
+source('~/Research/icc/R/setup.R')
 
 #
 set.seed(6886)
@@ -25,31 +17,22 @@ source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
 
 ###############################################################
 # summarize
-load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var.rda'))
+load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_fin.rda'))
 oppMod <- mod
-load(paste0(pathResults, 'sobState_model1a_1_newp5Var.rda'))
+load(paste0(pathResults, 'sobState_model1a_1_newp5Var_fin.rda'))
 stateMod <- mod
 
 # make a table of results
-loadPkg('xtable')
-print.xtable(
-	xtable(fixef(oppMod)),
-	file=paste0(pathGraphics, 'rawOppModResults.tex')
-)
+# loadPkg('xtable')
+# print.xtable(
+# 	xtable(fixef(oppMod)),
+# 	file=paste0(pathGraphics, 'rawOppModResults.tex')
+# )
 
-print.xtable(
-	xtable(fixef(stateMod)),
-	file=paste0(pathGraphics, 'rawStateModResults.tex')
-)
-
-# summary(oppMod)
-#
-# plot(
-# 	conditional_effects(
-# 		oppMod,
-# 		categorical=TRUE
-# 	),
-# 	points = TRUE)
+# print.xtable(
+# 	xtable(fixef(stateMod)),
+# 	file=paste0(pathGraphics, 'rawStateModResults.tex')
+# )
 
 ###########################
 ## descriptive info for res design portion
@@ -67,7 +50,9 @@ print.xtable(
 # cntsOpp
 # round(propOpp, 2)
 ###########################
+###############################################################
 
+###############################################################
 # vars
 varsRaw <- unique(
 	c( rownames(fixef(oppMod)), rownames(fixef(stateMod)) ) )
@@ -75,12 +60,12 @@ vars <- unique(gsub('\\[[1-9]\\]','',varsRaw))
 varKey <- data.frame(
 	dirty = vars, stringsAsFactors = FALSE )
 varKey$clean <- c(
-	'Intercept',
-	'ICC Ratification',
+	'Intercept_${}$',
+	'ICC\\,Ratification$_{}$',
 	'Civil War$_{t-1}$',
 	'Polity$_{t-1}$',
 	'Log(GDP per capita)$_{t-1}$',
-	'Africa',
+	'Africa$_{}$',
 	'Judicial\n Independence$_{t-1}$',
 	'Cumulative\n Opp OSV$_{t-1}$',
 	'P5 Min. Ideal Pt.$_{t-1}$',
@@ -106,18 +91,18 @@ rebelTraceViz <- arrangeGrob(
 	arrangeGrob(ggB,rebelTrace$g,ggB, widths=c(.15,.65,.2)),
 	arrangeGrob(rebelTrace$l1, rebelTrace$l2, ncol=2, widths=c(.5,.5)),
 	nrow=2 )
-# ggsave(rebelTraceViz,
-# 	file=paste0(pathGraphics, 'rebelCoefTrace.pdf'),
-# 	width=10, height=10, device=cairo_pdf)
+ggsave(rebelTraceViz,
+	file=paste0(pathGraphics, 'rebelCoefTrace_fin.pdf'),
+	width=10, height=10, device=cairo_pdf)
 
 stateTrace <- vizWrapper(stateMod, gLab[2], l1Lab[2], l2Lab[2], trace=TRUE)
 stateTraceViz <- arrangeGrob(
 	arrangeGrob(ggB,stateTrace$g,ggB, widths=c(.15,.65,.2)),
 	arrangeGrob(stateTrace$l1, stateTrace$l2, ncol=2, widths=c(.5,.5)),
 	nrow=2 )
-# ggsave(stateTraceViz,
-# 	file=paste0(pathGraphics, 'stateCoefTrace.pdf'),
-# 	width=10, height=10, device=cairo_pdf)
+ggsave(stateTraceViz,
+	file=paste0(pathGraphics, 'stateCoefTrace_fin.pdf'),
+	width=10, height=10, device=cairo_pdf)
 
 ## rebel model coef plot
 rebelSumm <- vizWrapper(oppMod, gLab[1], l1Lab[1], l2Lab[1])

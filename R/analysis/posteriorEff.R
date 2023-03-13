@@ -1,9 +1,5 @@
 ###############################################################
-if(Sys.info()['user'] %in% c('s7m', 'janus829', 'sminhas')){
-	source('~/Research/icc/R/setup.R') }
-
-if(Sys.info()['user'] %in% c('herme','Owner')){
-	source(paste0('C:/Users/',Sys.info()['user'],'/Research/icc/R/setup.R')) }
+source('~/Research/icc/R/setup.R')
 
 #
 loadPkg(

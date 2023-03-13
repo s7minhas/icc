@@ -1,13 +1,5 @@
 ###############################################################
-if(Sys.info()['user'] %in% c('s7m', 'janus829', 'sminhas')){
-	source('~/Research/icc/R/setup.R') }
-
-if(Sys.info()['user'] %in% c('herme','Owner')){
-	user <- Sys.info()['user']
-	baseDir <- paste0('C:/Users/',Sys.info()['user'],'/')
-	source( paste0(baseDir,'Research/icc/R/setup.R') )
-	pathGraphics = paste0(baseDir, 'Research/icc/iccPaper/')
-}
+source('~/Research/icc/R/setup.R')
 
 #
 loadPkg(
