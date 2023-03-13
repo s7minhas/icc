@@ -309,3 +309,31 @@ stdzTable = function(model, gLab, l1Lab, l2Lab){
 	# arrange viz
 	## helper for arranging plot
 	return( list(g=ggGlobal,l1=ggLevel1,l2=ggLevel2) ) }
+
+# get df of coef summary ada
+stanSumm = function(mod, lab, vkey=varKey, remInt=TRUE){
+	
+	# extract coef summary
+	msumm = data.frame(fixef(mod, summary=TRUE))
+
+	# org var names
+	msumm$dirty = rownames(msumm)
+	msumm$dirty = gsub('[', '.', msumm$dirty, fixed=TRUE)
+	msumm$dirty = gsub(']', '.', msumm$dirty, fixed=TRUE)
+	rownames(msumm) = NULL
+	msumm$clean = vkey$clean[match(msumm$dirty, vkey$dirty)]
+
+	# add category for stages
+	msumm$stage = 'Global Effects'
+	msumm$stage[grepl('.1.',msumm$dirty, fixed=TRUE)] = 'No ICC to\nPrelim Effects'
+	msumm$stage[grepl('.2.',msumm$dirty, fixed=TRUE)] = 'ICC Prelim to\nFormal Effects'
+
+	# add supplied label
+	msumm$type = lab
+
+	# clean out intercept
+	if(remInt){
+		msumm = msumm[msumm$clean!='Intercept',] }
+
+	#
+	return(msumm) }

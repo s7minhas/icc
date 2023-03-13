@@ -17,9 +17,9 @@ source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
 
 ###############################################################
 # summarize
-load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_noImp.rda'))
+load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_noImp_fin.rda'))
 oppMod <- mod
-load(paste0(pathResults, 'sobState_model1a_1_newp5Var_noImp.rda'))
+load(paste0(pathResults, 'sobState_model1a_1_newp5Var_noImp_fin.rda'))
 stateMod <- mod
 
 # vars
@@ -30,7 +30,7 @@ varKey <- data.frame(
 	dirty = vars, stringsAsFactors = FALSE )
 varKey$clean <- c(
 	'Intercept',
-	'ICC Ratification',
+	'ICC\\,Ratification',
 	'Civil War$_{t-1}$',
 	'Polity$_{t-1}$',
 	'Log(GDP per capita)$_{t-1}$',
@@ -54,25 +54,6 @@ l2Lab <- paste0('ICC Prelim to Formal Effects (',c('Opposition','State'),' Model
 # helper for plotting
 ggB <- ggplot()+geom_blank(aes(1,1)) + cowplot::theme_nothing()
 
-# trace plots
-rebelTrace <- vizWrapper(oppMod, gLab[1], l1Lab[1], l2Lab[1], trace=TRUE)
-rebelTraceViz <- arrangeGrob(
-	arrangeGrob(ggB,rebelTrace$g,ggB, widths=c(.15,.65,.2)),
-	arrangeGrob(rebelTrace$l1, rebelTrace$l2, ncol=2, widths=c(.5,.5)),
-	nrow=2 )
-ggsave(rebelTraceViz,
-	file=paste0(pathGraphics, 'rebelCoefTrace_noImp.pdf'),
-	width=10, height=10, device=cairo_pdf)
-
-stateTrace <- vizWrapper(stateMod, gLab[2], l1Lab[2], l2Lab[2], trace=TRUE)
-stateTraceViz <- arrangeGrob(
-	arrangeGrob(ggB,stateTrace$g,ggB, widths=c(.15,.65,.2)),
-	arrangeGrob(stateTrace$l1, stateTrace$l2, ncol=2, widths=c(.5,.5)),
-	nrow=2 )
-ggsave(stateTraceViz,
-	file=paste0(pathGraphics, 'stateCoefTrace_noImp.pdf'),
-	width=10, height=10, device=cairo_pdf)
-
 ## rebel model coef plot
 rebelSumm <- vizWrapper(oppMod, gLab[1], l1Lab[1], l2Lab[1])
 rebelViz <- arrangeGrob(
@@ -80,7 +61,7 @@ rebelViz <- arrangeGrob(
 	arrangeGrob(rebelSumm$l1, rebelSumm$l2, ncol=2, widths=c(.55,.45)),
 	nrow=2 )
 ggsave(rebelViz,
-	file=paste0(pathGraphics, 'rebelCoefSumm_noImp.pdf'),
+	file=paste0(pathGraphics, 'fig_a6.pdf'),
 	width=8, height=6, device=cairo_pdf)
 
 ## state model
@@ -90,7 +71,7 @@ stateViz <- arrangeGrob(
 	arrangeGrob(stateSumm$l1, stateSumm$l2, ncol=2, widths=c(.55,.45)),
 	nrow=2 )
 ggsave(stateViz,
-	file=paste0(pathGraphics, 'stateCoefSumm_noImp.pdf'),
+	file=paste0(pathGraphics, 'fig_a5.pdf'),
 	width=8, height=6, device=cairo_pdf)
 ###############################################################
 

@@ -13,9 +13,9 @@ source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
 
 ###############################################################
 # summarize
-load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_ptsCivilWarOnly.rda'))
+load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_ptsCivilWarOnly_fin.rda'))
 oppMod = mod
-load(paste0(pathResults, 'sobState_model1a_1_newp5Var_ptsCivilWarOnly.rda'))
+load(paste0(pathResults, 'sobState_model1a_1_newp5Var_ptsCivilWarOnly_fin.rda'))
 stateMod = mod
 
 # vars
@@ -26,7 +26,7 @@ varKey = data.frame(
 	dirty = vars, stringsAsFactors = FALSE )
 varKey$clean = c(
 	'Intercept',
-	'ICC Ratification',
+	'ICC\\,Ratification',
 	'Polity$_{t-1}$',
 	'Log(GDP per capita)$_{t-1}$',
 	'Africa',
@@ -56,7 +56,7 @@ rebelViz = arrangeGrob(
 	arrangeGrob(rebelSumm$l1, rebelSumm$l2, ncol=2, widths=c(.55,.45)),
 	nrow=2 )
 ggsave(rebelViz,
-	file=paste0(pathGraphics, 'rebelCoefSumm_ptsCivilWarOnly.pdf'),
+	file=paste0(pathGraphics, 'fig_a4.pdf'),
 	width=8, height=6, device=cairo_pdf)
 
 ## state model
@@ -66,6 +66,6 @@ stateViz = arrangeGrob(
 	arrangeGrob(stateSumm$l1, stateSumm$l2, ncol=2, widths=c(.55,.45)),
 	nrow=2 )
 ggsave(stateViz,
-	file=paste0(pathGraphics, 'stateCoefSumm_ptsCivilWarOnly.pdf'),
+	file=paste0(pathGraphics, 'fig_a3.pdf'),
 	width=8, height=6, device=cairo_pdf)
 ###############################################################
