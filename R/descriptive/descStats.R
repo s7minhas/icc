@@ -170,7 +170,63 @@ oppTimes = lapply(cntries_opp, function(x){
 oppTimes = do.call(rbind, oppTimes)
 
 # get descriptive info
-stats = function(x){ c(avg=mean(x), stdev=sd(x)) }
-apply(stateTimes[,-1], 2, stats)
-apply(oppTimes[,-1], 2, stats)
+stats = function(x){ c(avg=mean(x), stdev=sd(x), min=min(x), max=max(x)) }
+sstats = t(apply(stateTimes[,-1], 2, stats))
+ostats= t(apply(oppTimes[,-1], 2, stats))
+sstats = data.frame(sstats, stringsAsFactors = F)
+ostats = data.frame(ostats, stringsAsFactors = F)
+sstats$stage = rownames(sstats) ; rownames(sstats) = NULL
+ostats$stage = rownames(ostats) ; rownames(ostats) = NULL
+sstats$type = 'State-Focused'
+ostats$type = 'Opposition-Focused'
+
+# cleanup for plotting
+timeStats = rbind(ostats, sstats)
+timeStats$stageClean = 'Preliminary Examination Time'
+timeStats$stageClean[timeStats$stage=='formalTime'] = 'Formal Examination Time'
+timeStats$stageClean = factor(timeStats$stageClean, levels=c(
+  'Preliminary Examination Time',
+  'Formal Examination Time' ))
+timeStats$type = factor(timeStats$type, levels=c(
+  'State-Focused',
+  'Opposition-Focused' ))
+
+# focus on avg and stdev and melt
+timeStats = timeStats[,c('avg','stdev','type','stageClean')]
+ggdata = melt(timeStats, id=c('type','stageClean'))
+ggdata$varClean = 'Average'
+ggdata$varClean[ggdata$variable=='stdev'] = 'Standard Deviation'
+
+# viz
+viz = ggplot(
+  ggdata, 
+  aes(
+    x=varClean, y=value, 
+    fill=type, group=type )) +
+  geom_bar(stat='identity', position='dodge') +
+  scale_fill_manual(values=c('gray68', 'gray28')) +
+  # scale_color_manual(values=c('gray8', 'gray48')) +  
+  labs(
+    x='', y='Time (Years)', fill='', color=''
+  ) +
+  facet_wrap(~stageClean, ncol=2, scales='fixed') +
+  theme_bw() +
+  theme(
+    legend.position='top',
+    panel.border=element_blank(),
+    axis.ticks=element_blank(),
+    panel.grid.major=element_blank(),
+    strip.text = element_text(color='white',
+      family="Source Sans Pro SemiBold", 
+      angle=0, hjust=.05),
+    strip.background = element_rect(
+      fill = "#525252", color='#525252')    
+  )
+
+#
+ggsave(
+  viz, 
+  file=paste0(pathGraphics, 'fig_a13.pdf'),
+  width=8, height=4, device=cairo_pdf
+)
 ###############################################################
