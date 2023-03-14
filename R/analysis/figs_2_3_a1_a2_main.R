@@ -5,11 +5,8 @@ source('~/Research/icc/R/setup.R')
 set.seed(6886)
 loadPkg(
 	c(
-		'brms', 'bayesplot', 'MASS', 'VGAM',
-		# tadaa is a wrapper around ryourready
-		# https://github.com/cran/ryouready/blob/5d76b21f98737ac2778cd207b56309bcc78df9ed/R/association_measures.r
-		'tadaatoolbox', 'reshape2', 'RColorBrewer',
-		'extrafont', 'latex2exp', 'Cairo', 'gridExtra', 'cowplot'
+		'brms', 'bayesplot', 'extrafont',
+		'latex2exp', 'Cairo', 'gridExtra', 'cowplot'
 		)
 	)
 source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))

@@ -333,7 +333,49 @@ stanSumm = function(mod, lab, vkey=varKey, remInt=TRUE){
 
 	# clean out intercept
 	if(remInt){
-		msumm = msumm[msumm$clean!='Intercept',] }
+		msumm = msumm[!grepl('Intercept',msumm$clean),] }
 
 	#
 	return(msumm) }
+
+# coef plot grid
+coef_grid = function( 
+	omod, omlab, smod, smlab, vkey=varKey, remInt=TRUE ){
+
+	# get summary of coef vals
+	coefData = rbind(
+		stanSumm(omod, omlab, vkey=vkey, remInt=remInt),
+		stanSumm(smod, smlab, vkey=vkey, remInt=remInt) )
+
+	# reorder vars
+	coefData$stage = factor( coefData$stage, levels=c(
+			'Global Effects',
+			'No ICC to\nPrelim Effects',
+			'ICC Prelim to\nFormal Effects' ))
+	coefData$clean = factor(coefData$clean, levels=unique(varKey$clean[-1]))
+	coefData$type = factor(coefData$type, levels=c(smlab, omlab))
+
+	# make coef plot
+	viz=ggplot(
+		data=coefData, 
+		aes(x=clean, y=Estimate)) +
+		geom_point() +
+		geom_errorbar( aes(ymin=Q2.5, ymax=Q97.5), width=.1) +		
+		geom_hline(yintercept=0, linetype='dashed', color='grey') +
+		labs(
+			x='', y='') +
+		coord_flip() +
+		facet_grid(stage~type, scales='free') +
+		theme_bw() +
+		theme(
+			# panel.border=element_blank(),
+			legend.position='top',
+			axis.ticks=element_blank(),
+			strip.text = element_text(size = 9, color='white',
+				family="Source Sans Pro SemiBold", 
+				angle=0, hjust=.05),
+			strip.background = element_rect(
+				fill = "#525252", color='#525252') )
+
+	#
+	return(viz) }
