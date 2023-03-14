@@ -142,6 +142,6 @@ somerViz = ggplot(perfData2, aes(x=model, y=value)) +
 			angle=0, hjust=.05),
     strip.background = element_rect(fill = "#525252", color='#525252')
   )
-ggsave(somerViz, file=paste0(pathGraphics, 'somerViz_fin.pdf'),
+ggsave(somerViz, file=paste0(pathGraphics, 'fig_a12.pdf'),
        device=cairo_pdf, width=8, height=3)
 ###############################################################

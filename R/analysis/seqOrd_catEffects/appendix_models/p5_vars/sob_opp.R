@@ -78,7 +78,7 @@ shh = lapply(1:length(cntries), function(ii){
 		)
 	save(
 		mod, 
-		file=paste0(pathResults, 'sobOpp_', cshorts[ii], '_fin.rda'))
+		file=paste0(pathResults, 'sobOpp_p_', cshorts[ii], '_fin.rda'))
 	###############################################################
 }) # end iteration through p5 countries
 ###############################################################
