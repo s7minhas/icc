@@ -77,3 +77,100 @@ cntsOpp
 (90-77)/90
 (77-58)/77
 ###############################################################
+
+###############################################################
+# variation in length of time attrib to invest
+slice = data[,c(
+  'cname', 'year', 
+  'icclevel_state_3', 'icclevel_opp_3' )]
+rownames(slice) = NULL
+
+# count up times of investigations
+cntries = unique(slice$cname)
+
+# remove countries that dont experience any
+aggState = slice %>% group_by(cname) %>%
+  summarize(state=sum(icclevel_state_3)) %>%
+  data.frame(.,stringsAsFactors = F)
+aggState = aggState[aggState$state>0,]
+cntries_state = aggState$cname
+
+aggOpp = slice %>% group_by(cname) %>%
+  summarize(opp=sum(icclevel_opp_3)) %>%
+  data.frame(.,stringsAsFactors = F)
+aggOpp = aggOpp[aggOpp$opp>0,]
+cntries_opp = aggOpp$cname
+
+# for identified countries find time state cases
+state = slice[slice$cname %in% cntries_state,c(1:3)]
+stateTimes = lapply(cntries_state, function(x){
+
+  # subset to relevant data
+  tmp = state[state$cname==x,]
+  tmp = tmp[order(tmp$year),]
+
+  # set up counters
+  prelimTime = 0
+  formalTime = 0
+
+  # iterate through and start
+  # counting when seeing
+  # repeating 1s and repeating 2s
+  for(ii in 1:nrow(tmp)){
+
+    if(tmp$icclevel_state_3[ii]==1){
+      prelimTime = prelimTime + 1
+    } else if(tmp$icclevel_state_3[ii]==2){
+      formalTime = formalTime + 1
+    }
+  }
+
+  # organize
+  out = data.frame(cntry=x, stringsAsFactors = F)
+  out$prelimTime = prelimTime
+  out$formalTime = formalTime
+
+  #
+  return(out)
+})
+stateTimes = do.call(rbind, stateTimes)
+
+# do the same for opp cases
+opp = slice[slice$cname %in% cntries_opp,c(1:2,4)]
+oppTimes = lapply(cntries_opp, function(x){
+
+  # subset to relevant data
+  tmp = opp[opp$cname==x,]
+  tmp = tmp[order(tmp$year),]
+
+  # set up counters
+  prelimTime = 0
+  formalTime = 0
+
+  # iterate through and start
+  # counting when seeing
+  # repeating 1s and repeating 2s
+  for(ii in 1:nrow(tmp)){
+
+    if(tmp$icclevel_opp_3[ii]==1){
+      prelimTime = prelimTime + 1
+    } else if(tmp$icclevel_opp_3[ii]==2){
+      formalTime = formalTime + 1
+    }
+  }
+
+  # organize
+  out = data.frame(cntry=x, stringsAsFactors = F)
+  out$prelimTime = prelimTime
+  out$formalTime = formalTime
+
+  #
+  return(out)
+})
+oppTimes = do.call(rbind, oppTimes)
+
+# get descriptive info
+stats = function(x){ c(avg=mean(x), stdev=sd(x)) }
+apply(stateTimes[,-1], 2, stats)
+apply(oppTimes[,-1], 2, stats)
+###############################################################
