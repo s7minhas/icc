@@ -20,16 +20,16 @@ load(paste0(pathResults, 'sobState_model1a_1_newp5Var_fin.rda'))
 stateMod <- mod
 
 # make a table of results
-# loadPkg('xtable')
-# print.xtable(
-# 	xtable(fixef(oppMod)),
-# 	file=paste0(pathGraphics, 'rawOppModResults.tex')
-# )
+loadPkg('xtable')
+print.xtable(
+	xtable(fixef(oppMod)),
+	file=paste0(pathGraphics, 'tab_a2.tex')
+)
 
-# print.xtable(
-# 	xtable(fixef(stateMod)),
-# 	file=paste0(pathGraphics, 'rawStateModResults.tex')
-# )
+print.xtable(
+	xtable(fixef(stateMod)),
+	file=paste0(pathGraphics, 'tab_a1.tex')
+)
 
 ###########################
 ## descriptive info for res design portion

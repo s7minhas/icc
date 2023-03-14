@@ -37,6 +37,9 @@ varKey$clean = c(
 	'P5 Min. Ideal Pt.',
 	'Cumulative\n Govt OSV'
 	)
+# reorder so osv comes before p5 measure
+varKey = varKey[c(1:7,9,8),]
+# add stage versions
 addCats = function(x,toAdd){
 	x$dirty=paste0(x$dirty,toAdd);x}
 varKey = rbind(varKey,

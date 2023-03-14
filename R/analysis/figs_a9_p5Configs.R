@@ -36,10 +36,13 @@ varKey$clean = c(
 	'Log(GDP per capita)',
 	'Africa',
 	'Judicial\n Independence',
-	'Cumulative\n Opp OSV (UCDP)',
-	'Ideal Point w/ Country',
-	'Cumulative\n Govt OSV (UCDP)'
+	'Cumulative\n Opp OSV',
+	'Ideal Point\n Distance w/ Country',
+	'Cumulative\n Govt OSV'
 	)
+# reorder so osv comes before p5 measure
+varKey = varKey[c(1:8,10,9),]
+# add stage versions		
 addCats = function(x,toAdd){
 	x$dirty=paste0(x$dirty,toAdd);x}
 varKey = rbind(varKey,
@@ -66,7 +69,7 @@ coefData$stage = factor( coefData$stage, levels=c(
     'No ICC to\nPrelim Effects',
     'ICC Prelim to\nFormal Effects' ))
 coefData$clean = factor(
-    coefData$clean, levels=rev(unique(varKey$clean[-1])))
+    coefData$clean, levels=unique(varKey$clean[-1]))
 coefData$type = factor(
     coefData$type, levels=c('State-Focused', 'Opposition-Focused'))
 ###############################################################
@@ -98,5 +101,5 @@ viz=ggplot(
 # save
 ggsave(viz,
 	file=paste0(pathGraphics, 'fig_a9.pdf'),
-	width=8, height=6, device=cairo_pdf)
+	width=8, height=8, device=cairo_pdf)
 ###############################################################

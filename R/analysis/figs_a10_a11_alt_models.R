@@ -32,7 +32,7 @@ varKey <- data.frame(
 	dirty = vars, stringsAsFactors = FALSE )
 varKey$clean <- c(
 	'Intercept',
-	'ICC\\,Ratification',
+	'ICC Ratification',
 	'Civil War$_{t-1}$',
 	'Polity$_{t-1}$',
 	'Log(GDP per capita)$_{t-1}$',
