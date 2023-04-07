@@ -4,7 +4,7 @@ loadPkg(c('sbgcop','brms', 'future'))
 ###############################################################
 
 ###############################################################
-load(paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
+load(paste0(pathData, 'modData_fin.rda'))
 
 ## prelim state
 sobOppVars = c(
