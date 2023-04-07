@@ -4,7 +4,7 @@ loadPkg(c('sbgcop','brms', 'future'))
 ###############################################################
 
 ###############################################################
-load(paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
+load(paste0(pathData, 'modData_fin.rda'))
 
 ## prelim state
 sobOppVars = c(
@@ -124,7 +124,4 @@ mod = brm_multiple(
 save(
 	mod, 
 	file=paste0(pathResults, 'sobOpp_model1a_1_newp5Var_fin.rda'))
-
-#
-print(summary(mod))
 ###############################################################
