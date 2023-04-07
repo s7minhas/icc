@@ -3,16 +3,15 @@ pth = '~/Research/icc/R/analysis/seqOrd_catEffects/appendix_models/'
 
 # dirs
 app_mod_dirs = c(
-    'chiefProsec', #
-    'democ', #
-    'impleLegDom', #
-    'noImp', #
-    'p_US_RUS_CHN', #
-    # runs with imputation so need to run separately
-    # 'ptsCivilWarOnly', 
-    'svac', #
-    'tradeProp', #
-    'unsc' #
+    'chiefProsec',
+    'democ',
+    'impleLegDom',
+    'noImp',
+    'p_US_RUS_CHN',
+    'ptsCivilWarOnly', 
+    'svac',
+    'tradeProp',
+    'unsc'
 )
 
 # create file paths

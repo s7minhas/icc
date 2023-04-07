@@ -1,6 +1,6 @@
 ###############################################################
 source('~/Research/icc/R/setup.R')
-loadPkg(c('sbgcop','brms', 'future'))
+loadPkg(c('sbgcop','brms'))
 ###############################################################
 
 ###############################################################
@@ -16,8 +16,8 @@ sobOppVars = c(
 	'lag1_p5_absidealdiffMin' )
 
 # var transformations
-data$lag1_osv_state_cumul = log(data$lag1_osv_state_cumul+1)
-data$lag1_osv_state_cumul[is.na(data$lag1_osv_state_cumul)] = 0	
+data$lag1_osv_rebel_cumul = log(data$lag1_osv_rebel_cumul+1)
+data$lag1_osv_rebel_cumul[is.na(data$lag1_osv_rebel_cumul)] = 0	
 ###############################################################
 
 ###############################################################
