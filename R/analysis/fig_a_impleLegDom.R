@@ -56,6 +56,6 @@ viz = coef_grid(
 ###############################################################
 # save
 ggsave(viz,
-	file=paste0(pathGraphics, 'fig_a17.pdf'),
+	file=paste0(pathGraphics, 'fig_a_impleLegDom.pdf'),
 	width=8, height=6, device=cairo_pdf)
 ###############################################################

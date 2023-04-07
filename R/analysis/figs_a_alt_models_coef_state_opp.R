@@ -180,7 +180,7 @@ tmp_bw=ggplot(coefData, aes(x=var, y=Estimate, group=model)) +
     strip.background = element_rect(fill = "#525252", color='#525252')
   	)
 ggsave(tmp_bw,
-	file=paste0(pathGraphics, 'fig_a10.pdf'),
+	file=paste0(pathGraphics, 'fig_a_alt_models_coef_state.pdf'),
 	width = 12, height = 8)
 ###############################################################
 
@@ -316,6 +316,6 @@ tmp_bw=ggplot(coefData, aes(x=var, y=Estimate, group=model)) +
     strip.background = element_rect(fill = "#525252", color='#525252')
   	)
 ggsave(tmp_bw,
-	file=paste0(pathGraphics, 'fig_a11.pdf'),
+	file=paste0(pathGraphics, 'fig_a_alt_models_coef_opp.pdf'),
 	width = 12, height = 8)
 ###############################################################

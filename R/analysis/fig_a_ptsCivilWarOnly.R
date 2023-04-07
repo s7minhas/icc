@@ -12,10 +12,10 @@ source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
 ###############################################################
 
 ###############################################################
-# load in robustness check data
-load(paste0(pathResults, 'sobOpp_democ_fin.rda'))
+# summarize
+load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_ptsCivilWarOnly_fin.rda'))
 oppMod = mod
-load(paste0(pathResults, 'sobState_democ_fin.rda'))
+load(paste0(pathResults, 'sobState_model1a_1_newp5Var_ptsCivilWarOnly_fin.rda'))
 stateMod = mod
 ###############################################################
 
@@ -29,8 +29,7 @@ varKey = data.frame(
 varKey$clean = c(
 	'Intercept',
 	'ICC Ratification',
-	'Civil War',	
-	'V-DEM',
+	'Polity',
 	'Log(GDP per capita)',
 	'Africa',
 	'Judicial\n Independence',
@@ -39,7 +38,7 @@ varKey$clean = c(
 	'Cumulative\n Govt OSV'
 	)
 # reorder so osv comes before p5 measure
-varKey = varKey[c(1:8,10,9),]
+varKey = varKey[c(1:7,9,8),]
 # add stage versions
 addCats = function(x,toAdd){
 	x$dirty=paste0(x$dirty,toAdd);x}
@@ -47,7 +46,7 @@ varKey = rbind(varKey,
 	addCats(varKey,'.1.'),addCats(varKey,'.2.') )
 ###############################################################	
 
-###############################################################
+###############################################################	
 viz = coef_grid(
 	oppMod, 'Opposition-Focused',
 	stateMod, 'State-Focused' )
@@ -56,6 +55,6 @@ viz = coef_grid(
 ###############################################################
 # save
 ggsave(viz,
-	file=paste0(pathGraphics, 'fig_a5.pdf'),
-	width=8, height=6, device=cairo_pdf)
+	file=paste0(pathGraphics, 'fig_a_ptsCivilWarOnly.pdf'),
+	width=8, height=7, device=cairo_pdf)
 ###############################################################

@@ -13,9 +13,9 @@ source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
 
 ###############################################################
 # load in robustness check data
-load(paste0(pathResults, 'sobOpp_intJust_fin.rda'))
+load(paste0(pathResults, 'sobOpp_svac_fin.rda'))
 oppMod = mod
-load(paste0(pathResults, 'sobState_intJust_fin.rda'))
+load(paste0(pathResults, 'sobState_svac_fin.rda'))
 stateMod = mod
 ###############################################################
 
@@ -34,9 +34,9 @@ varKey$clean = c(
 	'Log(GDP per capita)',
 	'Africa',
 	'Judicial\n Independence',
-	'Time Since\n Opp OSV',
+	'Cumulative\n Opp SVAC',
 	'P5 Min. Ideal Pt.',
-	'Time Since\n Govt OSV'
+	'Cumulative\n Govt SVAC'
 	)
 # reorder so osv comes before p5 measure
 varKey = varKey[c(1:8,10,9),]
@@ -56,6 +56,6 @@ viz = coef_grid(
 ###############################################################
 # save
 ggsave(viz,
-	file=paste0(pathGraphics, 'fig_a15.pdf'),
+	file=paste0(pathGraphics, 'fig_a_svac.pdf'),
 	width=8, height=6, device=cairo_pdf)
 ###############################################################

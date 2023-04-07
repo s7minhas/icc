@@ -13,9 +13,9 @@ source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
 
 ###############################################################
 # load in robustness check data
-load(paste0(pathResults, 'sobOpp_p_FRA_UK_fin.rda'))
+load(paste0(pathResults, 'sobOpp_democ_fin.rda'))
 oppMod = mod
-load(paste0(pathResults, 'sobState_p_FRA_UK_fin.rda'))
+load(paste0(pathResults, 'sobState_democ_fin.rda'))
 stateMod = mod
 ###############################################################
 
@@ -30,17 +30,17 @@ varKey$clean = c(
 	'Intercept',
 	'ICC Ratification',
 	'Civil War',	
-	'Polity',
+	'V-DEM',
 	'Log(GDP per capita)',
 	'Africa',
 	'Judicial\n Independence',
-	'Cumulative\n Opp OSV (UCDP)',
-	'P2 (FRA, UK)\n Min. Ideal Pt.',
-	'Cumulative\n Govt OSV (UCDP)'
+	'Cumulative\n Opp OSV',
+	'P5 Min. Ideal Pt.',
+	'Cumulative\n Govt OSV'
 	)
 # reorder so osv comes before p5 measure
 varKey = varKey[c(1:8,10,9),]
-# add stage versions	
+# add stage versions
 addCats = function(x,toAdd){
 	x$dirty=paste0(x$dirty,toAdd);x}
 varKey = rbind(varKey,
@@ -56,6 +56,6 @@ viz = coef_grid(
 ###############################################################
 # save
 ggsave(viz,
-	file=paste0(pathGraphics, 'fig_a19.pdf'),
+	file=paste0(pathGraphics, 'fig_a_democ.pdf'),
 	width=8, height=6, device=cairo_pdf)
 ###############################################################
