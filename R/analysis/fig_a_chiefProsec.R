@@ -40,7 +40,7 @@ varKey$clean = c(
 	'Cumulative\n Govt OSV'
 	)
 # reorder so osv comes before p5 measure
-varKey = varKey[c(1:8,10,9),]
+varKey = varKey[c(1:8,9,11,10),]
 # add stage versions	
 addCats = function(x,toAdd){
 	x$dirty=paste0(x$dirty,toAdd);x}
