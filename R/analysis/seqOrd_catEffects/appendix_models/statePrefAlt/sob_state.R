@@ -32,22 +32,9 @@ dyadData$year = dyadData$year + 1
 # subset to sample frame
 dyadData = dyadData[dyadData$year %in% 2002:2016,]
 
-###
-allVars = c(
-	'ptaCnt', 'allyTotal',
-	'matlConfGov', 'matlCoopGov',
-	'verbCoopGov', 'verbConfGov',
-	'tradeBal', 'importsCIF', 'exportsCIF',
-	'importsFOB', 'exportsFOB',
-	'trade', 'tradeSend', 'tradeDepSend',
-	'tradeGDP'
-)
-
-shh = lapply(allVars, function(vars){
-
 # subset to relevant vars
 ids = c('cname1', 'cname2', 'year')
-# vars = 'allyTotal'
+vars = 'trade'
 dyadData = dyadData[,c(ids, vars)]
 
 # focus on p5 countries
@@ -88,7 +75,7 @@ data = cbind(data, dyadData_toMerge)
 # switch out p5_absidealdiff with alt trade measure
 p5Vars = paste0('p5_', vars, 'Min')
 data[!is.finite(data[,p5Vars]),p5Vars] = NA
-data$lag1_p5_absidealdiffMin = data[,p5Vars]
+data$lag1_p5_absidealdiffMin = data[,p5Vars]*10
 ###############################################################
 
 ###############################################################
@@ -120,11 +107,7 @@ mod = brm(
 	family=cratio(link='logit'),
 	cores=4
 	)
-summary(mod)
 save(
   mod, 
-	file=paste0(pathResults, 'sobState_statePrefAlt_', vars, '_fin.rda'))  
-  # file=paste0(pathResults, 'sobState_statePrefAlt_fin.rda'))
+  file=paste0(pathResults, 'sobState_statePrefAlt_fin.rda'))
 ###############################################################
-
-})
