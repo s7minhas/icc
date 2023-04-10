@@ -124,13 +124,10 @@ ggsave(stateViz,
 
 ###############################################################
 # get out stdz tables
-stdzTable
-prepData
-
 oppTab<-stdzTable(oppMod, gLab[1], l1Lab[1], l2Lab[1])
 oppRes <- lapply(oppTab, function(tab){ apply(tab, 2, mean) })
-# round(cbind(unlist(oppRes)), 2)
+round(cbind(unlist(oppRes)), 2)
 stateTab<-stdzTable(stateMod, gLab[2], l1Lab[2], l2Lab[2])
 stateRes <- lapply(stateTab, function(tab){ apply(tab, 2, mean) })
-# round(cbind(unlist(stateRes)), 2)
+round(cbind(unlist(stateRes)), 2)
 ###############################################################

@@ -36,7 +36,7 @@ varKey$clean = c(
 	'Africa',
 	'Judicial\n Independence',
 	'Cumulative\n Opp OSV',
-	'P5 Alt Msr',
+	'P5 Trade',
 	'Cumulative\n Govt OSV'
 	)
 
