@@ -9,8 +9,8 @@ app_mod_dirs = c(
     'noImp',
     'p_US_RUS_CHN',
     'ptsCivilWarOnly', 
+    'statePrefAlt',
     'svac',
-    'tradeProp',
     'unsc'
 )
 

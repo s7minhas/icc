@@ -13,9 +13,32 @@ source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
 
 ###############################################################
 # load in robustness check data
-load(paste0(pathResults, 'sobOpp_p_US_RUS_CHN_fin.rda'))
+allVars = c(
+  # 'ptaCnt', # sig neg in prelim and pos but unsig in formal
+  # 'allyTotal', # sig neg in prelim and pos but unsig in formal
+  # 'matlConfGov', # neg in prelim and pos but basically zero and unsig in formal
+  # 'matlCoopGov', # conflicting and confusing results
+  # 'verbCoopGov', # conflicting results, not sig in formal
+  # 'verbConfGov', # neg across but insig in formal
+  #irrelev var: 'tradeBal', # insig in prelim, and pos and sig in formal
+  'importsCIF', # insig in prelim and neg and sig in formal
+  # 'exportsCIF', # conflicting results not sig
+  'importsFOB', # insig in prelim and neg and sig in formal
+  # 'exportsFOB', # conflicting results not sig
+  'trade', # insig in prelim, neg and sig in formal
+  #irrelev var: 'tradeSend'  # insig in prelim and neg and sig in formal
+  # 'tradeDepSend', # not sig in formal
+  # 'tradeGDP' # not sig in formal
+)
+
+plots = list()
+for(ii in 1:length(allVars)){
+
+modvar = allVars[ii]
+  
+load(paste0(pathResults, 'sobOpp_statePrefAlt_', modvar, '_fin.rda'))
 oppMod = mod
-load(paste0(pathResults, 'sobState_p_US_RUS_CHN_fin.rda'))
+load(paste0(pathResults, 'sobState_statePrefAlt_', modvar, '_fin.rda'))
 stateMod = mod
 ###############################################################
 
@@ -35,9 +58,10 @@ varKey$clean = c(
 	'Africa',
 	'Judicial\n Independence',
 	'Cumulative\n Opp OSV',
-	'P3 (USA, RUS, CHN)\n Min. Ideal Pt.',
+	'P5 Alt Msr',
 	'Cumulative\n Govt OSV'
 	)
+
 # reorder so osv comes before p5 measure
 varKey = varKey[c(1:8,10,9),]
 # add stage versions	
@@ -55,7 +79,13 @@ viz = coef_grid(
 
 ###############################################################
 # save
-ggsave(viz,
-	file=paste0(pathGraphics, 'fig_a_p_US_RUS_CHN.pdf'),
-	width=8, height=6, device=cairo_pdf)
+# ggsave(viz,
+# 	file=paste0(pathGraphics, 'fig_a_p_statePrefAlt.pdf'),
+# 	width=8, height=6, device=cairo_pdf)
 ###############################################################
+
+plots[[ii]] = viz
+
+}
+
+names(plots) = allVars
