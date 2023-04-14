@@ -8,8 +8,8 @@ uid = Sys.info()['user']
 pathGit = '~/Research/icc/'
 
 # set drop paths
-# pathDrop = paste0('/media/',uid,'/localCloud/Dropbox/Research/icc/')
-pathDrop = '~/Library/CloudStorage/Dropbox/Research/icc/'
+pathDrop = paste0('/media/',uid,'/localCloud/Dropbox/Research/icc/')
+# pathDrop = '~/Library/CloudStorage/Dropbox/Research/icc/'
 
 # set paths to drop folders
 pathIn = pathData = paste0(pathDrop, 'data/')
