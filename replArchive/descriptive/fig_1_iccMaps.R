@@ -1,6 +1,5 @@
 ###############################################################
-if(Sys.info()['user'] %in% c('s7m', 'janus829')){
-	source('~/Research/icc/R/setup.R') }
+source(paste0(here::here(), '/setup.R'))
 
 #
 loadPkg(
@@ -13,7 +12,7 @@ loadPkg(
 ###############################################################
 
 ###############################################################
-load(paste0(pathData, 'mergedData_yrly_ongoing.rda.rda'))
+load(paste0(pathData, 'mergedData_yrly_ongoing.rda'))
 
 #
 data = data[,
@@ -80,12 +79,12 @@ gg = ggplot() +
 			) ) +
 	facet_wrap(~variable,nrow=2) +
 	theme_light(base_family="Source Sans Pro") +
-	theme_ipsum() +
 	theme(
 		axis.text = element_blank(),
 		axis.ticks = element_blank(),
 		axis.line = element_blank(),
 		panel.background = element_blank(),
+		panel.border = element_blank(),
 		panel.grid.major = element_line(colour = 'transparent'),
 		panel.grid.minor = element_line(colour = 'transparent'),
 		legend.position =  'bottom',
@@ -100,7 +99,7 @@ gg = ggplot() +
 
 # save
 ggsave(gg, 
-	file=paste0(pathGraphics, 'iccMaps.pdf'),
-	width=5, height=10, device=cairo_pdf
+	file=paste0(pathGraphics, 'iccMaps.png'),
+	width=5, height=10, dpi=600
 	)
 ###############################################################	

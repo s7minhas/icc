@@ -2,13 +2,13 @@
 
 The base directory of the replication archive contains all the figures and tables shown in the paper. There are three subdirectories that contain the code necessary to produce these outputs (note that these files are also available on Github at [https://github/s7minhas/icc](https://github.com/s7minhas/icc)):
 
-- **compModelSim**: contains the code necessary for running the computational model, organizing the results, and conducting the regression analysis
-- **acledAnalysis**: contains the code necessary for running the empirical analysis in the paper
+- **descriptive**: contains the code necessary to reproduce descriptive statistics reported in the paper
+- **analysis**: contains the code necessary for running the empirical analysis in the paper
 - **appendix**: contains the code necessary to reproduce all the figures in the Appendix
-- **graphics**: contains .pngs and .tex files for all the figures and tables in the manuscript and appendix
+- **functions**: contains a set of R scripts with helper functions used in the analysis
 - **data**: contains the data files used in the analysis
 - **results**: contains the results of model runs
-- **functions**: contains a set of R scripts with helper functions used in the analysis
+- **graphics**: contains .pngs and .tex files for all the figures and tables in the manuscript and appendix
 
 Replicating the figures and tables in the **main** text will take only a few minutes on a standard laptop if the provided `.rda` files are used.
 
@@ -82,9 +82,9 @@ $no_of_cores
 
 #### Reproducing figures in the manuscript
 
-The `here` package is used to manage paths in this replication archive for R scripts. The .here file is stored in the top-most folder of the replication archive. Scripts are listed in order of the figures and tables in the manuscript. For python related scripts, the path will need to be set manually in one file: `compModelSim/abmRunning.py`.
+The `here` package is used to manage paths in this replication archive for R scripts. The .here file is stored in the top-most folder of the replication archive. Scripts are listed in order of the figures and tables in the manuscript. 
 
-- **figure_1.R**: Creates the hypothetical network used to show scenarios of low and high network competition. No inputs necessary. Output is stored in `graphics/figure1.png`.
+- **descriptive/fig_1_iccMaps.R**: Creates visualization showcasing spatial distribution of ICC cases. Takes `data/mergedData_yrly_ongoing.rda` and `data/panel.rda` as inputs. Output is stored in `graphics/iccMaps.png`.
 - Figures 2 and 3 are constructed manually and are not based on any code.
 - Table 1 is constructed manually. The parameter listed in that table accord with the simulation parameters used in `compModelSim/abmRunning.py`.
 - **figure_4.R**: Summarizes the results of a regression analysis on the simulated data. The `figure_4.R` script just create a coefficient plot using two inputs: `results/abm_feCoefs.rda` and `results/abm_reCoefs.rda`. The output of this script is stored in `graphics/figure4.png`. Steps to reproduce these results from scratch involve running the computational model, processing the data, and conducting the regression analysis; each of the scripts necessary to perform these steps are in the `compModelSim` directory:

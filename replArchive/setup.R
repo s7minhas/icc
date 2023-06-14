@@ -1,20 +1,15 @@
 # clear objs
 rm(list=ls())
 
-# get system information to set paths
-uid = Sys.info()['user']
-
 # set git paths
-pathGit = '~/Research/icc/'
-
-# set drop paths
-pathDrop = paste0('/media/',uid,'/localCloud/Dropbox/Research/icc/')
-# pathDrop = '~/Library/CloudStorage/Dropbox/Research/icc/'
+require(here)
+pth = paste0(here::here(), '/')
 
 # set paths to drop folders
-pathIn = pathData = paste0(pathDrop, 'data/')
-pathOut = pathResults = paste0(pathDrop, 'results/')
-pathGraphics = paste0(pathDrop, 'graphics/')
+pathIn = pathData = paste0(pth, 'data/')
+pathOut = pathResults = paste0(pth, 'results/')
+pathGraphics = paste0(pth, 'graphics/')
+pathFuncs = paste0(pth, 'functions/')
 
 #' function to install and/or load packages
 #'

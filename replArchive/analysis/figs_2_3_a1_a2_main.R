@@ -1,5 +1,5 @@
 ###############################################################
-source('~/Research/icc/R/setup.R')
+source(paste0(here::here(), '/setup.R'))
 
 #
 set.seed(6886)
@@ -9,7 +9,7 @@ loadPkg(
 		'latex2exp', 'Cairo', 'gridExtra', 'cowplot'
 		)
 	)
-source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
+source(paste0(pathFuncs, 'bayesplot_helpers.R'))
 ###############################################################
 
 ###############################################################
@@ -18,35 +18,18 @@ load(paste0(pathResults, 'sobOpp_model1a_1_newp5Var_fin.rda'))
 oppMod <- mod
 load(paste0(pathResults, 'sobState_model1a_1_newp5Var_fin.rda'))
 stateMod <- mod
+###############################################################
 
-# make a table of results
+###############################################################
+# make a table of results for appendix
 loadPkg('xtable')
 print.xtable(
 	xtable(fixef(oppMod)),
-	file=paste0(pathGraphics, 'tab_a2.tex')
-)
+	file=paste0(pathGraphics, 'tab_a2.tex') )
 
 print.xtable(
 	xtable(fixef(stateMod)),
-	file=paste0(pathGraphics, 'tab_a1.tex')
-)
-
-###########################
-## descriptive info for res design portion
-# cntsState=table(stateMod$data$icclevel_state_3)
-# totState=sum(cntsState)
-# propState = cntsState/totState
-#
-# cntsOpp=table(oppMod$data$icclevel_opp_3)
-# totOpp=sum(cntsOpp)
-# propOpp = cntsOpp/totOpp
-#
-# cntsState
-# round(propState, 2)
-#
-# cntsOpp
-# round(propOpp, 2)
-###########################
+	file=paste0(pathGraphics, 'tab_a1.tex') )
 ###############################################################
 
 ###############################################################
@@ -89,8 +72,8 @@ rebelTraceViz <- arrangeGrob(
 	arrangeGrob(rebelTrace$l1, rebelTrace$l2, ncol=2, widths=c(.5,.5)),
 	nrow=2 )
 ggsave(rebelTraceViz,
-	file=paste0(pathGraphics, 'fig_a2.pdf'),
-	width=10, height=10, device=cairo_pdf)
+	file=paste0(pathGraphics, 'fig_a2.png'),
+	width=10, height=10, dpi=600)
 
 stateTrace <- vizWrapper(stateMod, gLab[2], l1Lab[2], l2Lab[2], trace=TRUE)
 stateTraceViz <- arrangeGrob(
@@ -98,8 +81,8 @@ stateTraceViz <- arrangeGrob(
 	arrangeGrob(stateTrace$l1, stateTrace$l2, ncol=2, widths=c(.5,.5)),
 	nrow=2 )
 ggsave(stateTraceViz,
-	file=paste0(pathGraphics, 'fig_a1.pdf'),
-	width=10, height=10, device=cairo_pdf)
+	file=paste0(pathGraphics, 'fig_a1.png'),
+	width=10, height=10, dpi=600)
 
 ## rebel model coef plot
 rebelSumm <- vizWrapper(oppMod, gLab[1], l1Lab[1], l2Lab[1])
@@ -108,8 +91,8 @@ rebelViz <- arrangeGrob(
 	arrangeGrob(rebelSumm$l1, rebelSumm$l2, ncol=2, widths=c(.55,.45)),
 	nrow=2 )
 ggsave(rebelViz,
-	file=paste0(pathGraphics, 'fig_3.pdf'),
-	width=8, height=6, device=cairo_pdf)
+	file=paste0(pathGraphics, 'fig_3.png'),
+	width=8, height=6, dpi=600)
 
 ## state model
 stateSumm <- vizWrapper(stateMod, gLab[2], l1Lab[2], l2Lab[2])
@@ -118,16 +101,6 @@ stateViz <- arrangeGrob(
 	arrangeGrob(stateSumm$l1, stateSumm$l2, ncol=2, widths=c(.55,.45)),
 	nrow=2 )
 ggsave(stateViz,
-	file=paste0(pathGraphics, 'fig_2.pdf'),
-	width=8, height=6, device=cairo_pdf)
-###############################################################
-
-###############################################################
-# get out stdz tables
-oppTab<-stdzTable(oppMod, gLab[1], l1Lab[1], l2Lab[1])
-oppRes <- lapply(oppTab, function(tab){ apply(tab, 2, mean) })
-round(cbind(unlist(oppRes)), 2)
-stateTab<-stdzTable(stateMod, gLab[2], l1Lab[2], l2Lab[2])
-stateRes <- lapply(stateTab, function(tab){ apply(tab, 2, mean) })
-round(cbind(unlist(stateRes)), 2)
+	file=paste0(pathGraphics, 'fig_2.png'),
+	width=8, height=6, dpi=600)
 ###############################################################
