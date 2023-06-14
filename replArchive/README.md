@@ -1,8 +1,6 @@
 ## Replication instructions for the paper
 
-Some of the underlying data files, such as raw UCDP and ACLED data, are too big to share via hte .zip on Git, so we have made a dropbox link to the files available here as well: https://www.dropbox.com/s/apvx1az731so4ml/replArchive.zip?dl=0.
-
-The base directory of the replication archive contains all the figures and tables shown in the paper. There are three  subdirectories that contain the code necessary to produce these outputs (note that these files are also available on Github at [https://github/s7minhas/victimization](https://github.com/s7minhas/victimization)):
+The base directory of the replication archive contains all the figures and tables shown in the paper. There are three subdirectories that contain the code necessary to produce these outputs (note that these files are also available on Github at [https://github/s7minhas/icc](https://github.com/s7minhas/icc)):
 
 - **compModelSim**: contains the code necessary for running the computational model, organizing the results, and conducting the regression analysis
 - **acledAnalysis**: contains the code necessary for running the empirical analysis in the paper
@@ -10,7 +8,7 @@ The base directory of the replication archive contains all the figures and table
 - **graphics**: contains .pngs and .tex files for all the figures and tables in the manuscript and appendix
 - **data**: contains the data files used in the analysis
 - **results**: contains the results of model runs
-- **funcs**: contains a set of R scripts with helper functions used in the analysis
+- **functions**: contains a set of R scripts with helper functions used in the analysis
 
 Replicating the figures and tables in the **main** text will take only a few minutes on a standard laptop if the provided `.rda` files are used.
 
@@ -22,54 +20,64 @@ All of the analyses reported in the manuscript and the appendix are run with the
 
 ```
 > sessionInfo()
-R version 4.0.5 (2021-03-31)
-Platform: x86_64-w64-mingw32/x64 (64-bit)
-Running under: Windows 10 x64 (build 22000)
+R version 4.3.0 (2023-04-21)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Pop!_OS 22.04 LTS
 
 Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0 
+LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.10.0
 
 locale:
-[1] LC_COLLATE=English_United States.1252
-[2] LC_CTYPE=English_United States.1252
-[3] LC_MONETARY=English_United States.1252
-[4] LC_NUMERIC=C
-[5] LC_TIME=English_United States.1252
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+time zone: America/Detroit
+tzcode source: system (glibc)
 
 attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base
+[1] parallel  stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] countrycode_1.4.0 devtools_2.4.5    usethis_2.1.6     xtable_1.8-4     
+ [5] doParallel_1.0.17 iterators_1.0.14  foreach_1.5.2     Cairo_1.6-0      
+ [9] latex2exp_0.9.6   ggplot2_3.4.2     tidyr_1.3.0       lubridate_1.9.2  
+[13] magrittr_2.0.3    reshape2_1.4.4    dplyr_1.1.2       haven_2.5.2      
+[17] foreign_0.8-82   
 
 loaded via a namespace (and not attached):
-[1] compiler_4.0.5
+ [1] utf8_1.2.2        generics_0.1.3    stringi_1.7.12    digest_0.6.29    
+ [5] hms_1.1.3         grid_4.3.0        timechange_0.2.0  pkgload_1.3.2    
+ [9] fastmap_1.1.1     plyr_1.8.8        jsonlite_1.8.4    processx_3.8.1   
+[13] sessioninfo_1.2.2 pkgbuild_1.4.0    urlchecker_1.0.1  ps_1.6.0         
+[17] promises_1.2.0.1  purrr_1.0.1       fansi_1.0.2       scales_1.2.1     
+[21] codetools_0.2-19  cli_3.6.1         shiny_1.5.0       crayon_1.5.0     
+[25] rlang_1.1.1       ellipsis_0.3.2    munsell_0.5.0     remotes_2.4.2    
+[29] withr_2.5.0       cachem_1.0.8      tools_4.3.0       memoise_2.0.1    
+[33] colorspace_2.0-2  httpuv_1.6.5      forcats_1.0.0     mime_0.12        
+[37] vctrs_0.6.2       R6_2.5.1          lifecycle_1.0.3   stringr_1.5.0    
+[41] htmlwidgets_1.6.2 fs_1.5.2          miniUI_0.1.1.1    callr_3.7.3      
+[45] pkgconfig_2.0.3   later_1.3.0       pillar_1.9.0      gtable_0.3.0     
+[49] profvis_0.3.8     glue_1.6.2        Rcpp_1.0.10       tibble_3.2.1     
+[53] tidyselect_1.2.0  htmltools_0.5.5   compiler_4.3.0    prettyunits_1.1.1
 
 > benchmarkme::get_cpu()
 $vendor_id
 [1] "AuthenticAMD"
 
 $model_name
-[1] "AMD Ryzen 9 5950X 16-Core Processor"
+[1] "AMD Ryzen 9 7950X 16-Core Processor"
 
 $no_of_cores
 [1] 32
 
 > benchmarkme::get_ram()
-137 GB
-```
-
-##### Python information
-
-```
-> import sys
-> print(sys.version)
-3.7.11 (default, Jul 27 2021, 09:42:29) [MSC v.1916 64 bit (AMD64)]
-> import csv
-> print(csv.__version__)
-1.0
-> import numpy
-> print(numpy.__version__)
-1.21.2
-> import networkx
-> print(networkx.__version__)
-2.6.3
+134 GB
 ```
 
 #### Reproducing figures in the manuscript
