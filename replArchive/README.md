@@ -85,44 +85,48 @@ $no_of_cores
 The `here` package is used to manage paths in this replication archive for R scripts. The .here file is stored in the top-most folder of the replication archive. Scripts are listed in order of the figures and tables in the manuscript. 
 
 - **descriptive/fig_1_iccMaps.R**: Creates visualization showcasing spatial distribution of ICC cases. Takes `data/mergedData_yrly_ongoing.rda` and `data/panel.rda` as inputs. Output is stored in `graphics/iccMaps.png`.
-- Figures 2 and 3 are constructed manually and are not based on any code.
-- Table 1 is constructed manually. The parameter listed in that table accord with the simulation parameters used in `compModelSim/abmRunning.py`.
-- **figure_4.R**: Summarizes the results of a regression analysis on the simulated data. The `figure_4.R` script just create a coefficient plot using two inputs: `results/abm_feCoefs.rda` and `results/abm_reCoefs.rda`. The output of this script is stored in `graphics/figure4.png`. Steps to reproduce these results from scratch involve running the computational model, processing the data, and conducting the regression analysis; each of the scripts necessary to perform these steps are in the `compModelSim` directory:
-  - `1_abmRunning.py`: Runs the computational model using the parameters specified in the paper, the code for the model itself is located in `0_VicForViz.py` (This file takes several hours to run).
-  - `2_getVicCount.R`: Calculates victimization counts from the game.
-  - `3_getNetStats.R`: Calculates network statistics from the game (This file utilizes parallelization, adjust number of cores in the script).
-  - `4_abmDataPrep.R`: Organizing the data for analysis.
-  - `5_fe_abmAnalysis.R`: Runs the fixed effects regression analysis (This file takes several hours to run).
-  - `5_re_abmAnalysis.R`: Runs the random effects regression analysis.
-- **figure_5.R**: Creates a descriptive visualization of how the number of actors in armed conflicts have changed over time as well as our key independent variable, network competition. The inputs for this script are: `data/rawModelData.rda` and `data/actorCntsID.rda`. The output of this script is stored in `graphics/figure5.png`.
-- Table 2 is constructed manually.
-- **figure_6_7.R**: Summarizes the results of a regression analysis on data from ACLED. The script requires three inputs: `results/baseMods.rda`, `results/cnt1Mods.rda`, and `results/cnt2Mods.rda`. The output of this script is stored in `graphics/figure6.png` and `graphics/figure7.png`. Steps to reproduce these results from scratch involve imputing data, running base model, running model with first set of controls, and running model with second set of controls; each of the scripts necessary to perform these steps are in the `acledAnalysis` directory:
-  - `1_genImpData.R`: Performs multiple imputation analysis.
-  - `2a_runModels_base.R`: Runs models without any controls not being measured from ACLED.
-  - `2b_runModels_cnt1.R`: Runs models with first set of controls specified in the manuscript.
-  - `2c_runMOdels_cnt2.R`: Runs models with second set of controls specified in the manuscript.
-- **figure8.R**: Performs a simulation analysis to estimate the substantive effect of network competition across the model results presented in the manuscript. The script requires three inputs: `results/baseMods.rda`, `results/cnt1Mods.rda`, and `results/cnt2Mods.rda`. The output of this script is stored in `graphics/figure8.png`. The inputs for this script should have already been generated when following the steps laid out for `figure_6_7.R`.
+- **analysis/figs_2_3_a1_a2_main.R**: Summarizes the results of the main regression analysis presented in the paper. The inputs for this script are: `results/sobOpp_model1a_1_newp5Var_fin.rda` and `results/sobState_model1a_1_newp5Var_fin.rda`. The output of this script is stored in `graphics/fig_2.png` and `graphics/fig_3.png`. Additional files for the appendix are generated from this script as well. Steps to reproduce these results from scratch involve running two scripts:
+  - `analysis/sob_opp.R`: Runs the Opposition-Focused ICC Involvement model. The inputs for this script are `data/modData_fin.rda` and `data/sobOpp_imp_fin.rda`. The output of this model is a `brms` object saved as `results/sobOpp_model1a_1_newp5Var_fin.rda`.
+  - `analysis/sob_state.R`: Runs the State-Focused ICC Involvement model. The inputs for this script are `data/modData_fin.rda` and `data/sobState_imp_fin.rda`. The output of this model is a `brms` object saved as `results/sobState_model1a_1_newp5Var_fin.rda`.
 
 #### Reproducing figures in the appendix
 
 All of the scripts necessary to reproduce the figures in the appendix are located in the `appendix/` directory.
 
-- **01_tableA_1.R**: Generates Table A1 in the Appendix. Inputs: `data/rawModelData.rda`. Outputs: `graphics/appendix/table_A1.tex`.
-- **02_tableA_2_3_4.R**: Generates Tables A2-4 in the Appendix. Inputs: `data/rawModelData.rda`. Outputs: `graphics/appendix/table_A2.tex`, `graphics/appendix/table_A3.tex`, and `graphics/appendix/table_A4.tex`.
-- **03_figureA_1.R**: Generates Figure A1 in the Appendix. Inputs: `data/rawModelData.rda`. Outputs: `graphics/appendix/figure_A1.png`.
-- **04_figureA_2_3_4.R**: Generates Figures A2-4 in the Appendix. Inputs: `results/baseMods.rda`, `results/cnt1Mods.rda`, and `results/cnt2Mods.rda`. Outputs: `graphics/appendix/figure_A2.png`, `graphics/appendix/figure_A3.png`, and `graphics/appendix/figure_A4.png`.
-- **05_figureA_5_6.R**: Generates Figures A5-6 in the Appendix. Inputs: `data/rawModelData.rda`. Outputs: `graphics/appendix/figure_A5.png` and `graphics/appendix/figure_A6.png`.
-- **06_figureA_7_8.R**: Generates Figures A7-8 in the Appendix. Inputs: `data/rawModelData.rda` and `data/geoSpread_acled.rda`. Outputs: `graphics/appendix/figure_A7.png` and `graphics/appendix/figure_A8.png`.
-- **07_figureA_9.R**: Generates Figure A9 in the Appendix. Inputs: `results/abm_feCoefs_allyProp.rda` and `results/abm_reCoefs_allyProp.rda`. Outputs: `graphics/appendix/figure_A9.png`.
-- **08_figureA_10_11.R**: Generates Figures A10-11 in the Appendix. Inputs: `data/rawModelData.rda` and `data/allyProp_acled.rda`. Outputs: `graphics/appendix/figure_A10.png` and `graphics/appendix/figure_A11.png`.
-- **09_figureA_12.R**: Generates Figure A12 in the Appendix. Inputs: `data/netStats.rda`. Outputs: `graphics/appendix/figure_A12.png`.
-- **10_figureA_13.R**: Generates Figure A13 in the Appendix. Inputs: `data/modelDataCnt2.rda`. Outputs: `graphics/appendix/figure_A13.png`.
-- **11_figureA_14.R**: Generates Figure A14 in the Appendix. Inputs: `data/rawModelData.rda`. Outputs: `graphics/appendix/figure_A14.png`.
-- **12_figureA_15.R**: Generates Figure A15 in the Appendix. Inputs: `data/data.rda`. Outputs: `graphics/appendix/figure_A15.png`.
-- **13_figureA_16.R**: Generates Figure A16 in the Appendix. Inputs: `data/rawModelData.rda`. Outputs: `graphics/appendix/figure_A16.png`.
-- **14_figureA_17_18.R**: Generates Figure A17-18 in the Appendix. Inputs: `data/GEDEvent_v21_1.RData`, `data/rawModelData.rda`, and `data/modelDataCnt2.rda`. Outputs: `graphics/appendix/figure_A17.png` and `graphics/appendix/figure_A18.png`.
-- **15_figureA_19_20.R**: Generates Figure A19-20 in the Appendix. Inputs: `data/acledCiv.rda` and `data/rawModelData.rda`. Outputs: `graphics/appendix/figure_A19.png` and `graphics/appendix/figure_A20.png`.
-
+- **appendix/figs_2_3_a1_a2_main.R**: This script also generates the visualizations shown in Sections A.2 and A.3 of the Appendix. The inputs are the same as mentioned above and the outputs are: `graphics/fig_a1.png`, `graphics/fig_a2.png`, `graphics/tab_a1.tex`, and `graphics/tab_a2.tex`. 
+- **appendix/fig_a_ptsCivilWarOnly.R**: Produces the results shown in Section A.4. The inputs for this script are: `results/sobOpp_model1a_1_newp5Var_ptsCivilWarOnly_fin.rda` and `results/sobState_model1a_1_newp5Var_ptsCivilWarOnly_fin.rda`. The output of this script is stored in `graphics/fig_a_ptsCivilWarOnly.png`. Steps to reproduce these results from scratch: 
+  - `appendix/ptsCivilWarOnly/sob_opp.R`: Runs the Opposition model for this check. The inputs for this script are: `data/modData_fin.rda` and `data/subset_ptsCivWar_cntries.rda`. The output is: `results/sobOpp_model1a_1_newp5Var_ptsCivilWarOnly_fin.rda`. 
+  - `appendix/ptsCivilWarOnly/sob_state.R`: Runs the State model for this check. The inputs for this script are: `data/modData_fin.rda` and `data/subset_ptsCivWar_cntries.rda`. The output is: `results/sobState_model1a_1_newp5Var_ptsCivilWarOnly_fin.rda`.   
+- **appendix/fig_a_noImp.R**: Produces the results shown in Section A.5. The inputs for this script are: `results/sobOpp_model1a_1_newp5Var_noImp_fin.rda` and `results/sobState_model1a_1_newp5Var_noImp_fin.rda`. The output of this script is stored in `graphics/fig_a_noImp.png`. Steps to reproduce these results from scratch: 
+  - `appendix/noImp/sob_opp.R`: Runs the Opposition model for this check. The input for this script is `data/modData_fin.rda`. The output is: `results/sobOpp_model1a_1_newp5Var_noImp_fin.rda`.
+  - `appendix/noImp/sob_state.R`: Runs the State model for this check. The input for this script is `data/modData_fin.rda`. The output is: `results/sobState_model1a_1_newp5Var_noImp_fin.rda`.
+- **appendix/fig_a_democ.R**: Produces the results shown in Section A.6. The inputs for this script are: `results/sobOpp_democ_fin.rda` and `results/sobState_democ_fin.rda`. The output of this script is stored in `graphics/fig_a_democ.png`. Steps to reproduce these results from scratch: 
+  - `appendix/democ/sob_opp.R`: Runs the Opposition model for this check. The inputs for this script are: `data/modData_fin.rda` and `data/V-Dem-CY-Full+Others-v13.rds`. The output is: `results/sobOpp_democ_fin.rda`. 
+  - `appendix/democ/sob_state.R`: Runs the State model for this check. The inputs for this script are: `data/modData_fin.rda` and `data/V-Dem-CY-Full+Others-v13.rds`. The output is: `results/sobState_democ_fin.rda`.
+- **appendix/fig_a_svac.R**: Produces the results shown in Section A.7. The inputs for this script are: `results/sobOpp_svac_fin.rda` and `results/sobState_svac_fin.rda`. The output of this script is stored in `graphics/fig_a_svac.png`. Steps to reproduce these results from scratch: 
+  - `appendix/svac/sob_opp.R`: Runs the Opposition model for this check. The inputs for this script are: `data/modData_fin.rda` and `data/SVAC_3.0_complete.csv`. The output is: `results/sobOpp_svac_fin.rda`. 
+  - `appendix/svac/sob_state.R`: Runs the State model for this check. The inputs for this script are: `data/modData_fin.rda` and `data/SVAC_3.0_complete.csv`. The output is: `results/sobState_svac_fin.rda`.
+- **appendix/fig_a_p_statePrefAlt.R**: Produces the results shown in Section A.8. The inputs for this script are: `results/sobOpp_statePrefAlt_fin.rda` and `results/sobState_statePrefAlt_fin.rda`. The output of this script is stored in `graphics/fig_a_p_statePrefAlt.png`. Steps to reproduce these results from scratch: 
+  - `appendix/statePrefAlt/sob_opp.R`: Runs the Opposition model for this check. The inputs for this script are: `data/modData_fin.rda` and `data/statePref_from_plutonium.rda`. The output is: `results/sobOpp_statePrefAlt_fin.rda`. 
+  - `appendix/statePrefAlt/sob_state.R`: Runs the State model for this check. The inputs for this script are: `data/modData_fin.rda` and `data/statePref_from_plutonium.rda`. The output is: `results/sobState_statePrefAlt_fin.rda`.  
+- **appendix/fig_a_p_US_RUS_CHN.R**: Produces the results shown in Section A.9. The inputs for this script are: `results/sobOpp_p_US_RUS_CHN_fin.rda` and `results/sobState_p_US_RUS_CHN_fin.rda`. The output of this script is stored in `graphics/fig_a_p_US_RUS_CHN.png`. Steps to reproduce these results from scratch: 
+  - `appendix/p_US_RUS_CHN/sob_opp.R`: Runs the Opposition model for this check. The input for this script is `data/modData_fin.rda`. The output is: `results/sobOpp_p_US_RUS_CHN_fin.rda`. 
+  - `appendix/p_US_RUS_CHN/sob_state.R`: Runs the State model for this check. The input for this script is `data/modData_fin.rda`. The output is: `results/sobState_p_US_RUS_CHN_fin.rda`.
+- **appendix/fig_a_unsc.R**: Produces the results shown in Section A.10. The inputs for this script are: `results/sobOpp_unsc_fin.rda` and `results/sobState_unsc_fin.rda`. The output of this script is stored in `graphics/fig_a_unsc.png`. Steps to reproduce these results from scratch: 
+  - `appendix/unsc/sob_opp.R`: Runs the Opposition model for this check. The input for this script is `data/modData_fin.rda`. The output is: `results/sobOpp_unsc_fin.rda`. 
+  - `appendix/unsc/sob_state.R`: Runs the State model for this check. The input for this script is `data/modData_fin.rda`. The output is: `results/sobState_unsc_fin.rda`.
+- **appendix/fig_a_chiefProsec.R**: Produces the results shown in Section A.11. The inputs for this script are: `results/sobOpp_chiefProsec_fin.rda` and `results/sobState_chiefProsec_fin.rda`. The output of this script is stored in `graphics/fig_a_chiefProsec.png`. Steps to reproduce these results from scratch: 
+  - `appendix/chiefProsec/sob_opp.R`: Runs the Opposition model for this check. The input for this script is `data/modData_fin.rda`. The output is: `results/sobOpp_chiefProsec_fin.rda`. 
+  - `appendix/chiefProsec/sob_state.R`: Runs the State model for this check. The input for this script is `data/modData_fin.rda`. The output is: `results/sobState_chiefProsec_fin.rda`.
+- **appendix/fig_a_iccTime.R**: Produces the results shown in Section A.12. The inputs for this script are: `results/sobOpp_iccTime_fin.rda` and `results/sobState_iccTime_fin.rda`. The output of this script is stored in `graphics/fig_a_iccTime.png`. Steps to reproduce these results from scratch: 
+  - `appendix/iccTime/sob_opp.R`: Runs the Opposition model for this check. The input for this script is `data/modData_fin.rda`. The output is: `results/sobOpp_iccTime_fin.rda`. 
+  - `appendix/iccTime/sob_state.R`: Runs the State model for this check. The input for this script is `data/modData_fin.rda`. The output is: `results/sobState_iccTime_fin.rda`.
+- **appendix/fig_a_impleLegDom.R**: Produces the results shown in Section A.13. The inputs for this script are: `results/sobOpp_impleLegDom_fin.rda` and `results/sobState_impleLegDom_fin.rda`. The output of this script is stored in `graphics/fig_a_impleLegDom.png`. Steps to reproduce these results from scratch: 
+  - `appendix/impleLegDom/sob_opp.R`: Runs the Opposition model for this check. The inputs for this script are: `data/modData_fin.rda` and `data/imple_leg_domestic.csv`. The output is: `results/sobOpp_impleLegDom_fin.rda`. 
+  - `appendix/impleLegDom/sob_state.R`: Runs the State model for this check. The inputs for this script are: `data/modData_fin.rda` and `data/imple_leg_domestic.csv`. The output is: `results/sobState_impleLegDom_fin.rda`.
+- **appendix/figs_a_alt_models_coef_state_opp.R**: Produces Figures A13 and A14 shown in Section A.14. The inputs for this script are: `results/sobOpp_model1a_1_newp5Var_fin.rda` and `results/sobState_model1a_1_newp5Var_fin.rda`. The output of this script is stored in: `graphics/fig_a_alt_models_coef_state.png` and `graphics/fig_a_alt_models_coef_opp.png`.
+- **appendix/figs_a_model_perf.R**: Produces Figure A15 shown in Section A.14. The inputs for this script are: `results/sobOpp_model1a_1_newp5Var_fin.rda`, `results/sobState_model1a_1_newp5Var_fin.rda`, and `results/perfResults_fin.rda`. The output of this script is stored in `graphics/fig_a_model_perf.png`.
+- **descriptive/fig_a16_descStats.R**: Produces the results shown in Section A.15. The inputs for this script are: `data/mergedData_yrly_ongoing.rda`. The output of this script is stored in `graphics/fig_a13.png`.
 
 #### R package build notes
 

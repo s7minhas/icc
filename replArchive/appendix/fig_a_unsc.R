@@ -1,5 +1,5 @@
 ###############################################################
-source('~/Research/icc/R/setup.R')
+source(paste0(here::here(), '/setup.R'))
 
 #
 set.seed(6886)
@@ -9,7 +9,7 @@ loadPkg(
 		'latex2exp', 'Cairo', 'gridExtra', 'cowplot'
 		)
 	)
-source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
+source(paste0(pathFuncs, 'bayesplot_helpers.R'))
 ###############################################################
 
 ###############################################################
@@ -57,6 +57,6 @@ viz = coef_grid(
 ###############################################################
 # save
 ggsave(viz,
-	file=paste0(pathGraphics, 'fig_a_unsc.pdf'),
-	width=8, height=7, device=cairo_pdf)
+	file=paste0(pathGraphics, 'fig_a_unsc.png'),
+	width=8, height=7, dpi=600)
 ###############################################################

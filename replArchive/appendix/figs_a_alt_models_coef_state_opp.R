@@ -1,5 +1,5 @@
 ###############################################################
-source('~/Research/icc/R/setup.R')
+source(paste0(here::here(), '/setup.R'))
 
 #
 set.seed(6886)
@@ -12,7 +12,7 @@ loadPkg(
 		'extrafont', 'latex2exp', 'Cairo', 'gridExtra', 'cowplot'
 		)
 	)
-source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
+source(paste0(pathFuncs, 'bayesplot_helpers.R'))
 ###############################################################
 
 ###############################################################
@@ -180,8 +180,8 @@ tmp_bw=ggplot(coefData, aes(x=var, y=Estimate, group=model)) +
     strip.background = element_rect(fill = "#525252", color='#525252')
   	)
 ggsave(tmp_bw,
-	file=paste0(pathGraphics, 'fig_a_alt_models_coef_state.pdf'),
-	width = 12, height = 8)
+	file=paste0(pathGraphics, 'fig_a_alt_models_coef_state.png'),
+	width = 12, height = 8, dpi=600)
 ###############################################################
 
 ###############################################################
@@ -316,6 +316,6 @@ tmp_bw=ggplot(coefData, aes(x=var, y=Estimate, group=model)) +
     strip.background = element_rect(fill = "#525252", color='#525252')
   	)
 ggsave(tmp_bw,
-	file=paste0(pathGraphics, 'fig_a_alt_models_coef_opp.pdf'),
-	width = 12, height = 8)
+	file=paste0(pathGraphics, 'fig_a_alt_models_coef_opp.png'),
+	width = 12, height = 8, dpi=600)
 ###############################################################

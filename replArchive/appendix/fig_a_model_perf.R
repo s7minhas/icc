@@ -1,5 +1,5 @@
 ###############################################################
-source('~/Research/icc/R/setup.R')
+source(paste0(here::here(), '/setup.R'))
 
 #
 set.seed(6886)
@@ -12,7 +12,7 @@ loadPkg(
 		'extrafont', 'latex2exp', 'Cairo', 'gridExtra', 'cowplot'
 		)
 	)
-source(paste0(pathGit, 'R/functions/bayesplot_helpers.R'))
+source(paste0(pathFuncs, 'bayesplot_helpers.R'))
 ###############################################################
 
 ###############################################################
@@ -145,6 +145,6 @@ somerViz = ggplot(perfData2, aes(x=model, y=value)) +
 			angle=0, hjust=.05),
     strip.background = element_rect(fill = "#525252", color='#525252')
   )
-ggsave(somerViz, file=paste0(pathGraphics, 'fig_a_model_perf.pdf'),
-       device=cairo_pdf, width=8, height=3)
+ggsave(somerViz, file=paste0(pathGraphics, 'fig_a_model_perf.png'),
+       dpi=600, width=8, height=3)
 ###############################################################
