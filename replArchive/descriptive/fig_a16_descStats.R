@@ -68,7 +68,6 @@ cntsOpp=table(data$icclevel_opp_3)
 totOpp=sum(cntsOpp)
 propOpp = cntsOpp/totOpp
 
-print('listwise deletion')
 cntsState
 # round(propState, 2)
 
@@ -226,7 +225,7 @@ viz = ggplot(
 #
 ggsave(
   viz, 
-  file=paste0(pathGraphics, 'fig_a13.png'),
+  file=paste0(pathGraphics, 'fig_a_time_spent.png'),
   width=8, height=4, dpi=600
 )
 ###############################################################

@@ -13,3 +13,9 @@ cl = makeCluster(length(afiles))
 registerDoParallel(cl)
 shh = foreach(f = afiles) %dopar% { source(f) }
 stopCluster(cl)
+
+# run descriptive analysis for A.15 of appendix
+source(
+    paste0(here::here(), 
+    '/descriptive/fig_a16_descStats.R')
+    )

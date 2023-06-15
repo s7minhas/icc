@@ -5,12 +5,12 @@ The base directory of the replication archive contains all the figures and table
 - **descriptive**: contains the code necessary to reproduce descriptive statistics reported in the paper
 - **analysis**: contains the code necessary for running the empirical analysis in the paper
 - **appendix**: contains the code necessary to reproduce all the figures in the Appendix
-- **functions**: contains a set of R scripts with helper functions used in the analysis
+- **functions**: contains a script with some helper functions used in the analysis
 - **data**: contains the data files used in the analysis
 - **results**: contains the results of model runs
 - **graphics**: contains .pngs and .tex files for all the figures and tables in the manuscript and appendix
 
-Replicating the figures and tables in the **main** text will take only a few minutes on a standard laptop if the provided `.rda` files are used.
+Using the specifications provided below replicating everything in the manuscript and appendix should not take more than an hour.
 
 ### Setup information
 
@@ -76,7 +76,7 @@ Below we provide the version of each of the libraries that our project relies on
 
 The `here` package is used to manage paths in this replication archive for R scripts. The .here file is stored in the top-most folder of the replication archive. Scripts are listed in order of the figures and tables in the manuscript. 
 
-- **descriptive/fig_1_iccMaps.R**: Creates visualization showcasing spatial distribution of ICC cases. Takes `data/mergedData_yrly_ongoing.rda` and `data/panel.rda` as inputs. Output is stored in `graphics/iccMaps.png`.
+- **descriptive/fig_1_iccMaps.R**: Creates visualization showcasing spatial distribution of ICC cases. Takes `data/mergedData_yrly_ongoing.rda` and `data/panel.rda` as inputs. Output is stored in `graphics/iccMaps.png`. Note that for this script to work you need to use version 0.16 of the `countrycode` package. 
 - **analysis/figs_2_3_a1_a2_main.R**: Summarizes the results of the main regression analysis presented in the paper. The inputs for this script are: `results/sobOpp_model1a_1_newp5Var_fin.rda` and `results/sobState_model1a_1_newp5Var_fin.rda`. The output of this script is stored in `graphics/fig_2.png` and `graphics/fig_3.png`. Additional files for the appendix are generated from this script as well. Steps to reproduce these results from scratch involve running two scripts:
   - `analysis/sob_opp.R`: Runs the Opposition-Focused ICC Involvement model. The inputs for this script are `data/modData_fin.rda` and `data/sobOpp_imp_fin.rda`. The output of this model is a `brms` object saved as `results/sobOpp_model1a_1_newp5Var_fin.rda`.
   - `analysis/sob_state.R`: Runs the State-Focused ICC Involvement model. The inputs for this script are `data/modData_fin.rda` and `data/sobState_imp_fin.rda`. The output of this model is a `brms` object saved as `results/sobState_model1a_1_newp5Var_fin.rda`.
@@ -85,7 +85,7 @@ The `here` package is used to manage paths in this replication archive for R scr
 
 All of the scripts necessary to reproduce the figures in the appendix are located in the `appendix/` directory. To produce just the graphs without going into the individual files run: `1_run_appendix_graphs.R`, to rerun all analyses from scratch run `0_run_appendix_mods.R` first. Individual files that get sources into these two scripts are described below in the order that they appear in the Appendix.
 
-- **appendix/figs_2_3_a1_a2_main.R**: This script also generates the visualizations shown in Sections A.2 and A.3 of the Appendix. The inputs are the same as mentioned above and the outputs are: `graphics/fig_a1.png`, `graphics/fig_a2.png`, `graphics/tab_a1.tex`, and `graphics/tab_a2.tex`. 
+- **appendix/figs_2_3_a1_a2_main.R**: This script also generates the visualizations shown in Sections A.2 and A.3 of the Appendix. The inputs are the same as mentioned above and relevant outputs for the appendix are: `graphics/fig_a1.png`, `graphics/fig_a2.png`, `graphics/tab_a1.tex`, and `graphics/tab_a2.tex`. 
 - **appendix/fig_a_ptsCivilWarOnly.R**: Produces the results shown in Section A.4. The inputs for this script are: `results/sobOpp_model1a_1_newp5Var_ptsCivilWarOnly_fin.rda` and `results/sobState_model1a_1_newp5Var_ptsCivilWarOnly_fin.rda`. The output of this script is stored in `graphics/fig_a_ptsCivilWarOnly.png`. Steps to reproduce these results from scratch: 
   - `appendix/ptsCivilWarOnly/sob_opp.R`: Runs the Opposition model for this check. The inputs for this script are: `data/modData_fin.rda` and `data/subset_ptsCivWar_cntries.rda`. The output is: `results/sobOpp_model1a_1_newp5Var_ptsCivilWarOnly_fin.rda`. 
   - `appendix/ptsCivilWarOnly/sob_state.R`: Runs the State model for this check. The inputs for this script are: `data/modData_fin.rda` and `data/subset_ptsCivWar_cntries.rda`. The output is: `results/sobState_model1a_1_newp5Var_ptsCivilWarOnly_fin.rda`.   
@@ -118,7 +118,7 @@ All of the scripts necessary to reproduce the figures in the appendix are locate
   - `appendix/impleLegDom/sob_state.R`: Runs the State model for this check. The inputs for this script are: `data/modData_fin.rda` and `data/imple_leg_domestic.csv`. The output is: `results/sobState_impleLegDom_fin.rda`.
 - **appendix/figs_a_alt_models_coef_state_opp.R**: Produces Figures A13 and A14 shown in Section A.14. The inputs for this script are: `results/sobOpp_model1a_1_newp5Var_fin.rda` and `results/sobState_model1a_1_newp5Var_fin.rda`. The output of this script is stored in: `graphics/fig_a_alt_models_coef_state.png` and `graphics/fig_a_alt_models_coef_opp.png`.
 - **appendix/figs_a_model_perf.R**: Produces Figure A15 shown in Section A.14. The inputs for this script are: `results/sobOpp_model1a_1_newp5Var_fin.rda`, `results/sobState_model1a_1_newp5Var_fin.rda`, and `results/perfResults_fin.rda`. The output of this script is stored in `graphics/fig_a_model_perf.png`.
-- **descriptive/fig_a16_descStats.R**: Produces the results shown in Section A.15. The inputs for this script are: `data/mergedData_yrly_ongoing.rda`. The output of this script is stored in `graphics/fig_a13.png`.
+- **descriptive/fig_a16_descStats.R**: Produces the results shown in Section A.15. The inputs for this script are: `data/mergedData_yrly_ongoing.rda`. The output of this script is stored in `graphics/fig_a_time_spent.png`.
 
 ### Contact
 

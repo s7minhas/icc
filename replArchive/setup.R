@@ -38,9 +38,9 @@ loadPkg(c(
 	))
   # other packages used in scripts
   # 'sbgcop', 'brms', 'future', 'bayesplot', 'MASS', 'VGAM',
-  # 'tadaatoolbox', 'reshape2', 'RColorBrewer',
-  # 'extrafont', 'latex2exp', 'Cairo', 'gridExtra', 'cowplot'
-  # 'sf','dplyr',
+  # 'tadaatoolbox', 'RColorBrewer',
+  # 'extrafont', 'gridExtra', 'cowplot'
+  # 'sf',
   # 'rnaturalearth',
   # 'rgeos', 'hrbrthemes'
 

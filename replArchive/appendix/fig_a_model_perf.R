@@ -52,9 +52,6 @@ getPerfStats <- function(mod, lab){
 
 	# run polr
 	base <- polr(polrForm, data=data, Hess=TRUE)
-	baseSeq <- vglm(
-		polrForm, data=data,
-		family = cumulative (link="probitlink", parallel=TRUE))
 	# extract preds
 	predDF$polrPreds = predict(base)
 
