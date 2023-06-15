@@ -40,31 +40,10 @@ time zone: America/Detroit
 tzcode source: system (glibc)
 
 attached base packages:
-[1] parallel  stats     graphics  grDevices utils     datasets  methods  
-[8] base     
-
-other attached packages:
- [1] countrycode_1.4.0 devtools_2.4.5    usethis_2.1.6     xtable_1.8-4     
- [5] doParallel_1.0.17 iterators_1.0.14  foreach_1.5.2     Cairo_1.6-0      
- [9] latex2exp_0.9.6   ggplot2_3.4.2     tidyr_1.3.0       lubridate_1.9.2  
-[13] magrittr_2.0.3    reshape2_1.4.4    dplyr_1.1.2       haven_2.5.2      
-[17] foreign_0.8-82   
+[1] stats     graphics  grDevices utils     datasets  methods   base     
 
 loaded via a namespace (and not attached):
- [1] utf8_1.2.2        generics_0.1.3    stringi_1.7.12    digest_0.6.29    
- [5] hms_1.1.3         grid_4.3.0        timechange_0.2.0  pkgload_1.3.2    
- [9] fastmap_1.1.1     plyr_1.8.8        jsonlite_1.8.4    processx_3.8.1   
-[13] sessioninfo_1.2.2 pkgbuild_1.4.0    urlchecker_1.0.1  ps_1.6.0         
-[17] promises_1.2.0.1  purrr_1.0.1       fansi_1.0.2       scales_1.2.1     
-[21] codetools_0.2-19  cli_3.6.1         shiny_1.5.0       crayon_1.5.0     
-[25] rlang_1.1.1       ellipsis_0.3.2    munsell_0.5.0     remotes_2.4.2    
-[29] withr_2.5.0       cachem_1.0.8      tools_4.3.0       memoise_2.0.1    
-[33] colorspace_2.0-2  httpuv_1.6.5      forcats_1.0.0     mime_0.12        
-[37] vctrs_0.6.2       R6_2.5.1          lifecycle_1.0.3   stringr_1.5.0    
-[41] htmlwidgets_1.6.2 fs_1.5.2          miniUI_0.1.1.1    callr_3.7.3      
-[45] pkgconfig_2.0.3   later_1.3.0       pillar_1.9.0      gtable_0.3.0     
-[49] profvis_0.3.8     glue_1.6.2        Rcpp_1.0.10       tibble_3.2.1     
-[53] tidyselect_1.2.0  htmltools_0.5.5   compiler_4.3.0    prettyunits_1.1.1
+[1] compiler_4.3.0 cli_3.6.1      jsonlite_1.8.5 rlang_1.1.1 
 
 > benchmarkme::get_cpu()
 $vendor_id
@@ -130,17 +109,15 @@ All of the scripts necessary to reproduce the figures in the appendix are locate
 
 #### R package build notes
 
-Below we provide the version of each of the libraries that our project relies on (each library was built using R 4.0.5). We use one package, `simHelper`, that is not available on CRAN and needs to be installed using devtools, this can be done via executing the following R code: `devtools::install_github('s7minhas/simHelper', ref='vic')`. Version information for the other libraries used in the analysis are shown below:
+Below we provide the version of each of the libraries that our project relies on (each library was built using R 4.3.0). Version information for the other libraries used in the analysis are shown below:
 
-|                |                   |                 |                  |
-|:---------------|:------------------|:----------------|:-----------------|
-|abind 1.4-5     |Cairo 1.5-12.2     |countrycode 0.16 |doParallel 1.0.16 |
-|dplyr 1.0.6     |extrafont 0.17     |foreach 1.5.1    |ggplot2 3.3.5     |
-|ggraph 2.0.5    |glmmADMB 0.8.3.3   |glmmTMB 1.0.2.1  |igraph 1.2.6      |
-|latex2exp 0.5.0 |magrittr 2.0.1     |MASS 7.3-54      |network 1.17.1    |
-|patchwork 1.1.1 |RColorBrewer 1.1-3 |readr 1.4.0      |reshape2 1.4.4    |
-|sbgcop 0.980    |sna 2.6            |stringr 1.4.0    |tidygraph 1.2.0   |
-|tidyr 1.1.3     |xtable 1.8-4       |                 |                  |
-
+|                 |                  |                 |                    |                    |
+|:----------------|:-----------------|:----------------|:-------------------|:-------------------|
+|bayesplot 1.10.0 |doParallel 1.0.17 |ggplot2 3.4.2    |magrittr 2.0.3      |sbgcop 0.980        |
+|brms 2.19.0      |dplyr 1.1.2       |gridExtra 2.3    |MASS 7.3-59         |sf 1.0-13           |
+|Cairo 1.6-0      |extrafont 0.19    |haven 2.5.2      |RColorBrewer 1.1-3  |tadaatoolbox 0.17.0 |
+|countrycode 0.16 |foreach 1.5.2     |hrbrthemes 0.8.0 |reshape2 1.4.4      |tidyr 1.3.0         |
+|cowplot 1.1.1    |foreign 0.8-82    |latex2exp 0.9.6  |rgeos 0.6-3         |VGAM 1.1-8          |
+|devtools 2.4.5   |future 1.32.0     |lubridate 1.9.2  |rnaturalearth 0.3.3 |xtable 1.8-4        |
 
 If you find any errors or have any further questions, please address them to me via email at minhassh@msu.edu.
