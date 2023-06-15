@@ -114,7 +114,7 @@ sobStateVars[c(5:8)] = paste0('cs(',sobStateVars[c(5:8)],')')
 sobStateForm = formula(
 	paste0('icclevel_state_3 ~ ', 
 		paste(sobStateVars, collapse = ' + ') ) )
-plan(multiprocess)
+plan(multicore)
 mod = brm_multiple(
 	formula=sobStateForm, 
 	data=impDFs,

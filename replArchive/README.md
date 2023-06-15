@@ -12,11 +12,11 @@ The base directory of the replication archive contains all the figures and table
 
 Replicating the figures and tables in the **main** text will take only a few minutes on a standard laptop if the provided `.rda` files are used.
 
-#### Setup information
+### Setup information
 
 All of the analyses reported in the manuscript and the appendix are run with the following specification (further information on packages used in the analysis is included at the end of the README):
 
-##### R information
+#### System & R information
 
 ```
 > sessionInfo()
@@ -59,7 +59,20 @@ $no_of_cores
 134 GB
 ```
 
-#### Reproducing figures in the manuscript
+### R package build notes
+
+Below we provide the version of each of the libraries that our project relies on (each library was built using R 4.3.0). Version information for the other libraries used in the analysis are shown below:
+
+|                 |                  |                 |                    |                    |
+|:----------------|:-----------------|:----------------|:-------------------|:-------------------|
+|bayesplot 1.10.0 |doParallel 1.0.17 |ggplot2 3.4.2    |magrittr 2.0.3      |sbgcop 0.980        |
+|brms 2.19.0      |dplyr 1.1.2       |gridExtra 2.3    |MASS 7.3-59         |sf 1.0-13           |
+|Cairo 1.6-0      |extrafont 0.19    |haven 2.5.2      |RColorBrewer 1.1-3  |tadaatoolbox 0.17.0 |
+|countrycode 0.16 |foreach 1.5.2     |hrbrthemes 0.8.0 |reshape2 1.4.4      |tidyr 1.3.0         |
+|cowplot 1.1.1    |foreign 0.8-82    |latex2exp 0.9.6  |rgeos 0.6-3         |VGAM 1.1-8          |
+|devtools 2.4.5   |future 1.32.0     |lubridate 1.9.2  |rnaturalearth 0.3.3 |xtable 1.8-4        |
+
+### Reproducing figures in the manuscript
 
 The `here` package is used to manage paths in this replication archive for R scripts. The .here file is stored in the top-most folder of the replication archive. Scripts are listed in order of the figures and tables in the manuscript. 
 
@@ -68,9 +81,9 @@ The `here` package is used to manage paths in this replication archive for R scr
   - `analysis/sob_opp.R`: Runs the Opposition-Focused ICC Involvement model. The inputs for this script are `data/modData_fin.rda` and `data/sobOpp_imp_fin.rda`. The output of this model is a `brms` object saved as `results/sobOpp_model1a_1_newp5Var_fin.rda`.
   - `analysis/sob_state.R`: Runs the State-Focused ICC Involvement model. The inputs for this script are `data/modData_fin.rda` and `data/sobState_imp_fin.rda`. The output of this model is a `brms` object saved as `results/sobState_model1a_1_newp5Var_fin.rda`.
 
-#### Reproducing figures in the appendix
+### Reproducing figures in the appendix
 
-All of the scripts necessary to reproduce the figures in the appendix are located in the `appendix/` directory.
+All of the scripts necessary to reproduce the figures in the appendix are located in the `appendix/` directory. To produce just the graphs without going into the individual files run: `1_run_appendix_graphs.R`, to rerun all analyses from scratch run `0_run_appendix_mods.R` first. Individual files that get sources into these two scripts are described below in the order that they appear in the Appendix.
 
 - **appendix/figs_2_3_a1_a2_main.R**: This script also generates the visualizations shown in Sections A.2 and A.3 of the Appendix. The inputs are the same as mentioned above and the outputs are: `graphics/fig_a1.png`, `graphics/fig_a2.png`, `graphics/tab_a1.tex`, and `graphics/tab_a2.tex`. 
 - **appendix/fig_a_ptsCivilWarOnly.R**: Produces the results shown in Section A.4. The inputs for this script are: `results/sobOpp_model1a_1_newp5Var_ptsCivilWarOnly_fin.rda` and `results/sobState_model1a_1_newp5Var_ptsCivilWarOnly_fin.rda`. The output of this script is stored in `graphics/fig_a_ptsCivilWarOnly.png`. Steps to reproduce these results from scratch: 
@@ -107,17 +120,6 @@ All of the scripts necessary to reproduce the figures in the appendix are locate
 - **appendix/figs_a_model_perf.R**: Produces Figure A15 shown in Section A.14. The inputs for this script are: `results/sobOpp_model1a_1_newp5Var_fin.rda`, `results/sobState_model1a_1_newp5Var_fin.rda`, and `results/perfResults_fin.rda`. The output of this script is stored in `graphics/fig_a_model_perf.png`.
 - **descriptive/fig_a16_descStats.R**: Produces the results shown in Section A.15. The inputs for this script are: `data/mergedData_yrly_ongoing.rda`. The output of this script is stored in `graphics/fig_a13.png`.
 
-#### R package build notes
-
-Below we provide the version of each of the libraries that our project relies on (each library was built using R 4.3.0). Version information for the other libraries used in the analysis are shown below:
-
-|                 |                  |                 |                    |                    |
-|:----------------|:-----------------|:----------------|:-------------------|:-------------------|
-|bayesplot 1.10.0 |doParallel 1.0.17 |ggplot2 3.4.2    |magrittr 2.0.3      |sbgcop 0.980        |
-|brms 2.19.0      |dplyr 1.1.2       |gridExtra 2.3    |MASS 7.3-59         |sf 1.0-13           |
-|Cairo 1.6-0      |extrafont 0.19    |haven 2.5.2      |RColorBrewer 1.1-3  |tadaatoolbox 0.17.0 |
-|countrycode 0.16 |foreach 1.5.2     |hrbrthemes 0.8.0 |reshape2 1.4.4      |tidyr 1.3.0         |
-|cowplot 1.1.1    |foreign 0.8-82    |latex2exp 0.9.6  |rgeos 0.6-3         |VGAM 1.1-8          |
-|devtools 2.4.5   |future 1.32.0     |lubridate 1.9.2  |rnaturalearth 0.3.3 |xtable 1.8-4        |
+### Contact
 
 If you find any errors or have any further questions, please address them to me via email at minhassh@msu.edu.

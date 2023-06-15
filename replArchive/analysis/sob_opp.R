@@ -114,7 +114,7 @@ sobOppVars[c(5:8)] = paste0('cs(',sobOppVars[c(5:8)],')')
 sobOppForm = formula(
 	paste0('icclevel_opp_3 ~ ',
 		paste(sobOppVars, collapse = ' + ') ) )
-plan(multiprocess)
+plan(multicore)
 mod = brm_multiple(
 	formula=sobOppForm,
 	data=impDFs,
