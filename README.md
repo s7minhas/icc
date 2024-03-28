@@ -1,4 +1,4 @@
-# Network Competition and Civilian Targeting During Civil Conflict
+# Understanding the Determinants of ICC Involvement: Legal Mandate and Power Politics
 
 Authors
 ---
