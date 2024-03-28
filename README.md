@@ -14,4 +14,4 @@ Follow instructions in replArchive directory. Any questions should be addressed 
 
 Publication Outlet
 ---
-International Studies Quarterly (2023)
+International Studies Quarterly (2024)
